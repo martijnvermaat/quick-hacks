@@ -1,0 +1,14 @@
+This is a small hack to query the Tentamen Inschrijvings Systeem Vrije
+Universiteit from the command line. It shows your results for all
+courses contained in the TISVU system.
+
+It needs your VU-net-id username and password.
+
+The script depends on the PBP web tool for Python, available from:
+  http://pbp.berlios.de/
+
+
+Since it parses the HTML output of TISVU, the script will break easily
+if anything is changed in the TISVU application. Considering the history
+of the IT departement at the VU, we can safely assume nothing will
+change here for at least a few years ;)

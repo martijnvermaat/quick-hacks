@@ -1,0 +1,9 @@
+echo '
+go https://tisvu.vu.nl/tis
+go https://tisvu.vu.nl/tis/TI_SEC_PCK.TI_LOGON
+fv 1 P_USERID vu-net-id-username
+fv 1 P_PASSWORD vu-net-id-password
+submit 1
+go https://tisvu.vu.nl/tis/TI001Q01$TUV.QueryList
+show
+' | pbpscript | perl -e 'while(<>){ print "$1: $2\n" if /\<\/a\>\s*[a-z]+\s*([^\<]*[^\s]+)\s+[0-9-]{10}\s*([a-z0-9,\.]+)\s+/i }'
