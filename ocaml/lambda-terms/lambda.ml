@@ -12,15 +12,21 @@ type term =
   | App of term * term
 
 
+(* Some wrapper functions for term constructors. *)
+let var s = Var(s)
+let abs s t = Abs(s, t)
+let app t u = App(t, u)
+
+
 (* show returns the string representation of a term. *)
 (*
   Note: we could do better in placing parentheses.
 *)
 
-let rec show = function
+let rec term_to_string = function
     Var(s)    -> s
-  | Abs(s, t) -> "\\" ^ s ^ ". " ^ (show t)
-  | App(t, u) -> "(" ^ (show t) ^ ") (" ^ (show u) ^ ")"
+  | Abs(s, t) -> "\\" ^ s ^ ". " ^ (term_to_string t)
+  | App(t, u) -> "(" ^ (term_to_string t) ^ ") (" ^ (term_to_string u) ^ ")"
 
 
 (* List free variables. *)
@@ -105,6 +111,30 @@ let rec normalize t =
   let n_t = normalize_step t in
     if n_t = t then t
     else normalize_step n_t
+
+
+(* Test if two terms are alpha convertible. *)
+(*
+  Note: this is actually a nice excercise for regular
+  Lambda terms, but we won't try to find an ugly hack
+  for this.
+  On debruijn terms on the other hand, this operation
+  is much easier. Therefore it would be nice to have
+  a debruijn representation of terms and convert terms
+  first.
+*)
+(*
+  Note: maybe the following is an idea to implement
+  this operation on regular Lambda terms. Add a third
+  parameter which is a list of pairs translating vars
+  of the first term to vars of the second.
+  On second thought this seems like an optimization of
+  the more general approach of trying to alpha-convert
+  the first term to the second term (on each recursive
+  call, apply a substitution if we see an abstraction.
+*)
+
+let alpha_convertible t u = true
 
 
 (*

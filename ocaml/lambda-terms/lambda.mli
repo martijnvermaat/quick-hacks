@@ -4,19 +4,27 @@
  *)
 
 
-type term =
-    Var of string            (* variable    *)
-  | Abs of string * term     (* abstraction *)
-  | App of term * term       (* application *)
+(* Type of Lambda terms. *)
+type term
 
-val show : term -> string
 
+(* Construct terms. *)
+val var : string -> term
+val abs : string -> term -> term
+val app : term -> term -> term
+
+
+(* Get a string representation of a term. *)
+val term_to_string : term -> string
+
+
+(* Substitution for free variable in term. *)
 val substitute : string -> term -> term -> term
 
-val is_redex : term -> bool
 
-val beta_reduce : term -> term
-
-val normalize_step : term -> term
-
+(* Beta reduce term to normal form. *)
 val normalize : term -> term
+
+
+(* Test if two terms are equal modulo alpha conversion. *)
+val alpha_convertible : term -> term -> bool

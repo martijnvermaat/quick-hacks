@@ -1,29 +1,29 @@
 (* Test our datatype. *)
 
+open Lambda
+
 
 let _ =
 
 
-  let id = Lambda.Abs("x", Lambda.Var("x")) in
+  let id = abs "x" (var "x") in
 
-  let apply_self = Lambda.Abs("x",
-                              Lambda.App(Lambda.Var("x"),
-                                         Lambda.Var("x"))) in
+  let apply_self = abs "x" (app (var "x") (var "x")) in
 
-  let omega = Lambda.App(apply_self, apply_self) in
+  let omega = app apply_self apply_self in
 
-  let free_y = Lambda.Var("y") in
+  let free_y = var "y" in
 
-  let bound_y = Lambda.Abs("x", Lambda.Abs("y", Lambda.Var("x"))) in
+  let bound_y = abs "x" (abs "y" (var "x")) in
 
-  let test = (Lambda.App(bound_y, free_y)) in
+  let test = app bound_y free_y in
 
-    print_string ("Application of\n  " ^ (Lambda.show bound_y) ^ "\non\n  ");
-    print_string ((Lambda.show free_y) ^ "\nshould yield\n  \\z.y\n");
+    print_string ("Application of\n  " ^ (term_to_string bound_y) ^ "\non\n  ");
+    print_string ((term_to_string free_y) ^ "\nshould yield\n  \\z.y\n");
 
     print_string "Actual result:\n  ";
 
-    print_string (Lambda.show test);
+    print_string (term_to_string test);
     print_string "\n  ->\n  ";
-    print_string (Lambda.show (Lambda.normalize test));
+    print_string (term_to_string (normalize test));
     print_newline ();
