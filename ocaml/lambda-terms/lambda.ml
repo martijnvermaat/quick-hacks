@@ -133,8 +133,39 @@ let rec normalize t =
   the first term to the second term (on each recursive
   call, apply a substitution if we see an abstraction.
 *)
+(*
+  The following is an implementation of alpha
+  convertibility following the latter approach above.
+  There may be errors in this algorithm, it has not
+  been thought over very well ;)
+*)
 
-let alpha_convertible t u = true
+let rec alpha_convertible term = function
+    Var(s) ->
+      begin
+        match term with
+            Var(s') -> s = s'
+          | _       -> false
+      end
+  | Abs(s, t) ->
+      begin
+        match term with
+            Abs(s', t') ->
+              if s = s' then
+                alpha_convertible t t'
+              else
+                alpha_convertible t
+                  (substitute s' (Var(s)) t')
+          | _ -> false
+      end
+  | App(t, u) ->
+      match term with
+          App(t', u') ->
+            alpha_convertible t t'
+            && alpha_convertible u u'
+        | _ -> false
+
+
 
 
 (*
