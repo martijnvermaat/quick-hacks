@@ -13,6 +13,7 @@ type term =
 
 
 (* DeBruijn representation of terms. *)
+
 type debruijn =
     Variable of int
   | Abstraction of debruijn
@@ -20,6 +21,7 @@ type debruijn =
 
 
 (* Some wrapper functions for term constructors. *)
+
 let var s = Var(s)
 let abs s t = Abs(s, t)
 let app t u = App(t, u)
@@ -42,6 +44,7 @@ let rec term_to_string = function
   not to introduce duplicates. Another option would have
   been to just use a set datatype.
 *)
+
 let rec free_vars = function
     Var(s)    -> [s]
   | Abs(s, t) -> List.filter (fun x -> x <> s) (free_vars t)
@@ -192,7 +195,9 @@ let rec alpha_convertible term = function
   Note: we use a list of pairs that associates variables
   with DeBruijn indices.
 *)
+
 let debruijnize t =
+  (* Helper function db does the real work. *)
   let rec db indices =
     let add_one = function (s, i) -> (s, i+1) in
       function
@@ -212,13 +217,14 @@ let debruijnize t =
   let free =
     let f_t = free_vars t in
     let rec generate n =
-      (* Generate n yields [0;1;..;n] *)
+      (* Generate n yields [n; n-1; ... 2; 1] *)
       if n = 0 then
         []
       else
         n :: (generate (n-1))
     in
-      (* Yield [a,0; b,1; ... ; z,n] for a-z in f_t. *)
+      (* Yield [a,n; ... ; z,2; z,1] for a-z in f_t. *)
+      (* These are default DeBruijn indices for free variables. *)
       List.combine (f_t) (generate (List.length f_t))
   in
     db free t
@@ -245,4 +251,6 @@ let rec debruijn_to_string = function
   resultaat terug geeft. Je mag zelf kiezen welke
   normalizatie strategie je gebruikt, maar je moet wel
   aangeven welke keuze je hebt gemaakt.
+
+  (ok, already did this here...)
 *)
