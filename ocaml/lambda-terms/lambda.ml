@@ -75,6 +75,16 @@ let beta_reduce = function
 
 
 (* Apply one beta reduction step in term. *)
+(*
+  Note: here (and in the normalize function) we could
+  also use a 'has_redex' function instead of the check
+  on equality after applying normalize_step.
+  This is actually the approach taken where we use the
+  is_redex function (we could also do an equality check
+  there after applying beta_reduce).
+  Maybe we should stick to one way of doing things, and
+  add a 'has_redex' function.
+*)
 
 let rec normalize_step t =
   if is_redex t then
