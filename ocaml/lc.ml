@@ -16,6 +16,10 @@ let rec show = function
   | Application(t, u) -> "(" ^ (show t) ^ ") (" ^ (show u) ^ ")";;
 
 (* Substitution, substitute term for var in argument. *)
+(*
+   Note: this definition of substitution is naive, as
+   it doesn't rename captured free variables!
+*)
 let rec substitute var term = function
     Var(s)            -> if (s = var) then term else Var(s)
   | Abstraction(s, t) -> if (s = var) then Abstraction(s, t)
