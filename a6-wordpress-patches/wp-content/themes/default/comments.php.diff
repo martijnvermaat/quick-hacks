@@ -1,0 +1,25 @@
+--- comments.php	2005-02-11 03:08:24.000000000 +0100
++++ ../../../../a6/wp-content/themes/default/comments.php	2005-03-23 17:36:00.000000000 +0100
+@@ -90,8 +90,8 @@
+ 
+ <!--<p><small><strong>XHTML:</strong> You can use these tags: <?php echo allowed_tags(); ?></small></p>-->
+ 
+-<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
+-
++<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4" onkeyup="reloadPreviewDiv()"></textarea></p>
++<p><small>You can use <code>HTML</code> or <a href="http://www.textism.com/tools/textile/">Textile</a> markup.</small></p>
+ <p><input name="submit" type="submit" id="submit" tabindex="5" value="Submit Comment" />
+ <input type="hidden" name="comment_post_ID" value="<?php echo $id; ?>" />
+ </p>
+@@ -99,6 +99,9 @@
+ 
+ </form>
+ 
++<h3>Comment preview</h3>
++<div class="entrytext" id="previewcomment"></div>
++
+ <?php endif; // If registration required and not logged in ?>
+ 
+-<?php endif; // if you delete this the sky will fall on your head ?>
+\ No newline at end of file
++<?php endif; // if you delete this the sky will fall on your head ?>

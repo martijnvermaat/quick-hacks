@@ -1,0 +1,16 @@
+--- sidebar.php	2005-02-15 10:28:12.000000000 +0100
++++ ../../../../a6/wp-content/themes/default/sidebar.php	2005-03-23 13:19:00.000000000 +0100
+@@ -45,11 +45,13 @@
+ 				</ul>
+ 			</li>
+ 
++<?php/*
+ 			<li><h2><?php _e('Categories'); ?></h2>
+ 				<ul>
+ 				<?php list_cats(0, '', 'name', 'asc', '', 1, 0, 1, 1, 1, 1, 0,'','','','','') ?>
+ 				</ul>
+ 			</li>
++     */?>
+ 
+ 			<?php /* If this is the frontpage */ if ( is_home() || is_page() ) { ?>				
+ 				<?php get_links_list(); ?>

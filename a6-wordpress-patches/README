@@ -1,0 +1,28 @@
+Patches to basic WordPress 1.5 install for Universe A6 weblog.
+
+This directory contains .diff files describing my patch to the
+original file and other files added to the original installation.
+
+Patches apply to the default theme for WordPress 1.5.
+
+
+Plug-ins installed and activated:
+  MiniPosts 0.5.1 from http://doocy.net/mini-posts/
+  Textile 2 (Improved) 2.0.2 from
+    http://idly.org/category/geekery/wordpress/textile
+  Hello Dolly 1.0 from http://wordpress.org/
+
+Files different:
+  wp-content/plugins/mini-posts.php
+  wp-content/plugins/textile2-new.php
+  wp-content/themes/default/archive.php
+  wp-content/themes/default/comments.php
+  wp-content/themes/default/header.php
+  wp-content/themes/default/index.php
+  wp-content/themes/default/search.php
+  wp-content/themes/default/sidebar.php
+  wp-content/themes/default/single.php
+  wp-content/themes/default/style.css
+
+Files added:
+  wp-content/themes/default/livepreview.js

@@ -1,0 +1,12 @@
+--- single.php	2005-01-27 06:52:48.000000000 +0100
++++ ../../../../a6/wp-content/themes/default/single.php	2005-03-23 13:19:00.000000000 +0100
+@@ -19,7 +19,8 @@
+ 	
+ 				<p class="postmetadata alt">
+ 					<small>
+-						This entry was posted
++						This entry was posted by
++                        <?php the_author(); ?>
+ 						<?php /* This is commented, because it requires a little adjusting sometimes.
+ 							You'll need to download this plugin, and follow the instructions:
+ 							http://binarybonsai.com/archives/2004/08/17/time-since-plugin/ */

@@ -1,0 +1,11 @@
+--- header.php	2005-02-14 05:36:57.000000000 +0100
++++ ../../../../a6/wp-content/themes/default/header.php	2005-03-23 17:31:00.000000000 +0100
+@@ -14,6 +14,8 @@
+ 	<link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="<?php bloginfo('atom_url'); ?>" />
+ 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+ 
++    <script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/livepreview.js"></script>
++
+ 	<style type="text/css" media="screen">
+ 	
+ 		/* BEGIN IMAGE CSS */

@@ -1,0 +1,35 @@
+--- textile2-new.php	2004-06-09 06:36:12.000000000 +0200
++++ ../../../a6/wp-content/plugins/textile2-new.php	2005-03-28 00:41:38.427506832 +0200
+@@ -52,15 +52,29 @@
+ 
+   if ($dont_make_text_pretty == 1) {
+     $textile->options['smarty_mode'] = 0;
+-    return $textile->process($text);
++    $text = $textile->process($text);
+   } else if (!function_exists('SmartyPants')) {
+     $text = $textile->process($text);
+-    return wptexturize($text);
++    $text = wptexturize($text);
+   } else {
+-    return $textile->process($text);   
++    $text = $textile->process($text);   
+   }
++
++  return do_make_mini($text);
++
+ }
+ 
++function do_make_mini($text) {
++
++    if (is_mini_post() && !is_single()) {
++        $text = preg_replace('/<(?:\/)?p>/', '', $text);
++    }
++
++    return $text;
++
++}
++
++
+ /** Let's add some filters! **/
+ 
+ remove_filter('the_content', 'wpautop');

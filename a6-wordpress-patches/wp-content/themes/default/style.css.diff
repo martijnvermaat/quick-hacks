@@ -1,0 +1,33 @@
+--- style.css	2005-02-11 08:48:30.000000000 +0100
++++ ../../../../a6/wp-content/themes/default/style.css	2005-03-27 19:02:00.000000000 +0200
+@@ -137,6 +137,18 @@
+ 	font-weight: bold;
+ 	}
+ 
++.commentlist li ul li {
++	list-style-type: disc;
++	}
++
++.commentlist li ol li {
++	list-style-type: decimal;
++	}
++
++.commentlist li li {
++	font-weight: normal;
++	}
++
+ .commentlist cite, .commentlist cite a {
+ 	font-weight: bold;
+ 	font-style: normal;
+@@ -252,6 +264,11 @@
+ 	text-align: justify;
+ 	}
+ 
++.minipost {
++    margin: 40px 0 40px 0;
++    text-align: justify;
++}
++
+ .widecolumn .post {
+ 	margin: 0;
+ 	}
