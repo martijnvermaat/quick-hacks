@@ -1,0 +1,6 @@
+#!/bin/sh
+
+ocamlc -c tree.mli
+ocamlc -c tree.ml
+ocamlc -c test.ml
+ocamlc -o test tree.cmo test.cmo
