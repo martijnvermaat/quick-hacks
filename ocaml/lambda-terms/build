@@ -1,0 +1,6 @@
+#!/bin/sh
+
+ocamlc -c lambda.mli
+ocamlc -c lambda.ml
+ocamlc -c test.ml
+ocamlc -o test lambda.cmo test.cmo

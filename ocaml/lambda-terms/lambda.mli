@@ -4,7 +4,10 @@
  *)
 
 
-type term
+type term =
+    Var of string
+  | Abstraction of string * term
+  | Application of term * term
 
 val show : term -> string
 

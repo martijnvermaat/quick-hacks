@@ -9,7 +9,7 @@
 type term =
     Var of string
   | Abstraction of string * term
-  | Application of term * term;;
+  | Application of term * term
 
 
 (* show returns the string representation of a term. *)
@@ -17,7 +17,7 @@ type term =
 let rec show = function
     Var(s)            -> s
   | Abstraction(s, t) -> "\\" ^ s ^ ". " ^ (show t)
-  | Application(t, u) -> "(" ^ (show t) ^ ") (" ^ (show u) ^ ")";;
+  | Application(t, u) -> "(" ^ (show t) ^ ") (" ^ (show u) ^ ")"
 
 
 (* Substitution, substitute term for var in argument. *)
@@ -48,23 +48,14 @@ let isredex = function
   | _ -> false;;
 
 
+(*
+   Opgave:
+   Voeg normalizatie toe, dus een functie
 
-(* Test our datatype. *)
+     val normalize : term -> term
 
-let omega = Application(
-  Abstraction("x", Application(Var("x"),Var("x"))),
-  Abstraction("x", Application(Var("x"),Var("x"))));;
-
-let test = Application(Abstraction("x", Application(Var("x"), Var("y"))), Var("y"));;
-
-print_string "Should print (\\x.x x)(\\x.x x):\n";;
-print_string (show omega);;
-print_newline ();;
-
-print_string "Should print (\\x.x y) y:\n";;
-print_string (show test);;
-print_newline ();;
-
-print_string "Should print (y y):\n";;
-print_string (show (reduce test));;
-print_newline ();;
+   die een term beta reduceert naar normaalvorm en het
+   resultaat terug geeft. Je mag zelf kiezen welke
+   normalizatie strategie je gebruikt, maar je moet wel
+   aangeven welke keuze je hebt gemaakt.
+*)
