@@ -12,6 +12,13 @@ type term =
   | App of term * term
 
 
+(* DeBruijn representation of terms. *)
+type debruijn =
+    Variable of int
+  | Abstraction of debruijn
+  | Application of debruijn * debruijn
+
+
 (* Some wrapper functions for term constructors. *)
 let var s = Var(s)
 let abs s t = Abs(s, t)
@@ -30,20 +37,29 @@ let rec term_to_string = function
 
 
 (* List free variables. *)
-
+(*
+  Note: since we use lists here, we have to be careful
+  not to introduce duplicates. Another option would have
+  been to just use a set datatype.
+*)
 let rec free_vars = function
     Var(s)    -> [s]
   | Abs(s, t) -> List.filter (fun x -> x <> s) (free_vars t)
-  | App(t, u) -> List.append (free_vars t) (free_vars u)
+  | App(t, u) ->
+      let f_t = free_vars t in
+      let f_u = free_vars u in
+        List.append f_t (List.filter (fun x -> not (List.mem x f_t)) f_u)
 
 
 (* Generate fresh variable (not in l). *)
 
 let rec fresh_var v l =
-  if List.mem v l then   (* find fresh var *)
+  if List.mem v l then
+    (* Find fresh variable. *)
     fresh_var (v ^ "'") l
   else
-    v                    (* v is fresh *)
+    (* v is fresh. *)
+    v
 
 
 (* Substitution, substitute term for var in argument. *)
@@ -53,14 +69,18 @@ let rec substitute var term = function
   | Abs(s, t) ->
       let f_t = free_vars t in
       let f_term = free_vars term in
-        if (s = var) then                         (* var got bound *)
+        if (s = var) then
+          (* var got bound. *)
           Abs(s, t)
-        else if (not (List.mem var (f_t))) then   (* nothing to do *)
+        else if (not (List.mem var (f_t))) then
+          (* Nothing to substitute. *)
           Abs(s, t)
-        else if (List.mem s (f_term)) then        (* rename bound vars *)
+        else if (List.mem s (f_term)) then
+          (* Rename bound vars. *)
           let f = fresh_var s (List.append (f_t) (f_term)) in
             Abs(f, substitute var term t)
-        else                                      (* regular substitution *)
+        else
+          (* Regular substitution. *)
           Abs(s, substitute var term t)
   | App(t, u) -> App(substitute var term t,
                      substitute var term u)
@@ -165,6 +185,53 @@ let rec alpha_convertible term = function
             && alpha_convertible u u'
         | _ -> false
 
+
+
+(* Convert terms to DeBruijn representation. *)
+(*
+  Note: we use a list of pairs that associates variables
+  with DeBruijn indices.
+*)
+let debruijnize t =
+  let rec db indices =
+    let add_one = function (s, i) -> (s, i+1) in
+      function
+          Var(s) ->
+            if List.mem_assoc s indices then
+              Variable(List.assoc s indices)
+            else
+              (* Every var should have associated index. *)
+              raise (Invalid_argument ("debruijnize: "^s))
+        | Abs(s, t) ->
+            (* Add index for s and add one to other indices. *)
+            let l = List.map add_one (List.remove_assoc s indices) in
+              Abstraction(db ((s, 0) :: l) t)
+        | App(t, u) ->
+            Application(db indices t, db indices u)
+  in
+  let free =
+    let f_t = free_vars t in
+    let rec generate n =
+      (* Generate n yields [0;1;..;n] *)
+      if n = 0 then
+        []
+      else
+        n :: (generate (n-1))
+    in
+      (* Yield [a,0; b,1; ... ; z,n] for a-z in f_t. *)
+      List.combine (f_t) (generate (List.length f_t))
+  in
+    db free t
+
+
+(* String representation of DeBruijn term. *)
+
+let rec debruijn_to_string = function
+    Variable(i)       -> string_of_int i
+  | Abstraction(t)    -> "\\." ^ (debruijn_to_string t)
+  | Application(t, u) ->
+      "(" ^ (debruijn_to_string t)
+      ^ ") (" ^ (debruijn_to_string u) ^ ")"
 
 
 

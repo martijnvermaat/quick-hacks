@@ -20,7 +20,13 @@ let _ =
 
   let test = app bound_y free_y in
 
-    if alpha_convertible omega (app apply_self apply_self2) then
-      print_string "Ja!!!\n"
-    else
-      print_string "Nee!!!\n"
+    print_string (term_to_string omega);
+    print_newline ();
+    print_string (debruijn_to_string (debruijnize omega));
+    print_newline ();
+    print_newline ();
+
+    print_string (term_to_string test);
+    print_newline ();
+    print_string (debruijn_to_string (debruijnize test));
+    print_newline ();
