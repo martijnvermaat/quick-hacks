@@ -5,14 +5,18 @@
 
 
 type term =
-    Var of string
-  | Abstraction of string * term
-  | Application of term * term
+    Var of string            (* variable    *)
+  | Abs of string * term     (* abstraction *)
+  | App of term * term       (* application *)
 
 val show : term -> string
 
 val substitute : string -> term -> term -> term
 
-val reduce : term -> term
+val is_redex : term -> bool
 
-val isredex : term -> bool
+val beta_reduce : term -> term
+
+val normalize_step : term -> term
+
+val normalize : term -> term
