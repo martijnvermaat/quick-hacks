@@ -11,6 +11,13 @@ let rec show = function
     Zero    -> 0
   | Succ(n) -> 1 + (show n);;
 
+(* Asside: tail recursive version of show with an accumulator: *)
+let trshow =
+  let rec accshow a = function
+      Zero    -> a
+    | Succ(n) -> accshow (a+1) n
+  in accshow 0;;
+
 (* Addition on naturals. *)
 let rec add = function
     Zero    -> fun m -> m
