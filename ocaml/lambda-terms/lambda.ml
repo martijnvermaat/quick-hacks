@@ -1,7 +1,7 @@
 (*
-   Lambda calculus terms in OCaml
-   Implementation
- *)
+  Lambda calculus terms in OCaml
+  Implementation
+*)
 
 
 (* A term is a variable, abstraction or application. *)
@@ -22,8 +22,8 @@ let rec show = function
 
 (* Substitution, substitute term for var in argument. *)
 (*
-   Note: this definition of substitution is naive, as
-   it doesn't rename captured free variables!
+  Note: this definition of substitution is naive, as
+  it doesn't rename captured free variables!
 *)
 
 let rec substitute var term = function
@@ -49,13 +49,13 @@ let isredex = function
 
 
 (*
-   Opgave:
-   Voeg normalizatie toe, dus een functie
+  Opgave:
+  Voeg normalizatie toe, dus een functie
 
-     val normalize : term -> term
+    val normalize : term -> term
 
-   die een term beta reduceert naar normaalvorm en het
-   resultaat terug geeft. Je mag zelf kiezen welke
-   normalizatie strategie je gebruikt, maar je moet wel
-   aangeven welke keuze je hebt gemaakt.
+  die een term beta reduceert naar normaalvorm en het
+  resultaat terug geeft. Je mag zelf kiezen welke
+  normalizatie strategie je gebruikt, maar je moet wel
+  aangeven welke keuze je hebt gemaakt.
 *)
