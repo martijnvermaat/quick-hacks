@@ -1,0 +1,93 @@
+#!/bin/sh
+
+# This should be a shell script that creates
+# a backup of the Subversion repository and
+# gzips the result.
+#
+# It also copies the backup to a Windows
+# network share.
+#
+# To run periodically from a scheduler like
+# cron, for example:
+#
+#   $ crontab -l
+#   Run Subversion repository backup twice a week at night
+#   30 03 * * 7 /home/martijn/bin/svn_backup >> /var/log/svn_backup 2>&1
+#   30 03 * * 4 /home/martijn/bin/svn_backup >> /var/log/svn_backup 2>&1
+#
+# On most systems, hot-backup.py must be
+# executed with root permissions, hence the
+# same holds for this script.
+#
+# Martijn Vermaat, 2005-03-22
+
+
+# Configuration
+
+# Repository path
+REPOSITORY=/var/svn/repository
+
+# Backup directory
+BACKUPS=/var/backups/subversion
+
+# Windows network share mount point and backup location
+WINDOWSMOUNT=/var/backups/frank
+WINDOWS=$WINDOWSMOUNT/Tinux/subversion
+
+
+# End of configuration. Begin of backup script
+
+echo
+
+# We use the current date in the backup path
+DATE=`date '+%F'`
+
+echo
+echo Starting subversion backup procedure at $DATE
+echo
+echo Creating directory $BACKUPS/$DATE
+
+# Create backup dir
+mkdir $BACKUPS/$DATE
+
+echo
+echo Running hot-backup.py $REPOSITORY $BACKUPS/$DATE
+
+# Create backup with Subversion backup script
+/usr/lib/subversion/hot-backup.py $REPOSITORY $BACKUPS/$DATE
+
+echo
+echo Running tar and gzip
+
+# tar and gzip backup
+tar -cf $BACKUPS/$DATE.tar $BACKUPS/$DATE
+gzip --force $BACKUPS/$DATE.tar
+
+echo
+echo Removing uncompressed backup
+
+# Remove un-gzip-ed backup
+rm -Rf $BACKUPS/$DATE
+
+echo
+echo Mounting Windows network share
+
+# Mount Windows network share
+mount $WINDOWSMOUNT
+
+echo
+echo Copying backup to Windows network share
+
+# Copy backup to Windows network share
+cp $BACKUPS/$DATE.tar.gz $WINDOWS
+
+echo
+echo Unmounting Windows network share
+
+# Unmount Windows network share
+umount $WINDOWSMOUNT 2> /dev/null
+
+echo
+echo Backup completed and located at $BACKUPS/$DATE.tar.gz
+echo A copy is written to $WINDOWS
+echo
