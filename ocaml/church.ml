@@ -1,6 +1,6 @@
 (*
- Fun with Church numerals
- Martijn Vermaat, 2005-03-16
+  Fun with Church numerals
+  Martijn Vermaat, 2005-03-16
 *)
 
 (* The Church numeral denoting the integer value 0. *)
@@ -28,7 +28,7 @@ let five = succ four;;
 (* show returns integer value denoted by the given Church numeral. *)
 let show n =
   let inc n = n + 1 in
-  n inc 0;;
+    n inc 0;;
 
 
 (* Asside: These Church numerals could also be
