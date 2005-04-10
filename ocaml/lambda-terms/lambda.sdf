@@ -1,0 +1,59 @@
+definition
+
+
+module Layout
+
+exports
+
+    lexical syntax
+
+        [\ \t\n]                    -> LAYOUT
+
+    context-free restrictions
+
+        LAYOUT? -/- [\ \t\n]
+
+
+module Identifier
+
+exports
+
+    sorts Identifier
+
+    lexical syntax
+
+        [A-Za-z0-9]+                -> Identifier
+
+    lexical restrictions
+
+        Identifier -/- [A-Za-z0-9]
+
+
+module Expr
+
+exports
+
+    sorts Expr Identifier
+
+    context-free syntax
+
+        Identifier                  -> Expr {cons("Var")}
+        Expr Expr                   -> Expr {cons("Apply"), left}
+        "\\" Identifier "." Expr    -> Expr {cons("Lambda")}
+        "(" Expr ")"                -> Expr {bracket}
+
+    context-free priorities
+
+        Expr Expr                   -> Expr >
+        "\\" Identifier "." Expr    -> Expr
+
+
+module Main
+
+imports Expr Identifier Layout
+
+exports
+
+    context-free start-symbols
+
+        Expr

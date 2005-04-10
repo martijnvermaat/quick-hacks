@@ -22,9 +22,18 @@
   to XML and parse this with Xml-Light.
 *)
 
+(*
+  Use like
+
+  sglri -p lambda.tbl -i hoi | aterm2xml --implicit | ocaml xml-light.cma parser.ml
+
+  Unfortunately, sglri seems to suffer from a bug causing
+  it to ignore input from stdin.
+*)
+
 
 let _ =
 
-  let x = Xml.parse_string "<a href='url'>TEXT<begin/><end/></a>" in
-    Printf.printf "XML formated = \n%s" (Xml.to_string_fmt x);
+  let x = Xml.parse_in stdin in
+    print_string (Xml.to_string_fmt x);
     print_newline ()
