@@ -25,7 +25,7 @@
 (*
   Use like
 
-  sglri -p lambda.tbl -i hoi | aterm2xml --implicit | ocaml xml-light.cma lambda.cma parser.ml
+  sglri -p lambda.tbl -i hoi | aterm2xml --implicit | ocaml -I .. xml-light.cma lambda.cma parser.ml
 
   Unfortunately, sglri seems to suffer from a bug causing
   it to ignore input from stdin.
