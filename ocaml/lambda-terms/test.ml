@@ -1,32 +1,30 @@
-(* Test our datatype. *)
+(* Test our datatype and parser. *)
 
-open Lambda
+
+(*
+  sglri -p parse/lambda.tbl | aterm2xml --implicit | \
+    ocaml -I parse lambda.cmo xml-light.cma parse.cmo test.ml
+*)
 
 
 let _ =
 
 
-  let id = abs "x" (var "x") in
+  let xml = Xml.parse_in stdin in
 
-  let apply_self = abs "x" (app (var "x") (var "x")) in
+  let term = Parse.xml_to_lambda xml in
 
-  let apply_self2 = abs "y" (app (var "y") (var "y")) in
+  let debruijn = Lambda.debruijnize term in
 
-  let omega = app apply_self apply_self in
-
-  let free_y = var "y" in
-
-  let bound_y = abs "x" (abs "y" (var "x")) in
-
-  let test = app bound_y free_y in
-
-    print_string (term_to_string omega);
-    print_newline ();
-    print_string (debruijn_to_string (debruijnize omega));
-    print_newline ();
+    print_string "Term: ";
+    print_string (Lambda.term_to_string term);
     print_newline ();
 
-    print_string (term_to_string test);
+    print_string "DeBruijn: ";
+    print_string (Lambda.debruijn_to_string debruijn);
     print_newline ();
-    print_string (debruijn_to_string (debruijnize test));
+
+    print_string "Normal form: ";
+    print_string (Lambda.term_to_string
+                    (Lambda.normalize term));
     print_newline ();

@@ -124,11 +124,16 @@ let rec normalize_step t =
       | Abs(s, t) -> Abs(s, normalize_step t)
       | App(t, u) ->
           let n_t = normalize_step t in
-            if n_t = t then normalize_step u
-            else n_t
+            if n_t = t then App(t, normalize_step u)
+            else App(n_t, u)
 
 
 (* Normalize term. *)
+(*
+  Note: there are still some bugs here. In particular
+  terms with no normal form are not handled correctly,
+  e.g. ((\x.x x) (\x.x x)).
+*)
 
 let rec normalize t =
   let n_t = normalize_step t in

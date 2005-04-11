@@ -25,36 +25,26 @@
 (*
   Use like
 
-  sglri -p lambda.tbl -i hoi | aterm2xml --implicit | ocaml -I .. xml-light.cma lambda.cma parser.ml
+  sglri -p lambda.tbl | aterm2xml --implicit | ocaml -I .. xml-light.cma lambda.cma parser.ml
 
-  Unfortunately, sglri seems to suffer from a bug causing
-  it to ignore input from stdin.
+  Unfortunately, sglri from StrategoXT release 0.13 seems to
+  suffer from a bug causing it to ignore input from stdin.
 *)
 
 
 exception InvalidParsetree of string
 
 
-let _ =
+let rec xml_to_lambda = function
 
+    Xml.Element("Lambda", _, Xml.PCData(s)::t::[]) ->
+      Lambda.abs s (xml_to_lambda t)
 
-  let rec xml_to_lambda = function
+  | Xml.Element("Apply", _, t::u::[]) ->
+      Lambda.app (xml_to_lambda t) (xml_to_lambda u)
 
-      Xml.Element("Lambda", _, Xml.PCData(s)::t::[]) ->
-        Lambda.abs s (xml_to_lambda t)
+  | Xml.Element("Var", _, Xml.PCData(s)::[]) ->
+      Lambda.var s
 
-    | Xml.Element("Apply", _, t::u::[]) ->
-        Lambda.app (xml_to_lambda t) (xml_to_lambda u)
-
-    | Xml.Element("Var", _, Xml.PCData(s)::[]) ->
-        Lambda.var s
-
-    | _ ->
-        raise (InvalidParsetree "Not a parse tree of a lambda term")
-
-  in
-
-
-  let xml = Xml.parse_in stdin in
-    print_string (Lambda.term_to_string (xml_to_lambda xml));
-    print_newline ()
+  | _ ->
+      raise (InvalidParsetree "Not a parse tree of a lambda term")

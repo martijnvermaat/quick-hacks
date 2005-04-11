@@ -1,0 +1,3 @@
+sglri -p parse/lambda.tbl \
+ | aterm2xml --implicit   \
+ | ocaml -I parse lambda.cmo xml-light.cma parse.cmo test.ml
