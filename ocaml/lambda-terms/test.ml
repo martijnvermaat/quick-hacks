@@ -9,7 +9,6 @@
 
 let _ =
 
-
   let xml = Xml.parse_in stdin in
 
   let term = Parse.xml_to_lambda xml in
@@ -27,4 +26,4 @@ let _ =
     print_string "Normal form: ";
     print_string (Lambda.term_to_string
                     (Lambda.normalize term));
-    print_newline ();
+    print_newline ()

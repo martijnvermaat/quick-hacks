@@ -1,3 +1,12 @@
-sglri -p parse/lambda.tbl \
- | aterm2xml --implicit   \
- | ocaml -I parse lambda.cmo xml-light.cma parse.cmo test.ml
+#!/bin/sh
+
+#sglri -p parse/lambda.tbl \
+# | aterm2xml --implicit   \
+# | ocaml -I parse lambda.cmo xml-light.cma parse.cmo test.ml
+
+# Be careful to use ./test instead of just test which might
+# resolve to /usr/bin/test or similar...
+#sglri -p parse/lambda.tbl | aterm2xml --implicit | ./test
+
+# Or for systems with no sglri available
+sglr -2 -p parse/lambda.tbl | implode-asfix | aterm2xml --implicit | ./test
