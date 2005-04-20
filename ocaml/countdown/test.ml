@@ -19,4 +19,6 @@ let rec insertions e l = match l with
     []    -> [[e]]
   | x::xs -> (e::x::xs) :: (List.map (fun l -> x::l) (insertions e xs))
 
-let rec permutations = true
+let rec permutations l = match l with
+    []    -> [[]]
+  | x::xs -> List.flatten (List.map (fun l -> (insertions x l)) (permutations xs))
