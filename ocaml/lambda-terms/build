@@ -2,6 +2,6 @@
 
 ocamlc -c lambda.mli
 ocamlc -c lambda.ml
-ocamlc -c parse/parse.ml
-ocamlc -c -I parse test.ml
-ocamlc -o test -I parse lambda.cmo xml-light.cma parse.cmo test.cmo
+ocamlc -c -I /home/mvermaat/public/ocaml parse/parse.ml
+ocamlc -c -I parse -I /home/mvermaat/public/ocaml test.ml
+ocamlc -o test -I parse -I /home/mvermaat/public/ocaml lambda.cmo xml-light.cma parse.cmo test.cmo
