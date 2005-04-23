@@ -3,7 +3,7 @@
   in OCaml.
 
   The countdown problem is described by Graham
-  Huttonin the Functional Pearls column of the
+  Huttonin his Functional Pearls column of the
   Journal of Functional Programming [1].
 
   This code is a direct translation of the
@@ -17,11 +17,16 @@
 
 
   Example problem instance:
-    Numbers (3,7,11,15) with 10 should yield:
-    (7+3)
-    (3+7)
-    ((7*3)-11)
-    ((3*7)-11)
+
+    Numbers (1,3,7,10,25,50) with 765 should
+    yield:
+
+    (((25-7)-3)*(1+50))
+    ((25-(3+7))*(1+50))
+    (((25-3)-7)*(1+50))
+    ((25-10)*(1+50))
+    (3*((7*(50-10))-25))
+    [...]
 
 
   Usage:
@@ -34,18 +39,19 @@
     $ ./countdown
 
 
-  Future:
-  This is a naive brute-force solution. Two
-  optimizations are suggested by Hutton to
-  minimize the search space. Only the second
-  one is implemented here.
-
-
   April 2005, Martijn Vermaat
 
-  [1] http://www.cs.nott.ac.uk/~gmh/countdown.pdf
+  [1] Hutton, G. (2002) Functional Pearl: the
+  countdown problem. Journal of Functional
+  Programming.
+  http://www.cs.nott.ac.uk/~gmh/countdown.pdf
 *)
 
+
+
+(************************************************
+  Implementation
+************************************************)
 
 
 (*
@@ -271,6 +277,81 @@ let solutions numbers number =
 
 
 (************************************************
+  Below is the first optimization as suggested
+  by Hutton.
+************************************************)
+
+
+(*
+  A result is an expression and its evaluation.
+*)
+type result = (expression * int)
+
+
+(*
+  Return list of possible results for list of
+  natural numbers l.
+  Excuse me for the (especially in this function)
+  unreadable source code due to the flatten's and
+  map's. I tried to translate the list
+  comprehensions of Hutton as directly as
+  possible. I admit this is ugly.
+*)
+let rec results l = match l with
+    []  -> []
+  | [n] -> if n > 0 then [(Val n, n)] else []
+  | _   ->
+
+      (*
+        List of possible results of applying an
+        operator to l and r.
+      *)
+      let combine (l, x) (r, y) =
+        let ops = [Add; Sub; Mul; Div] in
+          List.map
+            (fun o -> (App(o, l, r), apply o x y))
+            (List.filter (fun o -> valid' o x y) ops)
+      in
+
+      (*
+        List of all possible results of combining
+        an element of ls with an element of rs.
+      *)
+      let combined_results (ls, rs) =
+        List.flatten
+          (List.map
+             (fun lx ->
+                List.flatten
+                  (List.map (fun ry -> combine lx ry) (results rs)))
+             (results ls))
+      in
+
+        List.flatten
+          (List.map
+             combined_results
+             (ne_split l))
+
+
+(*
+  A list of expressions over numbers that yield
+  number on evaluation.
+*)
+let solutions' numbers number =
+
+  (*
+    A list of all 'good' expressions over values
+    of list l.
+  *)
+  let exprs l =
+    let check (e, m) = (m = number) in
+    List.map (fun (e, m) -> e) (List.filter check (results l))
+  in
+
+    List.flatten (List.map exprs (subbags numbers))
+
+
+
+(************************************************
   What is left is a way to work with al this.
 ************************************************)
 
@@ -345,12 +426,24 @@ let countdown () =
     print_string "I can make ";
     print_int number;
     print_string " from these numbers in the following ways:\n";
+    flush stdout;
 
     let print e =
       print_string (expression_to_string e);
       print_newline ()
     in
-      List.iter print (solutions !numbers number)
+    let s = solutions' !numbers number in
+      List.iter print (solutions' !numbers number);
+      if List.length s > 1 then
+        begin
+          print_string "This were ";
+          print_int (List.length s);
+          print_string " solutions.\n"
+        end
+      else if List.length s = 1 then
+        print_string "This was the only solution.\n"
+      else
+        print_string "Sorry, there are no solutions to this problem.\n"
 
 
 (*
