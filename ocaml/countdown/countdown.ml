@@ -41,6 +41,12 @@
 
   April 2005, Martijn Vermaat
 
+  This code is based on the work by Graham
+  Hutton and available as Open Source under
+  the new BSD License:
+  http://www.opensource.org/licenses/bsd-license.php
+
+
   [1] Hutton, G. (2002) Functional Pearl: the
   countdown problem. Journal of Functional
   Programming.
@@ -283,6 +289,19 @@ let solutions numbers number =
 
 
 (*
+  This optimization is a real must-have in
+  languages with strict evaluation like OCaml
+  (and unlike Haskell).
+  Invalid expressions are now filtered out
+  earlier, so there will not be a lot of time
+  spent on evaluating them.
+  In a lazy language, a lot of this work will
+  be suspended (but the optimization is still
+  worth quite a bit).
+*)
+
+
+(*
   A result is an expression and its evaluation.
 *)
 type result = (expression * int)
@@ -374,9 +393,17 @@ let rec expression_to_string e =
     match e with
         Val n        -> string_of_int n
       | App(o, l, r) ->
-          "(" ^ (expression_to_string l)
-          ^ (operator_to_string o)
-          ^ (expression_to_string r) ^ ")"
+          begin
+            match l with
+                Val _ -> expression_to_string l
+              | _     -> "(" ^ (expression_to_string l) ^ ")"
+          end
+          ^ " " ^ (operator_to_string o) ^ " " ^
+          begin
+            match r with
+                Val _ -> expression_to_string r
+              | _     -> "(" ^ (expression_to_string r) ^ ")"
+          end
 
 
 (*
