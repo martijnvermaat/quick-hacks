@@ -36,9 +36,9 @@
 
   Future:
   This is a naive brute-force solution. Two
-  optimizations are suggested by Hutton that
-  should be not too hard to translate to
-  this code.
+  optimizations are suggested by Hutton to
+  minimize the search space. Only the second
+  one is implemented here.
 
 
   April 2005, Martijn Vermaat
@@ -106,6 +106,17 @@ let valid o m n = match o with
 
 
 (*
+  Applying operator o to operands m and n
+  yields a natural number. (Optimized.)
+*)
+let valid' o m n = match o with
+    Add -> (m <= n)
+  | Sub -> (m > n)
+  | Mul -> (m <> 1) && (n <> 1) && (m <= n)
+  | Div -> (n <> 1) && (m mod n) = 0
+
+
+(*
   Result of applying operator o to operands
   m and n.
 *)
@@ -152,7 +163,7 @@ let rec eval e = match e with
   | App(o, e1, e2) ->
       match (eval e1, eval e2) with
           ([e1'], [e2']) ->
-            if valid o e1' e2' then
+            if valid' o e1' e2' then
               [apply o e1' e2']
             else
               []
@@ -256,6 +267,12 @@ let rec expressions l = match l with
 let solutions numbers number =
   List.filter (fun e -> (eval e) = [number]) 
     (List.flatten (List.map expressions (subbags numbers)))
+
+
+
+(************************************************
+  What is left is a way to work with al this.
+************************************************)
 
 
 (*
