@@ -34,6 +34,13 @@
     $ ./countdown
 
 
+  Future:
+  This is a naive brute-force solution. Two
+  optimizations are suggested by Hutton that
+  should be not too hard to translate to
+  this code.
+
+
   April 2005, Martijn Vermaat
 
   [1] http://www.cs.nott.ac.uk/~gmh/countdown.pdf
@@ -188,8 +195,6 @@ let ne_split l =
     List.filter no_empty (split l)
 
 
-
-
 (*
   Generate a list of all possible expressions
   over the natural numbers in list l.
@@ -246,7 +251,7 @@ let rec expressions l = match l with
 
 (*
   A list of expressions using only values from
-  number and whose evaluated value is number.
+  numbers and whose evaluated value is number.
 *)
 let solutions numbers number =
   List.filter (fun e -> (eval e) = [number]) 
