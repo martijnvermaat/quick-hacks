@@ -460,7 +460,7 @@ let countdown () =
       print_newline ()
     in
     let s = solutions' !numbers number in
-      List.iter print (solutions' !numbers number);
+      List.iter print s;
       if List.length s > 1 then
         begin
           print_string "This were ";
