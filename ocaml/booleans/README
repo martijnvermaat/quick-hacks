@@ -1,0 +1,23 @@
+This directory contains:
+
+  * An interface for a boolean datatype
+  * Several implementations for this interface
+
+
+To use one of the implementations:
+
+  Rename any of the implementations (*.ml) to
+  booleans.ml and compile it with the interface:
+
+    $ cp booleans-standard.ml booleans.ml
+    $ ocamlc -c booleans.mli booleans.ml
+
+  Now this datatype can be used in the OCaml
+  toploop like this:
+
+    $ ocaml booleans.cmo
+            Objective Caml version 3.08.2
+
+    # open Booleans;;
+    # false';;
+    - : Booleans.bool' = <abstr>
