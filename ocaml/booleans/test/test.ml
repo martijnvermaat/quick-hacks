@@ -1,5 +1,8 @@
 (*
   Automated tests for booleans datatype.
+
+  Using the OUnit unit test framework:
+  http://www.xs4all.nl/~mmzeeman/ocaml/
 *)
 
 
