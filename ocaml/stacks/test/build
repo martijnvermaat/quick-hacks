@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ocamlfind ocamlc -I .. -package oUnit unix.cma oUnit.cma stacks.cmo -o test test.ml
