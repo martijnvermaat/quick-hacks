@@ -35,15 +35,21 @@ let test_top _ =
   assert_equal (top (push 3 (push 2 (push 1 empty)))) 3
 
 
+let test_poly _ =
+  assert_equal (push "a" empty) (push "a" empty);
+  assert_equal (push [] empty) (push [] empty)
+
+
 let test_confusion _ =
   assert_bool "empty stack and non-empty stack" (empty <> (push 1 empty));
   assert_bool "stack of 1 and stack of 1,2" ((push 1 empty) <> (push 2 (push 1 empty)))
 
 
 let test_suite = "stack" >:::
-  ["pop"       >:: test_pop;
-   "top"       >:: test_top;
-   "confusion" >:: test_confusion]
+  ["pop"          >:: test_pop;
+   "top"          >:: test_top;
+   "polymorphism" >:: test_poly;
+   "confusion"    >:: test_confusion]
 
 
 let _ = run_test_tt_main test_suite
