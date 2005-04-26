@@ -29,13 +29,18 @@ let test_pop _ =
 
 
 let test_top _ =
-  assert_raises Error (fun _ -> top empty);
+  assert_raises StackError (fun _ -> top empty);
   assert_equal (top (push 1 empty)) 1;
   assert_equal (top (push 2 (push 1 empty))) 2;
   assert_equal (top (push 3 (push 2 (push 1 empty)))) 3
 
 
 let test_poly _ =
+  (*
+    Actually, this test is bogus, because the
+    Stack implementation wouldn't even compile
+    against the interface if it wasn't polymorph.
+  *)
   assert_equal (push "a" empty) (push "a" empty);
   assert_equal (push [] empty) (push [] empty)
 

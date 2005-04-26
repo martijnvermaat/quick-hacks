@@ -1,15 +1,17 @@
+(* Implementatie voor polymorf stacks datatype. *)
 
 type 'a stack = 'a list
 
-let empty : 'a stack  = []
-let push  : 'a -> 'a stack -> 'a stack = fun h -> fun s -> h :: s
+exception StackError
 
-exception Error
+let empty = []
 
-let rec pop (s : 'a stack) =  match s with
-                                 [] -> [] 
-                               | h :: s ->  s 
+let push h s = h::s
 
-let top (s :  'a stack)  =   match s with   
-                                 [] -> raise Error 
-                               | h :: s ->  h 
+let rec pop s = match s with
+    []   -> []
+  | h::s -> s
+
+let top s = match s with
+    []   -> raise StackError
+  | h::s -> h
