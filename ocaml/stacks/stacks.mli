@@ -10,6 +10,14 @@ type 'a stack
 val  empty : 'a stack
 val  push  : 'a -> 'a stack -> 'a stack 
 
+(*
+  Om zo veel mogelijk overeen te komen met
+  de stack-of-data uit het eqlog deel, geeft
+  pop op de lege stack de lege stack terug
+  en top een error (we kunnen niet een
+  speciaal 'error' element hebben van type 'a).
+*)
+
 exception Error
 
 val  pop   : 'a stack -> 'a stack 
