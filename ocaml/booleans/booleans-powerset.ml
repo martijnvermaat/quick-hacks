@@ -7,8 +7,7 @@
 
 (*
   Elements in our set.
-  (If more than one element, this implementation
-  contains 'junk'.)
+  (Actually, this is not a set but a list.)
 *)
 type elements = A | B | C
 
