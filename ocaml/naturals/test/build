@@ -1,3 +1,3 @@
 #!/bin/sh
 
-ocamlfind ocamlc -I .. -package oUnit unix.cma oUnit.cma naturals.cmo -o test test.ml
+ocamlc -I .. -I /home/mvermaat/public/ocaml unix.cma oUnit.cma naturals.cmo -o test test.ml

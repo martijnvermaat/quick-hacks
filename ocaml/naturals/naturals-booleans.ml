@@ -7,9 +7,9 @@
 
 type nat = bool
 
-let zero = false
+let zero = true
 let suc = not
 
-let add = (||)
+let add = (=)
 
-let mul = (&&)
+let mul = (||)
