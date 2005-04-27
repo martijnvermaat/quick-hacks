@@ -6,7 +6,7 @@
 type nat
 
 val zero : nat
-val suc  : nat -> nat
+val succ  : nat -> nat
 
 val add : nat -> nat -> nat
 val mul : nat -> nat -> nat

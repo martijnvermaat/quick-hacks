@@ -8,7 +8,7 @@
 type nat = bool
 
 let zero = true
-let suc = not
+let succ = not
 
 let add = (=)
 

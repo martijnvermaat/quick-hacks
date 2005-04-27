@@ -8,11 +8,11 @@
 type nat = Zero | Suc of nat
 
 let zero = Zero
-let suc n = Suc n
+let succ n = Suc n
 
 let rec add m n = match n with
     Zero   -> m
-  | Suc n' -> suc (add m n')
+  | Suc n' -> succ (add m n')
 
 let rec mul m n = match n with
     Zero   -> Zero

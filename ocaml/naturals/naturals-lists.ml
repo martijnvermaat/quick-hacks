@@ -18,7 +18,7 @@
 type nat = int list list
 
 let zero  = []
-let suc n = []::n
+let succ n = []::n
 
 let add = (@) (* append *)
 
