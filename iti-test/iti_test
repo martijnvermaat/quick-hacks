@@ -1,0 +1,164 @@
+#!/bin/sh
+
+###################################################
+#                                                 #
+#   iti_test                                      #
+#                                                 #
+# Een simpel scriptje om automatisch Unit tests   #
+# op een datatype implementatie uit te voeren.    #
+#                                                 #
+#                                                 #
+# Gebruik:                                        #
+#                                                 #
+#   $ ./iti_test test_naam implementatie.ml       #
+#                                                 #
+# Waar implementatie.ml een OCaml implementatie   #
+# van het te testen datatype is en test_naam      #
+# een van de volgende waarden heeft:              #
+#                                                 #
+#   naturals                                      #
+#   four                                          #
+#   queues                                        #
+#                                                 # 
+#                                                 #
+# 2005-04-27, Martijn Vermaat                     #
+# mvermaat@cs.vu.nl                               #
+#                                                 #
+# Gemaakt voor het practicum Inleiding            #
+# Theoretische Informatica 2005                   #
+#                                                 #
+###################################################
+
+
+# String met help tip
+
+USE_HELP="Gebruik '`basename $0` --help' voor meer info"
+
+
+# Help printen
+
+if [ -n "$1" ] && [ "$1" = "--help" ]; then
+    echo "iti_test"
+    echo
+    echo "Een simpel scriptje om automatisch Unit tests"
+    echo "op een datatype implementatie uit te voeren."
+    echo
+    echo "Gebruik:"
+    echo "  iti_test test_naam implementatie.ml"
+    echo
+    echo "Waar implementatie.ml een OCaml implementatie"
+    echo "van het te testen datatype is en test_naam"
+    echo "een van de volgende waarden heeft:"
+    echo "  naturals"
+    echo "  four"
+    echo "  queues"
+    exit 0
+fi
+
+
+# We hebben $USER nodig om een temp dir te maken
+
+if [ -z "$USER" ]; then
+    echo "USER variabele heeft geen waarde"
+    echo $USE_HELP
+    exit 1
+fi
+
+
+# Kijken of we wel een module argument hebben
+
+if [ -z "$1" ]; then
+    echo "Geef een test op als argument"
+    echo $USE_HELP
+    exit 1
+fi
+
+
+# Kijken in argument welke module we gaan doen
+
+MODULE=""
+
+case "$1" in
+    naturals ) MODULE=naturals ;;
+    four     ) MODULE=four ;;
+    queues   ) MODULE=queues ;;
+    default  ) MODULE="" ;;
+esac
+
+if [ -z "$MODULE" ]; then
+    echo "Geen geldige test opgegeven, kies uit:"
+    echo "  naturals four queues"
+    echo $USE_HELP
+    exit 1
+fi
+
+
+# Een tijdstring maken voor in de temp dir naam
+
+TIME=`date '+%H%M%S'`
+
+CUR_DIR=`pwd`
+TMP_DIR=/tmp/$USER-$TIME
+ITI_DIR=/home/mvermaat/public/iti
+LIB_DIR=/home/mvermaat/public/ocaml
+
+OCAML=/usr/local/bin/ocaml
+OCAMLC=/usr/local/bin/ocamlc
+
+
+# Zorgen dat we een gezonden temp dir hebben
+
+if [ -d $TMP_DIR ]; then
+    echo "Hmmm, onze temp dir ($TMP_DIR) is in gebruik"
+    echo $USE_HELP
+    exit 1
+else
+    mkdir $TMP_DIR
+    if [ $? != 0 ]; then
+        echo "Ik kan geen temp dir ($TMP_DIR) aan maken"
+        echo $USE_HELP
+        exit 1
+    fi
+fi
+
+
+# Als er een bestaande file gegeven is, doe maar doen
+
+if [ -n "$2" ] && [ -f "$2" ]; then
+
+    # We kopieeren alles naar de temp dir
+
+    cp "$2" $TMP_DIR/$MODULE.ml
+
+    cp $ITI_DIR/$MODULE.mli $TMP_DIR
+    cp $ITI_DIR/test_$MODULE.ml $TMP_DIR
+
+    # We gaan zelf naar de temp dir en compileren
+
+    cd $TMP_DIR
+    $OCAMLC -c $MODULE.mli $MODULE.ml
+
+    if [ $? != 0 ]; then
+        echo "De implementatie kon niet gecompileerd worden"
+        echo $USE_HELP
+        cd $CUR_DIR
+        rm -Rf $TMP_DIR
+        exit 1
+    fi
+
+    # Compileren is gelukt, nu de test uitvoeren
+
+    $OCAML -I /home/mvermaat/public/ocaml unix.cma oUnit.cma $MODULE.cmo test_$MODULE.ml
+
+    cd $CUR_DIR
+    rm -Rf $TMP_DIR
+
+else
+    rm -Rf $TMP_DIR
+    echo "Geef een implementatie (.ml) als argument"
+    echo $USE_HELP
+    exit 1
+fi
+
+
+# Ja, dit is het einde

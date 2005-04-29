@@ -1,0 +1,26 @@
+iti_test
+
+Een simpel shell script wrapper voor enkele unit
+tests voor OCaml interface implementaties.
+
+Dit wordt gebruikt voor het automatisch testen
+van practicum uitwerkingen bij het vak Inleiding
+Theoretische Informatica.
+
+
+Configuratie:
+
+De ITI_DIR variabele in iti_test moet wijzen naar
+een dir met daarin:
+  naturals.mli
+  four.mli
+  queues.mli
+  test_naturals.ml
+  test_four.ml
+  test_queues.ml
+
+De LIB_DIR variabele moet een dir zijn waar we
+de OUnit module kunnen vinden.
+
+
+2005-04-29, Martijn Vermaat (mvermaat@cs.vu.nl)
