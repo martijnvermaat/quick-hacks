@@ -21,7 +21,8 @@ let test_top _ =
   assert_raises QueueError (fun _ -> out empty);
   assert_equal (out (push 1 empty)) 1;
   assert_equal (out (push 2 (push 1 empty))) 1;
-  assert_equal (out (push 3 (push 2 (push 1 empty)))) 1
+  assert_equal (out (push 3 (push 2 (push 1 empty)))) 1;
+  assert_equal (out (push 'a' (push 'b' (push 'c' empty)))) 'c'
 
 
 let test_poly _ =
