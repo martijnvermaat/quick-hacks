@@ -10,8 +10,8 @@
 # cron, for example:
 #
 #   $ crontab -l
-#   # Copy latest remote SVN backup every day
-#   30 03 * * * /home/martijn/bin/copy_svn_backup >> /var/log/copy_svn_backup 2>&1
+#   # Copy latest remote SVN backup every day at 20u10
+#   10 20 * * * /home/martijn/bin/copy_svn_backup >> /var/log/copy_svn_backup 2>&1
 #
 # Martijn Vermaat, 2005-05-10
 
