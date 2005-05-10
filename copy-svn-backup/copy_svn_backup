@@ -16,5 +16,48 @@
 # Martijn Vermaat, 2005-05-10
 
 
-FILE=`ssh christina "ls /var/backups/subversion | tail -1"`
-scp christina:/var/backups/subversion/$FILE .
+# Configuration
+
+REMOTE_HOST=christina
+REMOTE_DIR=/var/backups/subversion
+LOCAL_DIR=/backup/christina/subversion/automated
+
+
+# Start of script
+
+echo `date`
+
+
+# Get filename for latest backup
+
+echo "Checking for latest backup file..."
+
+LATEST=`ssh $REMOTE_HOST "ls $REMOTE_DIR | tail -1"`
+
+echo "Latest backup: $LATEST"
+
+
+# Check if this backup is not already present
+
+if [ -f "$LOCAL_DIR/$LATEST" ]; then
+
+    # This backup is already present
+
+    echo "Backup already present locally"
+
+else
+
+    # Copy latest backup to local dir
+
+    echo "Copying $LATEST from $REMOTE_HOST:$REMOTE_DIR to $LOCAL_DIR"
+
+    scp $REMOTE_HOST:$REMOTE_DIR/$LATEST $LOCAL_DIR
+
+    echo "Done"
+
+fi
+
+
+# Extra newline
+
+echo
