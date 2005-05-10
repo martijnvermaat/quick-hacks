@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# This should be a shell script that copies
+# a remote backup of the Subversion repository
+# to a local directory.
+# From the remote backup directory, it picks
+# the latest created backup.
+#
+# To run periodically from a scheduler like
+# cron, for example:
+#
+#   $ crontab -l
+#   # Copy latest remote SVN backup every day
+#   30 03 * * * /home/martijn/bin/copy_svn_backup >> /var/log/copy_svn_backup 2>&1
+#
+# Martijn Vermaat, 2005-05-10
+
+
+FILE=`ssh christina "ls /var/backups/subversion | tail -1"`
+scp christina:/var/backups/subversion/$FILE .

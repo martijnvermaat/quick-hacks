@@ -11,7 +11,7 @@
 # cron, for example:
 #
 #   $ crontab -l
-#   Run Subversion repository backup twice a week at night
+#   # Run Subversion repository backup twice a week at night
 #   30 03 * * 7 /home/martijn/bin/svn_backup >> /var/log/svn_backup 2>&1
 #   30 03 * * 4 /home/martijn/bin/svn_backup >> /var/log/svn_backup 2>&1
 #
