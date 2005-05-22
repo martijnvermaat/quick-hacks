@@ -23,6 +23,7 @@
 var urlMainPage = 'https://tisvu.vu.nl/tis/TI_SEC_PCK.TI_LOGON';
 var urlLoginRequest = 'https://tisvu.vu.nl/tis/TI_SEC_PCK.TI_CHECK_LOGON';
 var urlLogoutRequest = 'https://tisvu.vu.nl/tis/ti_sec_pck.ti_check_logoff';
+var urlResults = 'https://tisvu.vu.nl/tis/TI001Q01$TUV.QueryList';
 
 
 
@@ -33,6 +34,7 @@ var urlLogoutRequest = 'https://tisvu.vu.nl/tis/ti_sec_pck.ti_check_logoff';
 
 var pageLoginForm;
 var pageIndex;
+var pageResults;
 var pageError;
 
 
@@ -87,14 +89,14 @@ var navigationHTML = '\
     <ul class="nav">\
         <li id="linkIndex">Index</li>\
         <li id="linkLogin">Login</li>\
-        <li id="linkUitslagen">Tentamen uitslagen</li>\
-        <li id="linkLogout">Uitloggen</li>\
+        <li id="linkResults">Results</li>\
+        <li id="linkLogout">Logout</li>\
     </ul>\
 ';
 
 
 var pageLoginFormHTML = '\
-    <h2>Inloggen</h2>\
+    <h2>Login</h2>\
     <form id="formLogin">\
     <input id="user">\
     <input type="password" id="password">\
@@ -105,7 +107,14 @@ var pageLoginFormHTML = '\
 
 var pageIndexHTML = '\
     <h2>Index</h2>\
-    <p>Hoi, dit is TisNiks.</p>\
+    <p>Hi, this is TisNiks.</p>\
+';
+
+
+var pageResultsHTML = '\
+    <h2>Results</h2>\
+    <p>Pfft we have to parse this mess...</p>\
+    <pre id="fieldResults"></pre>\
 ';
 
 
@@ -172,6 +181,17 @@ function showIndex() {
 }
 
 
+function showResults(results) {
+
+    hidePages();
+    // temporary hack to show results in pre element
+    content = document.createTextNode(results)
+    document.getElementById('fieldResults').appendChild(content);
+    pageResults.style.display = '';
+
+}
+
+
 function showError(e) {
 
     document.getElementById('error').innerHTML = e;
@@ -184,6 +204,7 @@ function hidePages() {
 
     pageIndex.style.display = 'none';
     pageLoginForm.style.display = 'none';
+    pageResults.style.display = 'none';
     pageError.style.display = 'none';
 
 }
@@ -293,7 +314,11 @@ function logout() {
 
         if (req.status == 200) {
 
-            showError('Logged out.');
+            if (/uitloggen gelukt/i.test(req.responseText)) {
+                showError('Logged out.');
+            } else {
+                showError('Logout failed.');
+            }
 
         } else {
 
@@ -304,6 +329,56 @@ function logout() {
     }
 
     sendLogout();
+
+}
+
+
+/*
+  Get exam results.
+*/
+
+function getResults() {
+
+    var req;
+
+    function sendResults() {
+
+        var url = urlResults;
+
+        if (window.XMLHttpRequest){
+            req = new XMLHttpRequest();
+        } else {
+            showError('Could not make results request.');
+            return;
+        }
+
+        req.open('GET', url, true);
+
+        req.onreadystatechange = handleResults;
+
+        req.send(null);
+
+    }
+
+    function handleResults() {
+
+        // Ready state 4 is 'complete'
+
+        if (req.readyState != 4) return;
+
+        if (req.status == 200) {
+
+            showResults(req.responseText);
+
+        } else {
+
+            showError('Could not make results request.');
+
+        }
+
+    }
+
+    sendResults();
 
 }
 
@@ -340,6 +415,12 @@ function createPage() {
 
     body.appendChild(pageIndex);
 
+    pageResults = document.createElement('div');
+    pageResults.innerHTML = pageResultsHTML;
+    pageResults.style.display = 'none';
+
+    body.appendChild(pageResults);
+
     pageError = document.createElement('div');
     pageError.innerHTML = pageErrorHTML;
     pageError.style.display = 'none';
@@ -355,12 +436,16 @@ function createPage() {
         login(document.getElementById('user').value, document.getElementById('password').value); return false;
     };
 
+    document.getElementById('linkLogin').onclick = function() {
+        showLoginForm();
+    };
+
     document.getElementById('linkIndex').onclick = function() {
         showIndex();
     };
 
-    document.getElementById('linkLogin').onclick = function() {
-        showLoginForm();
+    document.getElementById('linkResults').onclick = function() {
+        getResults();
     };
 
     document.getElementById('linkLogout').onclick = function() {
