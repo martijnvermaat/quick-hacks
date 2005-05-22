@@ -6,9 +6,9 @@
 // ==/UserScript==
 
 
-var checkLoginUrl = 'https://tisvu.vu.nl/tis/TI006M01$.FirstPage';
 var pageLoginForm;
 var pageIndex;
+
 
 function login(name, password) {
 
@@ -50,6 +50,7 @@ function login(name, password) {
 
 }
 
+
 function emptyBody() {
 
     var body = document.getElementsByTagName('BODY')[0];
@@ -59,6 +60,7 @@ function emptyBody() {
     }
 
 }
+
 
 function createPage() {
 
@@ -75,11 +77,13 @@ function createPage() {
 
 }
 
+
 function showLoginForm() {
 
     pageLoginForm.style.display = '';
 
 }
+
 
 function showIndex() {
 
@@ -87,13 +91,14 @@ function showIndex() {
 
 }
 
+
 function tisNiks() {
 
     if (window.location.href == pageUrl) {
 
         emptyBody();
         createPage();
-        login('mvt600', 'OPrUs)6N');
+        login('mvt600', '');
 
     } else {
 
