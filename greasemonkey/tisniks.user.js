@@ -554,4 +554,13 @@ XMLHttpRequest
     Just update the bar on all ready states instead of only taking
     action on ready state 4.
 
+
+Known bugs
+
+    Greasemonkey logs an exception to the JavaScript Console upon
+    loading our script, but it's as yet unclear why.
+
+      Greasemonkey: http://www.cs.vu.nl/~mvermaat//TisNiks:
+      Exception when injecting : {}
+
 */
