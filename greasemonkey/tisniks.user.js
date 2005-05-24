@@ -144,6 +144,25 @@ function addGlobalStyle(css) {
 }
 
 
+function setCookies() {
+
+    function setCookie(name, value) {
+
+        document.cookie = name + '=' + value + '; expires=; path=/';
+
+    }
+
+    /*
+        Set these two cookies, or TisVu will not let
+        us login.
+    */
+
+    setCookie('CHECK_COOKIE', 'X');
+    setCookie('AUTH_METHOD', 'TIS');
+
+}
+
+
 function emptyBody() {
 
     /*
@@ -183,11 +202,24 @@ function showIndex() {
 
 function showResults(results) {
 
-    hidePages();
-    // temporary hack to show results in pre element
-    content = document.createTextNode(results)
-    document.getElementById('fieldResults').appendChild(content);
-    pageResults.style.display = '';
+    if (/geen gegevens verkregen/i.test(results)) {
+
+        /*
+          No results means:
+          There just are no results, or we're not logged in.
+        */
+
+        showError('No results found.');
+
+    } else {
+
+        hidePages();
+        // Temporary hack to show results in pre element
+        content = document.createTextNode(results);
+        document.getElementById('fieldResults').appendChild(content);
+        pageResults.style.display = '';
+
+    }
 
 }
 
@@ -429,6 +461,7 @@ function createPage() {
 
     //showLoginForm();
     showIndex();
+    //login('vunetid', 'password');
 
     // Add event handlers to forms and links
 
@@ -469,10 +502,14 @@ function tisNiks() {
         in a crashing Firefox, and so does removing the
         frameset. Therefore, we have to get past the frameset
         and use a 'normal' page and empty only the body.
+
+        We also need to set some cookies (normally set by
+        some page in the frameset), otherwise we can't login.
     */
 
     if (window.location.href == urlMainPage) {
 
+        setCookies();
         emptyBody();
         addGlobalStyle(styleSheet);
         createPage();
