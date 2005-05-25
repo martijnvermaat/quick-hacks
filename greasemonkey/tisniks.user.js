@@ -20,6 +20,8 @@
 ***********************************************************************/
 
 
+var applicationTitle = 'TisNiks';
+
 var urlMainPage = 'https://tisvu.vu.nl/tis/TI_SEC_PCK.TI_LOGON';
 var urlLoginRequest = 'https://tisvu.vu.nl/tis/TI_SEC_PCK.TI_CHECK_LOGON';
 var urlLogoutRequest = 'https://tisvu.vu.nl/tis/ti_sec_pck.ti_check_logoff';
@@ -140,6 +142,13 @@ function addGlobalStyle(css) {
     style.type = 'text/css';
     style.innerHTML = css;
     head.appendChild(style);
+
+}
+
+
+function setPageTitle(title) {
+
+    document.title = title;
 
 }
 
@@ -511,6 +520,7 @@ function tisNiks() {
 
         setCookies();
         emptyBody();
+        setPageTitle(applicationTitle);
         addGlobalStyle(styleSheet);
         createPage();
 
@@ -521,7 +531,7 @@ function tisNiks() {
             pages you might point your browser to).
         */
 
-        window.location.href = urlMainPage;
+        window.location.replace(urlMainPage);
 
     }
 
