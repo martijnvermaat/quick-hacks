@@ -115,8 +115,6 @@ var pageIndexHTML = '\
 
 var pageResultsHTML = '\
     <h2>Results</h2>\
-    <p>Pfft we have to parse this mess...</p>\
-    <pre id="fieldResults"></pre>\
 ';
 
 
@@ -211,24 +209,29 @@ function showIndex() {
 
 function showResults(results) {
 
-    if (/geen gegevens verkregen/i.test(results)) {
+    var table = document.createElement('table');
+    var row;
 
-        /*
-          No results means:
-          There just are no results, or we're not logged in.
-        */
+    for (var i = 0; i < results.length; i++) {
 
-        showError('No results found.');
+        row = document.createElement('tr');
 
-    } else {
+        for (var j = 1; j < results[i].length; j++) {
 
-        hidePages();
-        // Temporary hack to show results in pre element
-        content = document.createTextNode(results);
-        document.getElementById('fieldResults').appendChild(content);
-        pageResults.style.display = '';
+            cell = document.createElement('td');
+            cell.appendChild(document.createTextNode(results[i][j]));
+            row.appendChild(cell);
+
+        }
+
+        table.appendChild(row);
 
     }
+
+    pageResults.appendChild(table);
+
+    hidePages();
+    pageResults.style.display = '';
 
 }
 
@@ -264,45 +267,30 @@ function hidePages() {
 
 function login(name, password) {
 
-    var req;
-
     function sendLogin() {
 
-        var str = 'P_USERID=' + name + '&P_PASSWORD=' + password;
-        var url = urlLoginRequest;
-
-        if (window.XMLHttpRequest){
-            req = new XMLHttpRequest();
-        } else {
-            showError('Could not make login request.');
-            return;
-        }
-
-        req.open('POST', url, true);
-
-        req.setRequestHeader('Content-Type',
-                             'application/x-www-form-urlencoded; charset=UTF-8');
-
-        req.onreadystatechange = handleLogin;
-
-        req.send(str);
+        GM_xmlhttpRequest({
+            method:  "POST",
+            url:     urlLoginRequest,
+            data:    'P_USERID=' + name + '&P_PASSWORD=' + password,
+            headers: {
+                "Content-Type":'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+            onload:  handleLogin
+        });
 
     }
 
-    function handleLogin() {
+    function handleLogin(details) {
 
-        // Ready state 4 is 'complete'
-
-        if (req.readyState != 4) return;
-
-        if (req.status == 200) {
+        if (details.status == 200) {
 
             /*
                 String 'studieadministratie' is only present in a
                 success response.
             */
 
-            if (/studieadministratie/i.test(req.responseText)) {
+            if (/studieadministratie/i.test(details.responseText)) {
                 showIndex();
             } else {
                 showLoginForm();
@@ -330,32 +318,19 @@ function logout() {
 
     function sendLogout() {
 
-        var url = urlLogoutRequest;
-
-        if (window.XMLHttpRequest){
-            req = new XMLHttpRequest();
-        } else {
-            showError('Could not make logout request.');
-            return;
-        }
-
-        req.open('GET', url, true);
-
-        req.onreadystatechange = handleLogout;
-
-        req.send(null);
+        GM_xmlhttpRequest({
+            method:  "GET",
+            url:     urlLogoutRequest,
+            onload:  handleLogout
+        });
 
     }
 
-    function handleLogout() {
+    function handleLogout(details) {
 
-        // Ready state 4 is 'complete'
+        if (details.status == 200) {
 
-        if (req.readyState != 4) return;
-
-        if (req.status == 200) {
-
-            if (/uitloggen gelukt/i.test(req.responseText)) {
+            if (/uitloggen gelukt/i.test(details.responseText)) {
                 showError('Logged out.');
             } else {
                 showError('Logout failed.');
@@ -380,36 +355,51 @@ function logout() {
 
 function getResults() {
 
-    var req;
-
     function sendResults() {
 
-        var url = urlResults;
-
-        if (window.XMLHttpRequest){
-            req = new XMLHttpRequest();
-        } else {
-            showError('Could not make results request.');
-            return;
-        }
-
-        req.open('GET', url, true);
-
-        req.onreadystatechange = handleResults;
-
-        req.send(null);
+        GM_xmlhttpRequest({
+            method:  "GET",
+            url:     urlResults,
+            onload:  handleResults
+        });
 
     }
 
-    function handleResults() {
+    function handleResults(details) {
 
-        // Ready state 4 is 'complete'
+        if (details.status == 200) {
 
-        if (req.readyState != 4) return;
+            if (/geen gegevens verkregen/i.test(details.responseText)) {
 
-        if (req.status == 200) {
+                /*
+                    No results means:
+                    There just are no results, or we're not logged in.
+                */
 
-            showResults(req.responseText);
+                showError('No results found.');
+
+            } else {
+
+                /*
+                    This regular expression will give results like this:
+                    1 - vakcode
+                    2 - administratie
+                    3 - vaknaam
+                    4 - datum (dd-mm-yyyy format, but we should not depend on that!)
+                    5 - cijfer
+                */
+
+                var match;
+                var results = new Array();
+
+                while (match = /TARGET="fraVF">([^<]+)<\/A><\/TD><TD ALIGN="LEFT">([^<]+)<\/TD><TD ALIGN="LEFT">([^<]+)<\/TD><TD ALIGN="LEFT">([^>]+)<\/TD><TD ALIGN="LEFT">([^>]+)<\/TD>/g.exec(details.responseText)) {
+                    //GM_log(match[1] + ", " + match[2] + ", " + match[3] + ", " + match[4] + ", " + match[5]);
+                    results.push(match);
+                }
+
+                showResults(results);
+
+            }
 
         } else {
 
@@ -444,6 +434,12 @@ function createPage() {
 
     body.appendChild(navigation);
 
+    pageError = document.createElement('div');
+    pageError.innerHTML = pageErrorHTML;
+    pageError.style.display = 'none';
+
+    body.appendChild(pageError);
+
     pageLoginForm = document.createElement('div');
     pageLoginForm.innerHTML = pageLoginFormHTML;
     pageLoginForm.style.display = 'none';
@@ -461,12 +457,6 @@ function createPage() {
     pageResults.style.display = 'none';
 
     body.appendChild(pageResults);
-
-    pageError = document.createElement('div');
-    pageError.innerHTML = pageErrorHTML;
-    pageError.style.display = 'none';
-
-    body.appendChild(pageError);
 
     //showLoginForm();
     showIndex();
