@@ -165,7 +165,7 @@ function getResults() {
                 showLoginForm();
 
                 /*
-                    Let stupid TisVu set some cookies we need before
+                    Let stupid TisVU set some cookies we need before
                     it lets us login...
                 */
                 setCookies();
@@ -206,7 +206,7 @@ function getResults() {
 
 
 /*
-    Request a page on TisVu that sets some cookies.
+    Request a page on TisVU that sets some cookies.
 */
 
 function setCookies() {
@@ -251,11 +251,11 @@ function createPage() {
     var extra = '<table border="0" bgcolor="336699" cellspacing="0" cellpadding="1" width="100%"><tr><td>';
     extra += '<table border="0" bgcolor="336699" cellspacing="0" cellpadding="2" width="100%"><tr>';
     extra += '<td bgcolor="336699" width=5><img src="/images/spacer.gif" width=2></td>';
-    extra += '<td width="100%" bgcolor="336699" ><a name="TisVu"></a><span class="moduleTitle">';
-    extra += '<font color =" FFFFFF">TisVu&nbsp;</font></span></td><td align="right" valign="top" width="1%">';
+    extra += '<td width="100%" bgcolor="336699" ><a name="TisVU"></a><span class="moduleTitle">';
+    extra += '<font color =" FFFFFF">TisVU&nbsp;</font></span></td><td align="right" valign="top" width="1%">';
     extra += '</td></tr></table><table border="0" cellspacing="0" cellpadding="4" width="100%"><tr>';
     extra += '<td bgcolor="FFFFFF" class="moduleBody"><FONT size=2><p>';
-    extra += 'Your latest results from <a href="http://tisvu.vu.nl">TisVu</a>:';
+    extra += 'Your latest results from <a href="http://tisvu.vu.nl">TisVU</a>:';
     extra += '<form id="tisLogin" style="display:none"><input id="tisuser"><input type="password" id="tispassword">';
     extra += '<input type="submit" value="login"></form>';
     extra += '<div id="tisResults"></div>';
@@ -286,7 +286,7 @@ function tisNiks() {
 
         /*
             Eventueel eerst even deze pagina opvragen, zodat
-            cookies geset worden door TisVu:
+            cookies geset worden door TisVU:
             https://tisvu.vu.nl/tis/menu
         */
 
@@ -304,3 +304,15 @@ function tisNiks() {
 
 
 tisNiks();
+
+
+
+/***********************************************************************
+    Documentation
+***********************************************************************/
+
+
+/*
+    Comming soon. A lot of my documentation is in the TisNiks
+    userscript.
+*/
