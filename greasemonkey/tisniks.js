@@ -12,6 +12,11 @@
     It is to be used by Greasemonkey user scripts. TisNiks uses
     features specific to Greasemonkey.
 
+
+    TisNiks is Open Source and licensed under the new BSD
+    License, found at:
+    http://www.opensource.org/licenses/bsd-license.php
+
 ***********************************************************************/
 
 

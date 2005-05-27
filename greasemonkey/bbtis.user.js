@@ -11,10 +11,16 @@
 
     Version: 1.0, 2005-05-26
 
+
     This is just a quick hack to see what's possible with
     some Greasemonkey magic and TisVU.
 
     Martijn Vermaat, mvermaat@cs.vu.nl
+
+
+    BBTis is Open Source and licensed under the new BSD
+    License, found at:
+    http://www.opensource.org/licenses/bsd-license.php
 */
 
 
@@ -124,6 +130,8 @@ var tisNiks = {
         TisNiks is a collection of functions for querying TisVU.
 
         This version is somewhere near 0.0003 or something.
+
+        http://www.cs.vu.nl/~mvermaat/tisniks
     */
 
 
