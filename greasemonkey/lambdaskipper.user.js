@@ -12,8 +12,17 @@
 
     Version: 1.0, 2005-05-29
 
+    http://www.cs.vu.nl/~mvermaat/greasemonkey
 
     Martijn Vermaat, mvermaat@cs.vu.nl
+
+
+    Tracking down and reading unread posts on Lambda the Ultimate
+    started to annoy me quite a bit. Lambda Skipper adds a direct
+    jump to the top-most unread post for each node to the 'Recent
+    posts' overview.
+    It also adds links to skip to the next unread post in the node
+    view (in top-to-bottom order rather than chronological order).
 
 
     Lambda Skipper is Open Source and licensed under the new

@@ -4,6 +4,7 @@
 
     0.1, 2005-05-27
     Martijn Vermaat, mvermaat@cs.vu.nl
+    http://www.cs.vu.nl/~mvermaat/tisniks
 
 
     TisNiks is a collection of functions for querying the TisVU
