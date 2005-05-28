@@ -341,7 +341,7 @@ function bbTis() {
                             "//td[@width='50%']",
                             document,
                             null,
-                            XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+                            XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
                             null);
 
     if (tds.snapshotLength > 0) {
