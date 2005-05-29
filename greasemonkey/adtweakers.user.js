@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Ad Tweakers
 // @namespace     http://www.cs.vu.nl/~mvermaat/
-// @description   Do some ad tweaking on Tweakers.net
+// @description   Do some ad tweaking on Tweakers.net and GoT
 // @include       http://tweakers.net/*
 // @include       http://*.tweakers.net/*
 // ==/UserScript==
@@ -15,19 +15,20 @@
     Martijn Vermaat, mvermaat@cs.vu.nl
 
 
-    Do some ad tweaking on Tweakers.net
+    Do some ad tweaking on Tweakers.net and GoT
 
     Although this script is easy to install, adding the
     following rules to your userContent.css file works
     better because these rules are applied before the
-    page is rendered.
+    page is rendered. Drawback is that these rules are
+    applied on all websites, not only Tweakers.net.
 
-        iframe,
         #b_468_bg,
         #b_sky,
         #msnbar_holder,
         #textad_holder,
-        #advertorial { display : none ! important; }
+        #advertorial,
+        #mainbanner { display : none ! important; }
 
     This user script still shows ads until rendering the
     page is finished.
@@ -49,7 +50,7 @@
 
 function tweakAds() {
 
-    var elements = ['b_468_bg', 'b_sky', 'msnbar_holder', 'textad_holder', 'advertorial'];
+    var elements = ['b_468_bg', 'b_sky', 'msnbar_holder', 'textad_holder', 'advertorial', 'mainbanner'];
 
     for (var i = 0; i < elements.length; i++) {
         removeElementById(elements[i]);
