@@ -10,7 +10,7 @@
 /*
     Lambda Skipper
 
-    Version: 1.0, 2005-05-29
+    Version: 1.1, 2005-05-29
 
     http://www.cs.vu.nl/~mvermaat/greasemonkey
 
@@ -109,7 +109,7 @@ function addSkipLinks() {
 
             // Create skip link
             a = document.createElement('a');
-            a.setAttribute('href', '#' + next);
+            a.setAttribute('href', window.location.href.split("#")[0] + '#' + next);
             a.appendChild(document.createTextNode('Next new comment'));
 
             // Append link
