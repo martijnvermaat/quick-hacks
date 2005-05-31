@@ -15,7 +15,7 @@
     This is just a quick hack to see what's possible with
     some Greasemonkey magic and TisVU.
 
-    http://www.cs.vu.nl/~mvermaat/tisniks
+    http://www.cs.vu.nl/~mvermaat/greasemonkey
 
     Martijn Vermaat, mvermaat@cs.vu.nl
 
