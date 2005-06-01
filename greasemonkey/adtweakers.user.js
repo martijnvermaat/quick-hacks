@@ -50,7 +50,7 @@
 
 function tweakAds() {
 
-    var elements = ['b_468_bg', 'b_sky', 'msnbar_holder', 'textad_holder', 'advertorial', 'mainbanner'];
+    var elements = ['b_468_bg', 'b_sky', 'msnbar_holder', 'textad_holder', 'advertorial', 'mainbanner', 'bigad_holder'];
 
     for (var i = 0; i < elements.length; i++) {
         removeElementById(elements[i]);
