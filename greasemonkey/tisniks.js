@@ -2,7 +2,7 @@
 
     TisNiks
 
-    0.1, 2005-05-27
+    0.2, 2005-06-04
     Martijn Vermaat, mvermaat@cs.vu.nl
     http://www.cs.vu.nl/~mvermaat/tisniks
 
@@ -78,6 +78,31 @@
     can mean you're not logged in or you just have no results. There
     is no way to differentiate between the two.
 
+    ********************************************************************
+
+    tisNiks.getExams(onSuccess, onFailure)
+
+        onSuccess: function (results:array)
+        onFailure: function (status:string)
+
+    Try to fetch enrolled exams. On success, the onSuccess function
+    is called with parameters:
+
+        results: An array containing structures of the form
+
+                 { code:           545324
+                   administration: WI
+                   course:         Course Name
+                   date:           dd-mm-yyyy }
+
+    On failure, the onFailure function is called with parameters:
+
+        status: Can be 'request' or 'empty'
+
+    A call of onFailure('empty') means no exams were found. This can
+    mean you're not logged in or you just have no exams. There is no
+    way to differentiate between the two.
+
 ***********************************************************************/
 
 
@@ -89,11 +114,12 @@ var tisNiks = {
         Local variables
     */
 
-    tisNiksLog:      false,
+    tisNiksLog:       false,
 
     urlLoginRequest:  'https://tisvu.vu.nl/tis/TI_SEC_PCK.TI_CHECK_LOGON',
     urlLogoutRequest: 'https://tisvu.vu.nl/tis/ti_sec_pck.ti_check_logoff',
     urlResults:       'https://tisvu.vu.nl/tis/TI001Q01$TUV.QueryList',
+    urlExams:         'https://tisvu.vu.nl/tis/TI002M01$TKV.QueryList',
     urlSetCookies:    'https://tisvu.vu.nl/tis/menu',
 
 
@@ -254,6 +280,75 @@ var tisNiks = {
                 } else {
 
                     log('Could not make results request');
+                    onFailure('request');
+
+                }
+
+            }
+
+        });
+
+    },
+
+
+    /*
+        Get TisVU exams.
+    */
+
+    getExams: function(onSuccess, onFailure) {
+
+        var log = this.log;
+
+        GM_xmlhttpRequest({
+            method:  'GET',
+            url:     this.urlExams,
+            onload:  function(details) {
+
+                if (details.status == 200) {
+
+                    if (/geen gegevens verkregen/i.test(details.responseText)) {
+
+                        /*
+                            No exams means:
+                            There just are no exams, or we're not logged in.
+                        */
+
+                        log('No exams found');
+                        onFailure('empty');
+
+                    } else {
+
+                        /*
+                            This regular expression will give results like this:
+
+                            {
+                              code:           545324
+                              administration: WI
+                              course:         Course Name
+                              date:           dd-mm-yyyy
+                            }
+                        */
+
+                        var match;
+                        var exams = new Array();
+
+                        while (match = /TARGET="fraVF">([^<]+)<\/A><\/TD><TD ALIGN="LEFT">([^<]+)<\/TD><TD ALIGN="LEFT">([^<]+)<\/TD><TD ALIGN="LEFT">([^>]+)<\/TD>/g.exec(details.responseText)) {
+                            exams.push({
+                                code:           match[1],
+                                administration: match[2],
+                                course:         match[3],
+                                date:           match[4]
+                            });
+                        }
+
+                        log('Received exams');
+                        onSuccess(exams);
+
+                    }
+
+                } else {
+
+                    log('Could not make exams request');
                     onFailure('request');
 
                 }
