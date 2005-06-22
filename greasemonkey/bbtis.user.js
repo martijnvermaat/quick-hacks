@@ -9,7 +9,7 @@
 /*
     BBTis
 
-    Version: 1.1, 2005-06-04
+    Version: 1.2, 2005-07-22
 
 
     This is just a quick hack to see what's possible with
@@ -136,7 +136,7 @@ function showExams(exams) {
     // Add some ugly Blackboard HTML for the table header
     table.innerHTML = '<tr><th colspan="2" align="left" bgcolor="#f0f0f0">'
         + '<font face="Arial, Helvetica, sans-serif" size="2">'
-        + 'Upcomming exams:</font></th></tr>';
+        + 'Upcoming exams:</font></th></tr>';
 
     for (var i = 0; i < exams.length; i++) {
 
