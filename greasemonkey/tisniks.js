@@ -2,7 +2,7 @@
 
     TisNiks
 
-    0.2, 2005-06-04
+    0.2.1, 2005-09-08
     Martijn Vermaat, mvermaat@cs.vu.nl
     http://www.cs.vu.nl/~mvermaat/tisniks
 
@@ -116,11 +116,11 @@ var tisNiks = {
 
     tisNiksLog:       false,
 
-    urlLoginRequest:  'https://tisvu.vu.nl/tis/TI_SEC_PCK.TI_CHECK_LOGON',
-    urlLogoutRequest: 'https://tisvu.vu.nl/tis/ti_sec_pck.ti_check_logoff',
-    urlResults:       'https://tisvu.vu.nl/tis/TI001Q01$TUV.QueryList',
-    urlExams:         'https://tisvu.vu.nl/tis/TI002M01$TKV.QueryList',
-    urlSetCookies:    'https://tisvu.vu.nl/tis/menu',
+    urlLoginRequest:  'https://tis.vu.nl/tis/TI_SEC_PCK.TI_CHECK_LOGON',
+    urlLogoutRequest: 'https://tis.vu.nl/tis/ti_sec_pck.ti_check_logoff',
+    urlResults:       'https://tis.vu.nl/tis/TI001Q01$TUV.QueryList',
+    urlExams:         'https://tis.vu.nl/tis/TI002M01$TKV.QueryList',
+    urlSetCookies:    'https://tis.vu.nl/tis/menu',
 
 
     /*
