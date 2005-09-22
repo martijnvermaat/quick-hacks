@@ -6,10 +6,11 @@
 // ==/UserScript==
 
 
-/*
+/***********************************************************************
+
     BBTis
 
-    Version: 1.2.1, 2005-09-08
+    Version: 1.2.2, 2005-09-22
 
 
     This is just a quick hack to see what's possible with
@@ -23,7 +24,42 @@
     BBTis is Open Source and licensed under the new BSD
     License, found at:
     http://www.opensource.org/licenses/bsd-license.php
-*/
+
+***********************************************************************/
+
+
+
+/***********************************************************************
+
+    Changelog
+
+    2005-09-22 - 1.2.2
+    * Using TisNiks 0.2.2
+    * Added changelog
+
+    2005-09-08 - 1.2.1
+    * Using TisNiks 0.2.1
+    * Removed wrapper function
+
+    2005-07-22 - 1.2
+    * Typo: upcomming->upcoming (Marten Klencke)
+
+    2005-06-04 - 1.1
+    * Added BSD license
+    * Using TisNiks 0.2
+    * Added upcoming exams functionality
+
+    2005-05-26 - 1.0
+    * Added support for logging
+    * Changed name from TisNiks to BBTis
+    * Added wrapper function
+    * Added automatic login functionality
+    * Incorporated TisVU functions from TisNiks library 0.1
+
+    2005-05-26 - no version
+    * Birth of script
+
+***********************************************************************/
 
 
 
@@ -160,7 +196,7 @@ function showExams(exams) {
     /*
         TisNiks is a collection of functions for querying TisVU.
 
-        This is version 0.2.1
+        This is version 0.2.2
 
         http://www.cs.vu.nl/~mvermaat/tisniks
     */
@@ -175,11 +211,11 @@ var tisNiks = {
 
     tisNiksLog:       false,
 
-    urlLoginRequest:  'https://tis.vu.nl/tis/TI_SEC_PCK.TI_CHECK_LOGON',
-    urlLogoutRequest: 'https://tis.vu.nl/tis/ti_sec_pck.ti_check_logoff',
-    urlResults:       'https://tis.vu.nl/tis/TI001Q01$TUV.QueryList',
-    urlExams:         'https://tis.vu.nl/tis/TI002M01$TKV.QueryList',
-    urlSetCookies:    'https://tis.vu.nl/tis/menu',
+    urlLoginRequest:  'https://tisvu.vu.nl/tis/TI_SEC_PCK.TI_CHECK_LOGON',
+    urlLogoutRequest: 'https://tisvu.vu.nl/tis/ti_sec_pck.ti_check_logoff',
+    urlResults:       'https://tisvu.vu.nl/tis/TI001Q01$TUV.QueryList',
+    urlExams:         'https://tisvu.vu.nl/tis/TI002M01$TKV.QueryList',
+    urlSetCookies:    'https://tisvu.vu.nl/tis/menu',
 
 
     /*
