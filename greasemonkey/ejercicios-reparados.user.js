@@ -2,14 +2,14 @@
 // @name          Ejercicios Reparados
 // @namespace     http://www.cs.vu.nl/~mvermaat/
 // @description   Fix for Ejercicios de vocabulario
-// @include       http://www.let.uu.nl/~Kristi.JauregiOndarra/personal/Tv1/voc.*
+// @include       http://www.let.uu.nl/~Kristi.JauregiOndarra/personal/Tv1/voc*
 // ==/UserScript==
 
 
 /*
     Ejercicios Reparados
 
-    Version: 0.1, 2005-10-01
+    Version: 0.1.1, 2005-10-02
 
 
     Fixes 'Ejercicios de vocabulario' on the website of Kristi
@@ -25,6 +25,15 @@
     Ejercicios Reparados is Open Source and licensed under the
     new BSD License, found at:
     http://www.opensource.org/licenses/bsd-license.php
+
+
+    Changelog
+
+    2005-10-02 - 0.1.1
+    * Adjusted include url (removed dot at end)
+
+    2005-10-01 - 0.1
+    * Initial version
 */
 
 
