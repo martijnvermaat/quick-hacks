@@ -1,9 +1,20 @@
 import os
 import urllib
+import gtk
+import gtk.glade
 import nautilus
+#import pysvn
 
 
-# place this in /usr/lib/nautilus/extensions-1.0/python/
+GLADEFILE = '/usr/lib/nautilus/extensions-1.0/python/test.glade'
+
+
+class TestView:
+
+    def __init__(self):
+        self.xml = gtk.glade.XML(GLADEFILE)
+        self.window = self.xml.get_widget('window1')
+        self.window.show()
 
 
 class SubversionMenu(nautilus.MenuProvider):
@@ -12,6 +23,7 @@ class SubversionMenu(nautilus.MenuProvider):
         pass
 
     def _action(self, menu, file, window):
+        TestView()
         os.spawnlp(os.P_NOWAIT, "beep")
         return
 
