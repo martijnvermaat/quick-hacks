@@ -148,7 +148,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="entry2">
+			    <widget class="GtkEntry" id="directoryEntry">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -361,6 +361,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_cancel" last_modification_time="Wed, 09 Nov 2005 20:50:41 GMT"/>
 	    </widget>
 	  </child>
 

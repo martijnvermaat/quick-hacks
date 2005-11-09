@@ -12,15 +12,21 @@ DATE = "2005/11/09"
 GLADEFILE = "katja.glade"
 
 
+import os
 from optparse import OptionParser
+
+import pygtk
+pygtk.require('2.0')
 import gtk
 import gtk.glade
+
 #import pysvn
 
 
-def actionCheckout(directory):
-
-    CheckoutDialog()
+def actionCheckout(dir):
+    d = CheckoutDialog()
+    d.run(dir)
+    return
 
 
 class CheckoutDialog:
@@ -31,13 +37,31 @@ class CheckoutDialog:
         self.xml = gtk.glade.XML(GLADEFILE)
         self.window = self.xml.get_widget("windowCheckout")
 
-        self.xml.get_widget('buttonCancel').connect('clicked', self.__on_cancel)
+        self.xml.signal_autoconnect({
+            "on_cancel": self.__on_cancel,
+            })
+
+        self.window.connect("destroy", self.__on_destroy)
 
         self.window.show()
+
+        return
+
+
+    def run(self, dir):
+        self.xml.get_widget("directoryEntry").set_text(dir)
+        gtk.main()
+        return
 
 
     def __on_cancel(self, w):
         self.window.destroy()
+        return
+
+
+    def __on_destroy(self, w):
+        gtk.main_quit()
+        return
 
 
 def main():
@@ -56,8 +80,10 @@ def main():
     if len(args) < 1:
         parser.error("no command provided")
 
-    actionCheckout("~")
-    gtk.main()
+    if args[0] == "status":
+        actionCheckout(os.getcwd())
+
+    return
 
 
 if __name__ == "__main__":
