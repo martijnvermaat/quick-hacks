@@ -16,7 +16,7 @@ import os
 from optparse import OptionParser
 
 import pygtk
-pygtk.require('2.0')
+pygtk.require("2.0")
 import gtk
 import gtk.glade
 
@@ -32,30 +32,60 @@ def actionCheckout(dir):
 class CheckoutDialog:
 
 
+    widget_names = ["windowCheckout",
+                    "revisionChoiceHead",
+                    "revisionChoiceSpin",
+                    "revisionSpin",
+                    "locationChooser"]
+
+
     def __init__(self):
 
         self.xml = gtk.glade.XML(GLADEFILE)
-        self.window = self.xml.get_widget("windowCheckout")
 
-        self.xml.signal_autoconnect({
-            "on_cancel": self.__on_cancel,
-            })
+        self.widgets = {}
+        for w in self.widget_names:
+            self.widgets[w] = self.xml.get_widget(w)
 
-        self.window.connect("destroy", self.__on_destroy)
+        self.xml.signal_autoconnect(
+            {"on_cancel": self.__on_cancel,
+             "on_checkout": self.__on_checkout,
+             "on_revision_toggled": self.__on_revision_toggled})
 
-        self.window.show()
+        self.widgets["windowCheckout"].connect("destroy", self.__on_destroy)
 
         return
 
 
     def run(self, dir):
-        self.xml.get_widget("directoryEntry").set_text(dir)
+
+        self.widgets["locationChooser"].set_current_folder(dir)
+
+        self.widgets["revisionChoiceHead"].set_active(1)
+        self.widgets["revisionSpin"].set_sensitive(0)
+
+        self.widgets["windowCheckout"].show()
         gtk.main()
+
+        return
+
+
+    def __on_revision_toggled(self, w):
+        if self.widgets["revisionChoiceSpin"].get_active():
+            self.widgets["revisionSpin"].set_sensitive(1)
+        else:
+            self.widgets["revisionSpin"].set_sensitive(0)
         return
 
 
     def __on_cancel(self, w):
-        self.window.destroy()
+        self.widgets["windowCheckout"].destroy()
+        return
+
+
+    def __on_checkout(self, w):
+        print int(self.widgets["revisionSpin"].get_value())
+        self.__on_cancel(w)
         return
 
 
