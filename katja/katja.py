@@ -20,7 +20,7 @@ pygtk.require("2.0")
 import gtk
 import gtk.glade
 
-#import pysvn
+import pysvn
 
 
 def actionCheckout(dir):
@@ -32,16 +32,22 @@ def actionCheckout(dir):
 class CheckoutDialog:
 
 
+    # TODO: all 'real' code should be moved out of this class, probably to
+    # the actionCheckout class
+
+
     widget_names = ["windowCheckout",
+                    "repositoryEntry",
+                    "directoryEntry",
+                    "locationChooser",
                     "revisionChoiceHead",
                     "revisionChoiceSpin",
-                    "revisionSpin",
-                    "locationChooser"]
+                    "revisionSpin"]
 
 
     def __init__(self):
 
-        self.xml = gtk.glade.XML(GLADEFILE)
+        self.xml = gtk.glade.XML(GLADEFILE, "windowCheckout")
 
         self.widgets = {}
         for w in self.widget_names:
@@ -84,6 +90,28 @@ class CheckoutDialog:
 
 
     def __on_checkout(self, w):
+
+        client = pysvn.Client()
+        client.exception_style = 0  # Would prefer 1, but doesn't seem to work
+
+        url = self.widgets["repositoryEntry"].get_text()
+        if url[-1] == '/':
+            url = url[:-1]
+
+        path = os.path.join(
+            self.widgets["locationChooser"].get_current_folder(),
+            self.widgets["directoryEntry"].get_text())
+
+        try:
+            client.checkout(url, path)
+        except pysvn.ClientError, e:
+            # e.arg[0]  entire message
+            # e.arg[1]  list of tupels (code, message)
+            error_dialog("Checkout failed",
+                         str(e),
+                         self.widgets["windowCheckout"])
+            return
+
         print int(self.widgets["revisionSpin"].get_value())
         self.__on_cancel(w)
         return
@@ -92,6 +120,33 @@ class CheckoutDialog:
     def __on_destroy(self, w):
         gtk.main_quit()
         return
+
+
+
+def error_dialog(title, message, parent):
+
+    #def hoi(w):
+    #    print "hoi"
+
+    #d = gtk.Dialog(title, parent=parent, buttons=("_Close", 1))
+
+    #label = gtk.Label(message)
+    #d.vbox.pack_start(label, True, True, 0)
+    #label.show()
+
+    #d.run()
+
+    error = gtk.MessageDialog(parent=parent,
+                              buttons=gtk.BUTTONS_CLOSE,
+                              type=gtk.MESSAGE_ERROR,
+                              flags=gtk.DIALOG_MODAL)
+
+    error.set_markup("<b>" + title + "</b>\n\n" + message)
+
+    error.run()
+    error.destroy()
+
+    return
 
 
 def main():
@@ -110,8 +165,10 @@ def main():
     if len(args) < 1:
         parser.error("no command provided")
 
-    if args[0] == "status":
+    if args[0] == "checkout":
         actionCheckout(os.getcwd())
+    else:
+        parser.error("command '%s' not recognised" % args[0])
 
     return
 
