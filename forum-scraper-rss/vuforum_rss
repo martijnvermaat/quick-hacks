@@ -1,0 +1,143 @@
+#!/opt/local/bin/python
+
+"""VUForumRSS
+
+http://www.cs.vu.nl/~mvermaat/things/vuforum.xhtml
+
+Usage:
+RSSify(url) - returns RSS document for the active topics list at url
+
+Example:
+Make a cronjob that runs every hour or so that executes vuforum_rss.py and
+redirects the output to a file in your www-root:
+$ python vuforum_rss.py > ~/www/vuforum.rss
+
+Based on JavahovaRSS - http://www.cs.vu.nl/~mvermaat/things/javahova.xhtml
+
+When fetching the Active Topics this script identifies itself as:
+'VUForumRSS/<version> +http://www.cs.vu.nl/~mvermaat/things/vuforum.xhtml'
+
+This script is an ad-hoc solution, it does not by any means advocate Good
+Programming Style (tm).
+
+Forum titles and Active Topics location are hard-coded since you won't be
+able to use this script on any other Active Topics list anyway.
+
+There are no comments, the code is very straight-forward and should speak for
+itself.
+
+"""
+
+__version__ = '0.1'
+__date__ = '2003/10/24'
+__author__ = 'Martijn Vermaat (mvermaat@cs.vu.nl)'
+__copyright__ = 'Copyright 2003, Martijn Vermaat'
+__license__ = 'GPL'
+__history__ = """
+0.1 - 2003/10/24 - Initial release
+"""
+
+import urllib2, string, re
+
+
+topicPattern = re.compile(r"""
+    class='forumlink'>(?P<forumTitle>[^<]+)</a>\s*
+    </span></td>\s*<td\s*class="row2"><span\s*class="topictitle">\s*
+    <a\s*href='http://forum.leentje.org/index.php\?
+    act=ST&f=(?P<forumID>[0-9]+)&t=(?P<id>[0-9]+)[^']+'\s*
+    class='topictitle'>(?P<title>[^<]+)</a></span>
+    (?:.|\s)*?
+    <span\s*class='name'><a\s*href='[^']+'>
+    (?P<starter>[^<]+)</a></span></td>\s*
+    <td\s*class="row2"\s*align="center"\s*valign="middle">
+    <span\s*class="postdetails">(?P<replies>[^<]+)</span></td>\s*
+    <td\s*class="row1"\s*align="center"\s*valign="middle">
+    <span\s*class="postdetails">(?P<views>[^<]+)</span></td>\s*
+    <td\s*class="row2"\s*align="center"\s*valign="middle"\s*nowrap="nowrap">
+    <span\s*class="postdetails">(?P<last>[^<]+)<br\s*/>\s*
+    <a\s*href='[^']+'>Last\s*Post\s*by:</a>\s*<b><b><a\s*href='[^']+'>
+    (?P<poster>[^<]+)</a></b></b></td>
+    """, re.VERBOSE)
+
+feedHeader = """<?xml version="1.0" encoding="iso-8859-1"?>
+<rss version="0.91">
+    <channel>
+        <title>VU Forum</title>
+        <link>http://forum.leentje.org</link>
+        <description>VU Forum active topics</description>
+        <language>en-us</language>
+"""
+
+feedFooter = """
+  </channel>
+</rss>
+"""
+
+feedItemString = """
+<item>
+    <title>%(title)s</title>
+    <link>http://forum.leentje.org/index.php?act=ST&amp;f=%(forumID)s&amp;t=%(id)s</link>
+    <description>
+        &lt;p&gt;
+            Topic '%(title)s' (%(forumTitle)s) at
+            &lt;a href="http://forum.leentje.org"&gt;VU Forum&lt;/a&gt;
+            has %(replies)s replies, last reply was by %(poster)s at %(last)s.
+        &lt;/p&gt;
+    </description>
+</item>
+"""
+
+
+def openResource(url, cookie):
+    request = urllib2.Request(url)
+    request.add_header('User-Agent', 'VUForumRSS/' + __version__ + ' +http://www.cs.vu.nl/~mvermaat/things/vuforum.xhtml')
+    request.add_header('Cookie', cookie)
+    return urllib2.urlopen(request)
+
+
+def formatDate(source):
+    """
+    One might want to format this date for readability or for use in other RSS versions
+    """
+    return source
+
+
+def XMLify(source):
+    source = string.replace(source, '&', '&amp;')
+    source = string.replace(source, '<', '&lt;')
+    source = string.replace(source, '>', '&gt;')
+    return source
+
+
+def parseEntries(lines):
+    entries = []
+    pos = 0
+    while 1:
+        match = topicPattern.search(lines, pos)
+        if match is None:
+            break
+        entries.append({
+                'id'            : match.group('id'),
+                'title'         : XMLify(match.group('title')),
+                'starter'       : XMLify(match.group('starter')),
+                'replies'       : match.group('replies'),
+                'last'          : XMLify(formatDate(match.group('last'))),
+                'poster'        : XMLify(match.group('poster')),
+                'forumID'       : match.group('forumID'),
+                'forumTitle'    : XMLify(match.group('forumTitle'))
+                })
+        pos = match.end(0)
+    return entries
+
+
+def RSSify(url, cookie):
+    feed = feedHeader
+    entries = parseEntries(openResource(url, cookie).read())
+    for entry in entries:
+        feed += feedItemString % entry
+    return feed + feedFooter
+
+
+if __name__ == '__main__':
+    print RSSify('http://forum.leentje.org/index.php?s=14162bf5854c4f44f42aa26cc752a81a&act=Search&CODE=getactive&st_day=s3',
+                    'member_id=136; pass_hash=f5b3c906ebfc5e159be91006c9b983e7')

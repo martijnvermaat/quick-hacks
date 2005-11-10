@@ -1,0 +1,156 @@
+#!/opt/local/bin/python
+
+"""JavahovaRSS
+
+http://www.cs.vu.nl/~mvermaat/
+
+Usage:
+RSSify(url) - returns RSS document for the active topics list at url
+
+Example:
+Make a cronjob that runs every hour or so that executes javahova_rss.py and
+redirects the output to a file in your www-root:
+$ python javahova_rss.py > ~/www/javahova.rss
+
+When fetching the Active Topics this script identifies itself as:
+'JavahovaRSS/<version> +http://www.cs.vu.nl/~mvermaat/'
+
+This script is an ad-hoc solution, it does not by any means advocate Good
+Programming Style (tm).
+
+Forum titles and Active Topics location are hard-coded since you won't be
+able to use this script on any other Active Topics list anyway.
+
+There are no comments, the code is very straight-forward and should speak for
+itself.
+
+"""
+
+__version__ = '0.4'
+__date__ = '2004/09/20'
+__author__ = 'Martijn Vermaat (mvermaat@cs.vu.nl)'
+__copyright__ = 'Copyright 2003, Martijn Vermaat'
+__license__ = 'GPL'
+__history__ = """
+0.1 - 2003/05/21 - Initial release
+0.2 - 2003/05/25 - Fixed bug in XMLify routine ('>' was not replaced)
+0.3 - 2003/08/27 - Removed external DTD reference
+0.4 - 2004/09/20 - Removed links to webpage since it no longer exists
+"""
+
+import urllib2, string, re
+
+
+longForumTitles = {
+    'ALG'   : 'Algemeen',
+    'JA'    : 'Java',
+    'XML'   : 'XML &amp; XSLT',
+    'ONZ'   : '/onzin',
+    'DK'    : 'Design kwesties',
+    'BB'    : 'Boek besprekingen',
+    'JK'    : 'Javahova Klooster',
+    'JD'    : 'Javahova development'
+    }
+
+topicPattern = re.compile(r"""
+    ^\s*                            # start of entry
+    active\(
+    \s*
+    (?P<status>[0-9]+)              # status
+    \s*,\s*
+    (?P<id>[0-9]+)                  # ID
+    \s*,\s*
+    '(?P<title>[^']*)'              # title
+    \s*,\s*
+    '(?P<starter>[^']*)'            # starter
+    \s*,\s*
+    '(?P<replies>[^']*)'            # replies
+    \s*,\s*
+    '(?P<last>[^']*)'               # last
+    \s*,\s*
+    '(?P<pags>[^']*)'               # links for pages
+    \s*,\s*
+    '(?P<forumID>[^']*)'            # forum ID
+    \s*,\s*
+    '(?P<forumTitle>[^']*)'         # forum title
+    \s*
+    \);                             # end of entry
+    """, re.VERBOSE)
+
+feedHeader = """<?xml version="1.0" encoding="iso-8859-1"?>
+<rss version="0.91">
+    <channel>
+        <title>Javahova.net</title>
+        <link>http://forum.javahova.net</link>
+        <description>Javahova.net forum</description>
+        <language>en-us</language>
+"""
+
+feedFooter = """
+  </channel>
+</rss>
+"""
+
+feedItemString = """
+<item>
+    <title>%(title)s</title>
+    <link>http://forum.javahova.net/topic.php?id=%(id)s</link>
+    <description>
+        &lt;p&gt;
+            Topic '%(title)s' (%(forumTitle)s) at
+            &lt;a href="http://forum.javahova.net"&gt;Javahova.net&lt;/a&gt;
+            has %(replies)s replies, last reply was at %(last)s.
+        &lt;/p&gt;
+    </description>
+</item>
+"""
+
+
+def openResource(url):
+    request = urllib2.Request(url)
+    request.add_header('User-Agent', 'JavahovaRSS/' + __version__ + ' +http://www.cs.vu.nl/~mvermaat/')
+    return urllib2.urlopen(request)
+
+
+def formatDate(source):
+    """
+    One might want to format this date for readability or for use in other RSS versions
+    """
+    return source
+
+
+def XMLify(source):
+    source = string.replace(source, '&', '&amp;')
+    source = string.replace(source, '<', '&lt;')
+    source = string.replace(source, '>', '&gt;')
+    return source
+
+
+def parseEntries(lines):
+    entries = []
+    for entry in lines:
+        match = topicPattern.match(entry)
+        if match: entries.append({
+                    'status'        : match.group('status'),
+                    'id'            : match.group('id'),
+                    'title'         : XMLify(match.group('title')),
+                    'starter'       : XMLify(match.group('starter')),
+                    'replies'       : match.group('replies'),
+                    'last'          : formatDate(match.group('last')),
+                    'pags'          : match.group('pags'),
+                    'forumID'       : match.group('forumID'),
+                    'forumTitle'    : XMLify(longForumTitles[match.group('forumTitle')])
+                    })
+    return entries
+
+
+def RSSify(url):
+    feed = feedHeader
+    entries = parseEntries(openResource(url).readlines())
+    for entry in entries:
+        feed += feedItemString % entry
+    return feed + feedFooter
+
+
+if __name__ == '__main__':
+    print RSSify('http://forum.javahova.net/misc.php?action=active')
