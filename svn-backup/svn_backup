@@ -54,7 +54,7 @@ echo
 echo Running hot-backup.py $REPOSITORY $BACKUPS/$DATE
 
 # Create backup with Subversion backup script
-/usr/lib/subversion/hot-backup.py $REPOSITORY $BACKUPS/$DATE
+/home/martijn/bin/hot-backup.py $REPOSITORY $BACKUPS/$DATE
 
 echo
 echo Running tar and gzip
