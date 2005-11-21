@@ -24,9 +24,51 @@ import pysvn
 
 
 def actionCheckout(dir):
-    d = CheckoutDialog()
-    d.run(dir)
+    d = CheckoutDialog(dir)
     return
+
+
+class SubversionClient:
+
+
+    def __init__(self):
+
+        self.client = pysvn.Client()
+        self.client.exception_style = 1
+
+        self.client.callback_get_login = self.__get_login
+
+        return
+
+
+    def checkout(self, url, path):
+
+        self.client.checkout(url, path)
+        return
+
+
+    def __get_login(self, realm, username, may_save):
+
+        #print 'May save:',may_save
+        #print 'Realm:',realm
+        #if username:
+        #    print 'Username:',username
+        #else:
+        #    sys.stdout.write( 'Username: ' )
+        #    username = sys.stdin.readline().strip()
+        #    if len(username) == 0:
+        #        return 0, '', '', False
+
+        #sys.stdout.write( 'Password: ' )
+        #password = sys.stdin.readline().strip()
+
+        #save_password = 'x'
+        #while save_password.lower() not in ['y','ye','yes','n', 'no','']:
+        #    sys.stdout.write( 'Save password? [y/n] ' )
+        #    save_password = sys.stdin.readline().strip()
+
+        return 1, username, "password", True #save_password in ['y','ye','yes']
+
 
 
 class CheckoutDialog:
@@ -45,7 +87,7 @@ class CheckoutDialog:
                     "revisionSpin"]
 
 
-    def __init__(self):
+    def __init__(self, dir):
 
         self.xml = gtk.glade.XML(GLADEFILE, "windowCheckout")
 
@@ -59,11 +101,6 @@ class CheckoutDialog:
              "on_revision_toggled": self.__on_revision_toggled})
 
         self.widgets["windowCheckout"].connect("destroy", self.__on_destroy)
-
-        return
-
-
-    def run(self, dir):
 
         self.widgets["locationChooser"].set_current_folder(dir)
 
@@ -91,8 +128,7 @@ class CheckoutDialog:
 
     def __on_checkout(self, w):
 
-        client = pysvn.Client()
-        client.exception_style = 0  # Would prefer 1, but doesn't seem to work
+        client = SubversionClient()
 
         url = self.widgets["repositoryEntry"].get_text()
         if url[-1] == '/':
@@ -105,14 +141,16 @@ class CheckoutDialog:
         try:
             client.checkout(url, path)
         except pysvn.ClientError, e:
-            # e.arg[0]  entire message
-            # e.arg[1]  list of tupels (code, message)
+            # e.args[0]  entire message
+            # e.args[1]  list of tupels (message, code)
+            # TODO: format messages
+            print e.args[1]
             error_dialog("Checkout failed",
                          str(e),
                          self.widgets["windowCheckout"])
             return
 
-        print int(self.widgets["revisionSpin"].get_value())
+        #print int(self.widgets["revisionSpin"].get_value())
         self.__on_cancel(w)
         return
 
