@@ -3,18 +3,15 @@
 // @namespace     http://www.cs.vu.nl/~mvermaat/
 // @description   Extends Lambda The Ultimate with some links to skip to next new post
 // @include       http://lambda-the-ultimate.org/tracker*
-// @include       http://lambda-the-ultimate.org/node/view/*
+// @include       http://lambda-the-ultimate.org/node/*
 // ==/UserScript==
 
 
-/*
+/***********************************************************************
+
     Lambda Skipper
 
-    Version: 1.2, 2005-06-01
-
-    http://www.cs.vu.nl/~mvermaat/greasemonkey
-
-    Martijn Vermaat, mvermaat@cs.vu.nl
+    Version: 1.3, 2006-01-30
 
 
     Tracking down and reading unread posts on Lambda the Ultimate
@@ -24,19 +21,40 @@
     It also adds links to skip to the next unread post in the node
     view (in top-to-bottom order rather than chronological order).
 
+    http://www.cs.vu.nl/~mvermaat/greasemonkey
+
+    Martijn Vermaat, mvermaat@cs.vu.nl
+
 
     Lambda Skipper is Open Source and licensed under the new
     BSD License, found at:
     http://www.opensource.org/licenses/bsd-license.php
-*/
+
+***********************************************************************/
 
 
 
-/*
-    Wrap the whole thing in an anonymous function to avoid
-    nameclashes with existing Javascript.
-*/
-(function() {
+/***********************************************************************
+
+    Changelog
+
+    2006-01-30 - 1.3
+    * Updated URL scheme for LtU node pages
+    * Removed wrapper function
+    * Added changelog
+
+    2005-06-01 - 1.2
+    * Added top-most new comment link in topic view
+    * Added direct top-most new post links at top of tracker
+
+    2005-05-29 - 1.1
+    * Fixed url location link
+
+    2005-05-29 - 1.0
+    * Birth of script
+
+***********************************************************************/
+
 
 
 function addTrackerLinks() {
@@ -171,14 +189,8 @@ function addSkipLinks() {
 }
 
 
-if (/^http:\/\/([a-z0-9-.]+\.)?lambda-the-ultimate\.org\/node\/view\//i.test(window.location.href)) {
+if (/^http:\/\/([a-z0-9-.]+\.)?lambda-the-ultimate\.org\/node\//i.test(window.location.href)) {
     addSkipLinks();
 } else if (/^http:\/\/([a-z0-9-.]+\.)?lambda-the-ultimate\.org\/tracker/i.test(window.location.href)) {
     addTrackerLinks();
 }
-
-
-/*
-    End of wrapper function (see top of script).
-*/
-})();
