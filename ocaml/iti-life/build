@@ -1,0 +1,1 @@
+ocamlc graphics.cma iti-life.ml -o iti-life
