@@ -1,16 +1,10 @@
 open Graphics
 
-let width = 40
-let height = 40
+let width = 32
+let height = 32
 
-let field_width = 20
-let field_height = 20
-
-(*
-let col = 20
-let lig = 10
-let pas = 30
-*)
+let field_width = 18
+let field_height = 18
 
 let click (x, y) =
   ignore (wait_next_event [Button_up]);
