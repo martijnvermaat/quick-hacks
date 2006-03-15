@@ -9,9 +9,17 @@ let field_height = 20
 
 let get_state board (x,y) = 
   try
-    board.(x).(y);
+    let state (s, _) = s in
+      state board.(x).(y)
   with Invalid_argument arg ->
     false
+
+let get_neighbours board (x,y) = 
+  try
+    let neighbours (_, n) = n in
+      neighbours board.(x).(y)
+  with Invalid_argument arg ->
+    0
 
 let draw_board board =
   auto_synchronize false;
@@ -24,15 +32,42 @@ let draw_board board =
   done;
   auto_synchronize true
 
+let calculate_neighbours board =
+  for x = 0 to board_width - 1 do
+    for y = 0 to board_height - 1 do
+      let int_of_state pos = if get_state board pos then 1 else 0 in
+	    int_of_state (x-1,y+1) + int_of_state (x,y+1) + int_of_state (x+1,y+1) +
+	      int_of_state (x-1,y) +
+	      int_of_state (x+1,y) +
+	      int_of_state (x-1,y-1) + int_of_state (x,y-1) + int_of_state (x+1,y-1)
+    done
+  done
+
+let evolve_cell board pos =
+  let state = get_state board pos 
+  and neighbours = get_neighbours board pos in
+    match neighbours with
+      | 2 -> if state = true then true else false
+      | 3 -> if state = false then true else true
+      | _ -> false
+
+let evolve_board board =
+  for x = 0 to board_width - 1 do
+    for y = 0 to board_height - 1 do
+      board.(x).(y) <- (evolve_cell board (x,y), 0)
+    done
+  done;
+  calculate_neighbours board
+
 let init_board board =
-  !board.(28).(30) <- true;
-  !board.(29).(30) <- true;
-  !board.(29).(31) <- true;
-  !board.(30).(31) <- true;
-  !board.(30).(32) <- true;
-  !board.(31).(32) <- true;
-  !board.(31).(33) <- true;
-  !board.(32).(33) <- true;;
+  !board.(28).(30) <- (true, 0);
+  !board.(29).(30) <- (true, 0);
+  !board.(29).(31) <- (true, 0);
+  !board.(30).(31) <- (true, 0);
+  !board.(30).(32) <- (true, 0);
+  !board.(31).(32) <- (true, 0);
+  !board.(31).(33) <- (true, 0);
+  !board.(32).(33) <- (true, 0)
 
 let b = ref (Array.make_matrix board_width board_height false)
 
@@ -44,6 +79,7 @@ let click board (x, y) =
 let () =
   open_graph (Printf.sprintf " %dx%d" (board_width * field_width) (board_height * field_height));
   init_board b;
+  calculate_neighbours board;
   draw_board b;
   try
     while true do
@@ -52,7 +88,11 @@ let () =
         if st.keypressed then begin
           let c = st.key in
 	        if c = 'q' then raise Exit
-        end;
+            else if c = 'n' then begin
+              evolve_board b;
+              draw_board b
+            end
+        end
     done
-  with 
+  with
     | Exit -> exit 0
