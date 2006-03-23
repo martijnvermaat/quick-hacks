@@ -7,6 +7,10 @@ let field_width = 10
 let field_height = 10
 
 
+type cell = Living | Dead
+type board = cell array array
+
+
 let get_state board (x,y) = 
   try
     let state (s, _) = s in
