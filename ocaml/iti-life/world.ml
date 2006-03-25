@@ -93,7 +93,7 @@ let world_map f world =
 
   performance is reasonable but not good. idea for
   optimization is to only evolve cells that have potential
-  to change (close to living cells).
+  to be alive (living cells and their neighbours).
 
   idea stolen from
   http://homepages.inf.ed.ac.uk/dts/fps/pract3-2004/pract3.sml
