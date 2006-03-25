@@ -1,2 +1,2 @@
 ocamlc graphics.cma iti-life.ml -o iti-life
-ocamlc graphics.cma life.ml -o life
+ocamlc graphics.cma world.ml life.ml -o life
