@@ -1,0 +1,1 @@
+ocamlc graphics.cma life.ml -o life
