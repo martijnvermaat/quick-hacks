@@ -10,6 +10,7 @@
   * automatic constant evolving
   * storing and loading of figures
   * have position (0,0) in center for easier storing of figures
+  * connect left/right and top/bottom edges of world
 *)
 
 
