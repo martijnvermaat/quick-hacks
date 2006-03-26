@@ -39,6 +39,23 @@ let new_world width height = width, height, PositionSet.empty
 
 
 (*
+  Calculate changeset for two worlds. This is a list of cells representing
+  the difference from world to world'.
+*)
+let changeset (_, _, cells) (_, _, cells') =
+  let positions = PositionSet.elements (PositionSet.diff
+                                          (PositionSet.union cells cells')
+                                          (PositionSet.inter cells cells'))
+  and pos_to_cell pos =
+    if PositionSet.mem pos cells' then
+      Living, pos
+    else
+      Dead, pos
+  in
+    List.map pos_to_cell positions
+
+
+(*
   Get the cell at given position.
 *)
 let cell_at pos world =
@@ -116,21 +133,3 @@ let rec map_all f width height world =
 let world_map f world =
   let width, height, cells = world in
     map_all f width height world
-
-
-let rec iter_highest_row f width height world =
-  ignore (if width > 0 then begin
-            f (cell_at (width-1, height-1) world);
-            iter_highest_row f (width-1) height world
-          end)
-
-
-let rec iter_all f width height world =
-  ignore (if height > 0 then begin
-            iter_highest_row f width height world;
-            iter_all f width (height-1) world
-          end)
-
-let world_iter f world =
-  let width, height, cells = world in
-    ignore (iter_all f width height world)

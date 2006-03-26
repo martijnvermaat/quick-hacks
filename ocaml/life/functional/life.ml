@@ -4,7 +4,6 @@
   March 2006, Martijn Vermaat
 
   Ideas/todo:
-  * only redraw cells that have changed (take changeset of two worlds)
   * only evolve cells that have potential to live (living cells and their
     neighbours)
   * automatic constant evolving
@@ -30,22 +29,21 @@ and living_color              = blue
 
 
 (*
-  Draw the world on the board. Use double buffering to prevent the board from
-  flickering (turn of graphics auto synchronization).
+  Redraw all cells in given changeset on the board. Use double buffering to
+  prevent the board from flickering (turn of graphics auto synchronization).
 *)
-let draw_board world =
-
-  auto_synchronize false;
-
+let draw_changeset changeset =
   let fill_cell (x, y) color =
     set_color color;
-    fill_rect (x * field_width) (y * field_height) field_width field_height
+    let x' = x * field_width and y' = y * field_height in
+      fill_rect x' y' (field_width - 1) (field_height - 1)
   in
   let draw_cell = function
       Living, pos -> fill_cell pos living_color
     | Dead, pos   -> fill_cell pos dead_color
   in
-    world_iter draw_cell world;
+    auto_synchronize false;
+    List.iter draw_cell changeset;
     auto_synchronize true
 
 
@@ -86,20 +84,17 @@ let rec main world =
   let next_world =
     begin
       if st.button then
-        let world' = click (mouse_pos ()) world in
-          draw_board world';
-          world'
+        click (mouse_pos ()) world
       else if st.keypressed then
         match st.key with
             'q' -> raise Exit
-          | ' ' -> let world' = evolve_world world in
-              draw_board world';
-              world'
+          | ' ' -> evolve_world world
           | _   -> world
       else
         world
     end
   in
+    draw_changeset (changeset world next_world);
     main next_world
 
 

@@ -27,6 +27,13 @@ val new_world : int -> int -> world
 
 
 (*
+  Calculate changeset for two worlds. This is a list of cells representing
+  the difference from world to world'.
+*)
+val changeset : world -> world -> cell list
+
+
+(*
   Get cell at given position.
 *)
 val cell_at : position -> world -> cell
@@ -54,9 +61,3 @@ val world_map : (cell -> cell) -> world -> world
   Apply given function to all cells in world and return resulting world.
 *)
 val world_map : (cell -> cell) -> world -> world
-
-
-(*
-  Apply given function to all cells in world.
-*)
-val world_iter : (cell -> unit) -> world -> unit
