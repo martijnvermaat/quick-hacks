@@ -1,64 +1,103 @@
-type state = Living | Dead
-type coordinate = int * int
-type cell = state * coordinate
+(*
+  Implementation for the world datatype.
 
-(* internal representation *)
-(* a world is conceptually unbounded *)
-(* not any more, width,height is included *)
-type world = int * int * coordinate list
+  A world contains cells and reflects a state in Conways Game of Life.
+  Some operations on worlds are provided to do calculations on them.
+*)
 
-let new_world width height = width, height, []
 
-let rec remove_from_list pos = function
-    []   -> []
-  | h::t -> if h = pos then t else h::(remove_from_list pos t)
+(*
+  A cell is a pair stating its state and position in the world.
+*)
+type state    = Living | Dead
+type position = int * int
+type cell     = state * position
 
-(* this should not be used, do away with it *)
+
+(*
+  This creates the type for a set of positions.
+*)
+module PositionSet = Set.Make(struct
+                                  type t = position
+                                  let compare = compare
+                                end)
+
+
+(*
+  A world is given by a width, a height and a set of positions that denote the
+  living cells in the world.
+  The latter is an idea taken from
+    http://homepages.inf.ed.ac.uk/dts/fps/pract3-2004/pract3.sml
+*)
+type world = int * int * PositionSet.t
+
+
+(*
+  Constructor for a new world with no living cells.
+*)
+let new_world width height = width, height, PositionSet.empty
+
+
+(*
+  Get the cell at given position.
+*)
 let cell_at pos world =
   let width, height, cells = world in
-    if List.mem pos cells then
+    if PositionSet.mem pos cells then
       Living, pos
     else
       Dead, pos
 
 
-let toggle_cell pos world =
-  let width, height, cells = world in
-    if List.mem pos cells then
-      width, height, remove_from_list pos cells
-    else
-      width, height, pos::cells
-
-
+(*
+  Add given cell to world, of course overwriting the existing cell at that
+  position.
+*)
 let add_cell cell world =
   let s, pos = cell in
   let width, height, cells = world in
-  let cell_removed = remove_from_list pos cells in
     match s with
-        Living -> width, height, pos::cell_removed
-      | _      -> width, height, cell_removed
+        Living -> width, height, PositionSet.add pos cells
+      | _      -> width, height, PositionSet.remove pos cells
 
 
-let neighbours pos world =
-  let x, y = pos in
+(*
+  Kill or breed a cell at given position.
+*)
+let toggle_cell pos world =
+  match cell_at pos world with
+      Living, _ -> add_cell (Dead, pos) world
+    | Dead,   _ -> add_cell (Living, pos) world
+
+
+(*
+  Number of living neighbours for given cell.
+  todo: de-uglify
+*)
+let num_neighbours cell world =
+  let s, (x, y) = cell in
   let list_of_neighbours =
-    cell_at (x, y+1) world
-    :: cell_at (x+1, y+1) world
-    :: cell_at (x+1, y) world
-    :: cell_at (x+1, y-1) world
-    :: cell_at (x, y-1) world
-    :: cell_at (x-1, y-1) world
-    :: cell_at (x-1, y) world
-    :: cell_at (x-1, y+1) world
-    :: []
+    [cell_at (x,   y+1) world;
+     cell_at (x+1, y+1) world;
+     cell_at (x+1, y)   world;
+     cell_at (x+1, y-1) world;
+     cell_at (x,   y-1) world;
+     cell_at (x-1, y-1) world;
+     cell_at (x-1, y)   world;
+     cell_at (x-1, y+1) world]
   in
     List.fold_left
       (fun n -> function
            (Living, _) -> n + 1
-         | _           -> n)  (* isn't there an identity function? *)
+         | _           -> n)
       0
       list_of_neighbours
 
+
+(*
+  What follows is a hacked up implementation of map and iter functions over
+  worlds. This should be rewritten.
+*)
 
 let rec map_highest_row f width height world =
   if width > 0 then
@@ -79,22 +118,19 @@ let world_map f world =
     map_all f width height world
 
 
+let rec iter_highest_row f width height world =
+  ignore (if width > 0 then begin
+            f (cell_at (width-1, height-1) world);
+            iter_highest_row f (width-1) height world
+          end)
 
 
-(*
-  Idea:
-  have an *abstract* datatype for the board implemented
-  as a list of coordinates for living cells.
-  operations on the board return cells as cell datatype,
-  a tuple of coordinates and state.
-  for the next round a new board is created.
-  maybe have coordinates (0,0) in the center of the board,
-  to make encoding of interesting figures easy.
+let rec iter_all f width height world =
+  ignore (if height > 0 then begin
+            iter_highest_row f width height world;
+            iter_all f width (height-1) world
+          end)
 
-  performance is reasonable but not good. idea for
-  optimization is to only evolve cells that have potential
-  to be alive (living cells and their neighbours).
-
-  idea stolen from
-  http://homepages.inf.ed.ac.uk/dts/fps/pract3-2004/pract3.sml
-*)
+let world_iter f world =
+  let width, height, cells = world in
+    ignore (iter_all f width height world)

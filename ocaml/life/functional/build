@@ -1,1 +1,1 @@
-ocamlc graphics.cma world.ml life.ml -o life
+ocamlopt world.mli && ocamlopt graphics.cmxa world.ml life.ml -o life

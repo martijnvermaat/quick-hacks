@@ -1,78 +1,119 @@
+(*
+  Game of Live implementation in OCaml
+
+  March 2006, Martijn Vermaat
+
+  Ideas/todo:
+  * only redraw cells that have changed
+  * only evolve cells that have potential to live (living cells and their
+    neighbours)
+  * automatic constant evolving
+  * storing and loading of figures
+  * have position (0,0) in center for easier storing of figures
+*)
+
+
 open Graphics
 open World
 
-let board_width = 50
-let board_height = 50
 
-let field_width = 10
-let field_height = 10
+(*
+  Configuration.
+  A board of 50x50 is reasonable, with fields 10x10.
+*)
+let board_width, board_height = 50, 50
+and field_width, field_height = 10, 10
+and dead_color                = black
+and living_color              = blue
 
 
+(*
+  Draw the world on the board. Use double buffering to prevent the board from
+  flickering (turn of graphics auto synchronization).
+*)
 let draw_board world =
-  auto_synchronize false;
-  for x = 0 to board_width - 1 do
-    for y = 0 to board_height - 1 do
-      begin
-        match cell_at (x, y) world with
-            Living, _ -> set_color red
-          | Dead, _   -> set_color black
-      end;
-      fill_rect (x * field_width) (y * field_height) field_width field_height
-    done
-  done;
-  auto_synchronize true;
-  world
 
-let click world (x, y) =
+  auto_synchronize false;
+
+  let fill_cell (x, y) color =
+    set_color color;
+    fill_rect (x * field_width) (y * field_height) field_width field_height
+  in
+  let draw_cell = function
+      Living, pos -> fill_cell pos living_color
+    | Dead, pos   -> fill_cell pos dead_color
+  in
+    world_iter draw_cell world;
+    auto_synchronize true
+
+
+(*
+  Toggle state of the cell that we clicked and return the updated world.
+*)
+let click (x, y) world =
   ignore (wait_next_event [Button_up]);
   let pos = x/field_width, y/field_height in
     toggle_cell pos world
 
-let evolve_state state neighbours =
-  (* this can be nicer *)
-  match state, neighbours with
-      _, 3      -> Living
-    | Living, 2 -> Living
-    | _         -> Dead
 
+(*
+  Calculate new state for each cell in the world and return the updated world.
+*)
 let evolve_world world =
-  (*
-    problem is that world does has no explicit bounds. a map over this world
-    is conceptually fine, but not straightforward to implement
-    solution 1) add width,height to world
-                + simple
-                - ugly
-    solution 2) let it just calculate as far as it wants to, but only use
-                what's inside the board dimensions
-                + simple?
-                - after many rounds there can be many unused cells
-    solution 3) a lazy version of solution 2
-                + elegant
-                - hard?
-  *)
-  world_map (function s, pos -> evolve_state s (neighbours pos world), pos) world
+  let evolve_cell cell =
+    let state, pos = cell
+    and n = num_neighbours cell world in
+      match state, n with
+          _,      3 -> Living, pos
+        | Living, 2 -> Living, pos
+        | _         -> Dead,   pos
+  in
+    world_map evolve_cell world
 
+
+(*
+  Main loop takes a world and waits for the user to do something. This can be
+  a request to play a round of the game, update the state of a cell, etc. This
+  is repeated with the possibly updated world.
+  This function is tail-recursive so it should not perform worse than an
+  imperative 'while true' loop.
+  Exit is raised if the user wants to quit the game.
+*)
 let rec main world =
+  let st = wait_next_event [Button_down; Key_pressed] in
   let next_world =
     begin
-      let st = wait_next_event [Button_down; Key_pressed] in
-        if st.button then
-          draw_board (click world (mouse_pos ()))
-        else if st.keypressed then
-          match st.key with
-              'q' -> raise Exit
-            | ' ' -> draw_board (evolve_world world)
-            | _   -> world
-        else
-          world
+      if st.button then
+        let world' = click (mouse_pos ()) world in
+          draw_board world';
+          world'
+      else if st.keypressed then
+        match st.key with
+            'q' -> raise Exit
+          | ' ' -> let world' = evolve_world world in
+              draw_board world';
+              world'
+          | _   -> world
+      else
+        world
     end
   in
     main next_world
 
 
+(*
+  Start by creating a new window for the board and call the main loop with an
+  empty world.
+*)
 let () =
-  open_graph (Printf.sprintf " %dx%d" (board_width * field_width) (board_height * field_height));
+  open_graph (Printf.sprintf " %dx%d"
+                (board_width * field_width)
+                (board_height * field_height));
+  set_window_title "Game of Life";
+  set_color dead_color;
+  fill_rect 0 0 (board_width * field_width) (board_height * field_height);
   try
     main (new_world board_width board_height)
   with
-    | Exit -> exit 0
+      Exit              -> exit 0
+    | Graphic_failure _ -> exit 0   (* raised when closing the window *)
