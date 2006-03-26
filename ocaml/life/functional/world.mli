@@ -34,30 +34,12 @@ val changeset : world -> world -> cell list
 
 
 (*
-  Get cell at given position.
-*)
-val cell_at : position -> world -> cell
-
-
-(*
   Kill or breed a cell at given position.
 *)
 val toggle_cell : position -> world -> world
 
 
 (*
-  Number of neighbours for given cell.
+  Play one round of the game and return the update world.
 *)
-val num_neighbours : cell -> world -> int
-
-
-(*
-  Apply given function to all cells in world.
-*)
-val world_map : (cell -> cell) -> world -> world
-
-
-(*
-  Apply given function to all cells in world and return resulting world.
-*)
-val world_map : (cell -> cell) -> world -> world
+val evolve_world : world -> world

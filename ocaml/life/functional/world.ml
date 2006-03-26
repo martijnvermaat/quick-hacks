@@ -18,9 +18,9 @@ type cell     = state * position
   This creates the type for a set of positions.
 *)
 module PositionSet = Set.Make(struct
-                                  type t = position
-                                  let compare = compare
-                                end)
+                                type t = position
+                                let compare = compare
+                              end)
 
 
 (*
@@ -33,6 +33,53 @@ type world = int * int * PositionSet.t
 
 
 (*
+  Add all positions in given list to the given set.
+*)
+let rec add_all list set =
+  match list with
+      []   -> set
+    | h::t -> add_all t (PositionSet.add h set)
+
+
+(*
+  List of neighbour positions for given position.
+*)
+let neighbour_positions (x, y) =
+  [(x,   y+1);
+   (x+1, y+1);
+   (x+1, y  );
+   (x+1, y-1);
+   (x,   y-1);
+   (x-1, y-1);
+   (x-1, y  );
+   (x-1, y+1)]
+
+
+(*
+  Number of living neighbours for given position.
+*)
+let num_neighbours pos (_, _, poss) =
+  List.fold_left
+    (fun n pos ->
+       if PositionSet.mem pos poss then
+         n + 1
+       else
+         n)
+    0
+    (neighbour_positions pos)
+
+
+(*
+  Given a world, return set of candidate positions that may be living after
+  the next step in evolution.
+*)
+let candidates (_, _, poss) =
+  let poss_list = PositionSet.elements poss
+  in
+    add_all (List.flatten (List.map neighbour_positions poss_list)) poss
+
+
+(*
   Constructor for a new world with no living cells.
 *)
 let new_world width height = width, height, PositionSet.empty
@@ -42,94 +89,40 @@ let new_world width height = width, height, PositionSet.empty
   Calculate changeset for two worlds. This is a list of cells representing
   the difference from world to world'.
 *)
-let changeset (_, _, cells) (_, _, cells') =
-  let positions = PositionSet.elements (PositionSet.diff
-                                          (PositionSet.union cells cells')
-                                          (PositionSet.inter cells cells'))
+let changeset (_, _, poss) (_, _, poss') =
+  let changed_poss = PositionSet.elements (PositionSet.diff
+                                             (PositionSet.union poss poss')
+                                             (PositionSet.inter poss poss'))
   and pos_to_cell pos =
-    if PositionSet.mem pos cells' then
+    if PositionSet.mem pos poss' then
       Living, pos
     else
       Dead, pos
   in
-    List.map pos_to_cell positions
-
-
-(*
-  Get the cell at given position.
-*)
-let cell_at pos world =
-  let width, height, cells = world in
-    if PositionSet.mem pos cells then
-      Living, pos
-    else
-      Dead, pos
-
-
-(*
-  Add given cell to world, of course overwriting the existing cell at that
-  position.
-*)
-let add_cell cell world =
-  let s, pos = cell in
-  let width, height, cells = world in
-    match s with
-        Living -> width, height, PositionSet.add pos cells
-      | _      -> width, height, PositionSet.remove pos cells
+    List.map pos_to_cell changed_poss
 
 
 (*
   Kill or breed a cell at given position.
 *)
 let toggle_cell pos world =
-  match cell_at pos world with
-      Living, _ -> add_cell (Dead, pos) world
-    | Dead,   _ -> add_cell (Living, pos) world
-
-
-(*
-  Number of living neighbours for given cell.
-  todo: de-uglify
-*)
-let num_neighbours cell world =
-  let s, (x, y) = cell in
-  let list_of_neighbours =
-    [cell_at (x,   y+1) world;
-     cell_at (x+1, y+1) world;
-     cell_at (x+1, y)   world;
-     cell_at (x+1, y-1) world;
-     cell_at (x,   y-1) world;
-     cell_at (x-1, y-1) world;
-     cell_at (x-1, y)   world;
-     cell_at (x-1, y+1) world]
+  let width, height, poss = world
   in
-    List.fold_left
-      (fun n -> function
-           (Living, _) -> n + 1
-         | _           -> n)
-      0
-      list_of_neighbours
+    if PositionSet.mem pos poss then
+      width, height, PositionSet.remove pos poss
+    else
+      width, height, PositionSet.add pos poss
 
 
 (*
-  What follows is a hacked up implementation of map and iter functions over
-  worlds. This should be rewritten.
+  Play one round of the game and return the update world.
 *)
-
-let rec map_highest_row f width height world =
-  if width > 0 then
-    map_highest_row f (width-1) height (add_cell (f (cell_at (width-1, height-1) world)) world)
-  else
-    world
-
-
-let rec map_all f width height world =
-  if height > 0 then
-    map_all f width (height-1) (map_highest_row f width height world)
-  else
-    world
-
-
-let world_map f world =
-  let width, height, cells = world in
-    map_all f width height world
+let evolve_world world =
+  let width, height, poss = world in
+  let evolve_position pos =
+    match (PositionSet.mem pos poss), (num_neighbours pos world) with
+        _,    3 -> true
+      | true, 2 -> true
+      | _       -> false
+  in
+    width, height, PositionSet.filter evolve_position (candidates world)

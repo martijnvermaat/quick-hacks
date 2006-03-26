@@ -4,13 +4,11 @@
   March 2006, Martijn Vermaat
 
   Ideas/todo:
-  * only evolve cells that have potential to live (living cells and their
-    neighbours)
+  * don't calculate outside the borders of world
   * automatic constant evolving
   * storing and loading of figures
   * have position (0,0) in center for easier storing of figures
   * connect left/right and top/bottom edges of world
-  * evolving of world should maybe be done in world.ml
 *)
 
 
@@ -22,7 +20,7 @@ open World
   Configuration.
   A board of 50x50 is reasonable, with fields 10x10.
 *)
-let board_width, board_height = 50, 50
+let board_width, board_height = 60, 60
 and field_width, field_height = 10, 10
 and dead_color                = black
 and living_color              = blue
@@ -54,21 +52,6 @@ let click (x, y) world =
   ignore (wait_next_event [Button_up]);
   let pos = x/field_width, y/field_height in
     toggle_cell pos world
-
-
-(*
-  Calculate new state for each cell in the world and return the updated world.
-*)
-let evolve_world world =
-  let evolve_cell cell =
-    let state, pos = cell
-    and n = num_neighbours cell world in
-      match state, n with
-          _,      3 -> Living, pos
-        | Living, 2 -> Living, pos
-        | _         -> Dead,   pos
-  in
-    world_map evolve_cell world
 
 
 (*
