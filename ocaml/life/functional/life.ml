@@ -4,7 +4,7 @@
   March 2006, Martijn Vermaat
 
   Ideas/todo:
-  * only redraw cells that have changed
+  * only redraw cells that have changed (take changeset of two worlds)
   * only evolve cells that have potential to live (living cells and their
     neighbours)
   * automatic constant evolving
