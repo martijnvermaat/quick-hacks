@@ -4,11 +4,14 @@
   March 2006, Martijn Vermaat
 
   Ideas/todo:
-  * don't calculate outside the borders of world
-  * automatic constant evolving
-  * storing and loading of figures
-  * have position (0,0) in center for easier storing of figures
-  * connect left/right and top/bottom edges of world
+  * automatic constant evolving.
+  * storing and loading of figures.
+  * have position (0,0) in center for easier storing of figures.
+  * connect left/right and top/bottom edges of world.
+  * the calculated world is potentially infinite in size, with a smarter
+    interface we could do nice things here (zooming, traveling, etc).
+    at the moment we do not use computations outside the bourd that have no
+    effect on the board.
 *)
 
 
@@ -93,7 +96,7 @@ let () =
   set_color dead_color;
   fill_rect 0 0 (board_width * field_width) (board_height * field_height);
   try
-    main (new_world board_width board_height)
+    main new_world
   with
       Exit              -> exit 0
     | Graphic_failure _ -> exit 0   (* raised when closing the window *)

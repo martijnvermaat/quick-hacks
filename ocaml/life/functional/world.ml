@@ -24,12 +24,12 @@ module PositionSet = Set.Make(struct
 
 
 (*
-  A world is given by a width, a height and a set of positions that denote the
-  living cells in the world.
-  The latter is an idea taken from
+  A world is given by a set of positions that denote the living cells in the
+  world. There are no bounds on the size of the world.
+  Idea taken from
     http://homepages.inf.ed.ac.uk/dts/fps/pract3-2004/pract3.sml
 *)
-type world = int * int * PositionSet.t
+type world = PositionSet.t
 
 
 (*
@@ -58,10 +58,10 @@ let neighbour_positions (x, y) =
 (*
   Number of living neighbours for given position.
 *)
-let num_neighbours pos (_, _, poss) =
+let num_neighbours pos world =
   List.fold_left
     (fun n pos ->
-       if PositionSet.mem pos poss then
+       if PositionSet.mem pos world then
          n + 1
        else
          n)
@@ -73,28 +73,28 @@ let num_neighbours pos (_, _, poss) =
   Given a world, return set of candidate positions that may be living after
   the next step in evolution.
 *)
-let candidates (_, _, poss) =
-  let poss_list = PositionSet.elements poss
+let candidates world =
+  let poss_list = PositionSet.elements world
   in
-    add_all (List.flatten (List.map neighbour_positions poss_list)) poss
+    add_all (List.flatten (List.map neighbour_positions poss_list)) world
 
 
 (*
   Constructor for a new world with no living cells.
 *)
-let new_world width height = width, height, PositionSet.empty
+let new_world = PositionSet.empty
 
 
 (*
   Calculate changeset for two worlds. This is a list of cells representing
   the difference from world to world'.
 *)
-let changeset (_, _, poss) (_, _, poss') =
+let changeset world world' =
   let changed_poss = PositionSet.elements (PositionSet.diff
-                                             (PositionSet.union poss poss')
-                                             (PositionSet.inter poss poss'))
+                                             (PositionSet.union world world')
+                                             (PositionSet.inter world world'))
   and pos_to_cell pos =
-    if PositionSet.mem pos poss' then
+    if PositionSet.mem pos world' then
       Living, pos
     else
       Dead, pos
@@ -106,23 +106,20 @@ let changeset (_, _, poss) (_, _, poss') =
   Kill or breed a cell at given position.
 *)
 let toggle_cell pos world =
-  let width, height, poss = world
-  in
-    if PositionSet.mem pos poss then
-      width, height, PositionSet.remove pos poss
-    else
-      width, height, PositionSet.add pos poss
+  if PositionSet.mem pos world then
+    PositionSet.remove pos world
+  else
+    PositionSet.add pos world
 
 
 (*
   Play one round of the game and return the update world.
 *)
 let evolve_world world =
-  let width, height, poss = world in
   let evolve_position pos =
-    match (PositionSet.mem pos poss), (num_neighbours pos world) with
+    match (PositionSet.mem pos world), (num_neighbours pos world) with
         _,    3 -> true
       | true, 2 -> true
       | _       -> false
   in
-    width, height, PositionSet.filter evolve_position (candidates world)
+    PositionSet.filter evolve_position (candidates world)

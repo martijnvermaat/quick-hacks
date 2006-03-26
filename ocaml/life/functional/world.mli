@@ -21,9 +21,9 @@ type world
 
 
 (*
-  Constructor for a new empty world with given width and height.
+  Constructor for a new empty world with no bounds.
 *)
-val new_world : int -> int -> world
+val new_world : world
 
 
 (*
