@@ -88,6 +88,7 @@ let new_world = PositionSet.empty
 (*
   Calculate changeset for two worlds. This is a list of cells representing
   the difference from world to world'.
+  todo: maybe use a Set of cells instead of a list, it's a changeSET after all
 *)
 let changeset world world' =
   let changed_poss = PositionSet.elements (PositionSet.diff

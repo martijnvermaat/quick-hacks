@@ -32,6 +32,7 @@ and living_color              = blue
 (*
   Redraw all cells in given changeset on the board. Use double buffering to
   prevent the board from flickering (turn of graphics auto synchronization).
+  todo: only draw cells that are inside the board
 *)
 let draw_changeset changeset =
   let fill_cell (x, y) color =
