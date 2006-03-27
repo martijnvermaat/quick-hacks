@@ -43,3 +43,9 @@ val toggle_cell : position -> world -> world
   Play one round of the game and return the update world.
 *)
 val evolve_world : world -> world
+
+
+(*
+  Update the world with the cells in the given list.
+*)
+val load_cells : cell list -> world -> world

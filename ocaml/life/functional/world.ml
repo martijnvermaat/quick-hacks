@@ -124,3 +124,13 @@ let evolve_world world =
       | _       -> false
   in
     PositionSet.filter evolve_position (candidates world)
+
+
+(*
+  Update the world with the cells in the given list.
+*)
+let rec load_cells cells world =
+  match cells with
+      []                  -> world
+    | (Living, pos)::tail -> load_cells tail (PositionSet.add pos world)
+    | (Dead,   pos)::tail -> load_cells tail (PositionSet.remove pos world)

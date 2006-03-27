@@ -12,6 +12,7 @@
     interface we could do nice things here (zooming, traveling, etc).
     at the moment we do not use computations outside the bourd that have no
     effect on the board.
+  * don't draw cells outside the visible board.
 *)
 
 
@@ -23,7 +24,7 @@ open World
   Configuration.
   A board of 50x50 is reasonable, with fields 10x10.
 *)
-let board_width, board_height = 60, 60
+let board_width, board_height = 50, 50
 and field_width, field_height = 10, 10
 and dead_color                = black
 and living_color              = blue
@@ -59,6 +60,21 @@ let click (x, y) world =
 
 
 (*
+  Load some stored figure in the world. Work this out sometime for more
+  functionality.
+*)
+let load_figure world =
+  let glider  = [(20,20);(21,20);(22,20);(20,21);(21,22)]
+  and block   = [(20,20);(21,20);(21,21);(20,21)]
+  and boat    = [(20,20);(21,20);(21,21);(19,21);(20,22)]
+  and blinker = [(20,20);(20,21);(20,22)]
+  in
+  let figure = List.map (fun pos -> (Living, pos)) glider
+  in
+    load_cells figure world
+
+
+(*
   Main loop takes a world and waits for the user to do something. This can be
   a request to play a round of the game, update the state of a cell, etc. This
   is repeated with the possibly updated world.
@@ -75,6 +91,7 @@ let rec main world =
       else if st.keypressed then
         match st.key with
             'q' -> raise Exit
+          | 'l' -> load_figure world
           | ' ' -> evolve_world world
           | _   -> world
       else
