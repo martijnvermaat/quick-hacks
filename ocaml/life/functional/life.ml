@@ -5,7 +5,7 @@
 
   Ideas/todo:
   * automatic constant evolving.
-  * storing and loading of figures.
+  * storing of current figure.
   * connect left/right and top/bottom edges of world.
   * the calculated world is potentially infinite in size, with a smarter
     interface we could do nice things here (zooming, traveling, etc).
@@ -63,6 +63,8 @@ let click (x, y) world =
 (*
   Load some stored figure in the world. Work this out sometime for more
   functionality.
+  todo: it's probably useless that load_cells takes cells, change that to
+        take just coordinates. we only give living cells anyway.
 *)
 let load_figure world =
   let glider  = [(-1,1);(0,1);(1,1);(-1,0);(0,-1)]
