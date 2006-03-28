@@ -6,7 +6,6 @@
   Ideas/todo:
   * automatic constant evolving.
   * storing and loading of figures.
-  * have position (0,0) in center for easier storing of figures.
   * connect left/right and top/bottom edges of world.
   * the calculated world is potentially infinite in size, with a smarter
     interface we could do nice things here (zooming, traveling, etc).
@@ -33,12 +32,14 @@ and living_color              = blue
 (*
   Redraw all cells in given changeset on the board. Use double buffering to
   prevent the board from flickering (turn of graphics auto synchronization).
+  By adding half of the board width/height the center becomes position (0,0).
   todo: only draw cells that are inside the board
 *)
 let draw_changeset changeset =
   let fill_cell (x, y) color =
     set_color color;
-    let x' = x * field_width and y' = y * field_height in
+    let x' = (x + board_width / 2) * field_width
+    and y' = (y + board_height / 2) * field_height in
       fill_rect x' y' (field_width - 1) (field_height - 1)
   in
   let draw_cell = function
@@ -55,7 +56,7 @@ let draw_changeset changeset =
 *)
 let click (x, y) world =
   ignore (wait_next_event [Button_up]);
-  let pos = x/field_width, y/field_height in
+  let pos = x/field_width - board_width/2, y/field_height - board_height/2 in
     toggle_cell pos world
 
 
@@ -64,10 +65,10 @@ let click (x, y) world =
   functionality.
 *)
 let load_figure world =
-  let glider  = [(20,20);(21,20);(22,20);(20,21);(21,22)]
-  and block   = [(20,20);(21,20);(21,21);(20,21)]
-  and boat    = [(20,20);(21,20);(21,21);(19,21);(20,22)]
-  and blinker = [(20,20);(20,21);(20,22)]
+  let glider  = [(-1,1);(0,1);(1,1);(-1,0);(0,-1)]
+  and block   = [(0,0);(1,0);(1,1);(0,1)]
+  and boat    = [(0,0);(1,0);(1,1);(-1,1);(0,2)]
+  and blinker = [(0,-1);(0,0);(0,1)]
   in
   let figure = List.map (fun pos -> (Living, pos)) glider
   in
@@ -103,10 +104,25 @@ let rec main world =
 
 
 (*
+  This function does what its name suggests.
+*)
+let print_info () =
+  print_endline "This is the Game of Life";
+  print_newline ();
+  print_endline "Options:";
+  print_endline "  q            Quit the game";
+  print_endline "  [spacebar]   Play a round";
+  print_endline "  l            Load a figure";
+  print_newline ();
+  print_endline "Click on a cell to kill or breed it"
+
+
+(*
   Start by creating a new window for the board and call the main loop with an
   empty world.
 *)
 let () =
+  print_info ();
   open_graph (Printf.sprintf " %dx%d"
                 (board_width * field_width)
                 (board_height * field_height));
