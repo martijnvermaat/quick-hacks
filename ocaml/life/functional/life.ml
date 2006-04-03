@@ -23,7 +23,7 @@ open World
   Configuration.
   A board of 50x50 is reasonable, with fields 10x10.
 *)
-let board_width, board_height = 50, 50
+let board_width, board_height = 80, 80
 and field_width, field_height = 10, 10
 and dead_color                = black
 and living_color              = blue
@@ -96,6 +96,7 @@ let rec main world =
             'q' -> raise Exit
           | 'l' -> load_figure world
           | ' ' -> evolve_world world
+          | 'c' -> new_world
           | _   -> world
       else
         world
@@ -115,6 +116,7 @@ let print_info () =
   print_endline "  q            Quit the game";
   print_endline "  [spacebar]   Play a round";
   print_endline "  l            Load a figure";
+  print_endline "  c            Clear the world";
   print_newline ();
   print_endline "Click on a cell to kill or breed it"
 
