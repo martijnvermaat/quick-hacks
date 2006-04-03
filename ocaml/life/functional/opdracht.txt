@@ -1,0 +1,34 @@
+Opzetje opdracht tekst.
+
+GameOfLife
+
+* Groter programmeren in OCaml
+* Intro Game of Life
+* Opzet Game of Life in OCaml
+* Download voorbeeldcode en lever werkend in
+
+
+Groter programmeren in OCaml
+
+Functioneel programmeren is een paradigma waarbij functies een centrale rol spelen. Vergelijk object-georienteerd (objecten) en logisch programmeren (relaties). Een functie is hier als we die uit de wiskunde kennen, niet een functie als in C of Java (procedures en methoden).
+
+Functioneel programmeren is een vorm van declaratief programmeren, net als logisch programmeren. Declaratief wil zeggen dat je beschrijft wat je programma moet doen, in tegenstelling tot hoe je programma iets moet doen (imperatief).
+
+Over het algemeen wordt verwacht dat een pure functionele programmeertaal de volgende eigenschappen heeft:
+
+* Hogere orde functies
+* Recursie
+* Geen state / single assignment / immutable data
+* Referential transparency / geen side effects
+
+todo.
+
+
+Intro Game of Life
+
+todo.
+
+
+Opzet Game of Life in OCaml
+
+todo.
