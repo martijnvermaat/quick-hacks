@@ -47,15 +47,49 @@ volgende eigenschappen heeft:
 
 * (Closures, pattern matching, lazy evaluation, etc.)
 
+ML is een bekende functionele taal met de genoemde eigenschappen. Een subset
+van OCaml is in feite ML, dus biedt OCaml een volledige functionele omgeving.
+Daarnaast heeft OCaml ook imperatieve constructies (for-loops, mutable data),
+een module systeem en object georienteerde constructies.
 
-
+Omdat dit een practicum functioneel programmeren is gebruiken we vooral het
+functionele deel van OCaml.
 
 
 Intro Game of Life
 
-todo.
+Game of Life is een voorbeeld van een cellular automaton. Een cellular
+automaton is een wiskundig model dat bestaat uit:
+
+* positieve dimensie N
+* eindige verzameling states S
+* n-dimensionaal raster van cellen over Z^N (Z gehele getallen)
+* buurrelatie over Z^N x Z^N
+* transitiefunctie van S^x+1 naar S met x het aantal buren van een cel
+(* start state voor iedere cel in raster?)
+
+In ons geval gaat het om een 2-dimensionaal raster, states {dead,living} en
+een transitiefunctie als volgt:
+
+* living met 2 of 3 buren living  -> living
+* dead met 3 buren living         -> living
+* overige gevallen                -> dead
+
+De buurrelatie zegt dat een cel die bereikbaar is met nul of een stappen in
+iedere dimensie een buur is van de cel op de huidige positie.
+
+We spelen het spel op de volgende manier. Uitgaande van een start state voor
+iedere cel spelen we op ieder discreet tijdstip t een ronde. Voor iedere cel c
+wordt met de transitiefunctie de nieuwe state van c berekend. De input van de
+transitiefunctie zijn de states van c en buren c1...cn van c op tijdstop t-1.
+
+[voorbeeldje met een plaatje]
 
 
 Opzet Game of Life in OCaml
+
+Input en output routines zijn typisch iets dat natuurlijker te programmeren is
+op een imperatieve manier.
+
 
 todo.
