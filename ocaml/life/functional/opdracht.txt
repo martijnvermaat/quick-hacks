@@ -1,11 +1,12 @@
 Opzetje opdracht tekst.
 
-GameOfLife
+
+Game of Life
 
 * Functioneel programmeren
 * Intro Game of Life
 * Opzet Game of Life in OCaml
-* Download voorbeeldcode en lever werkend in
+* Download voorbeeldcode
 
 
 Functioneel programmeren
@@ -84,7 +85,7 @@ iedere cel spelen we op ieder discreet tijdstip t een ronde. Voor iedere cel c
 wordt met de transitiefunctie de nieuwe state van c berekend. De input van de
 transitiefunctie zijn de states van c en buren c1...cn van c op tijdstop t-1.
 
-[voorbeeldje met een plaatje]
+[ voorbeeldje met een plaatje ]
 
 
 Opzet Game of Life in OCaml
@@ -124,3 +125,21 @@ uitrekenen.)
 
 [ gegeven is world.mli ]
 [ gegeven is een opzetje voor world.ml dat liefst alvast compileert ]
+
+[ misschien nog uitleg bij enkele dingen in world.ml ]
+
+
+Download voorbeeldcode
+
+Op de website vind je het bestand life.tar. Hierin vind je een opzet van het
+programma. Het is de bedoeling dat je de code uitbreidt tot een functionerend
+Game of Life programma.
+In het bestand 'make' staat een commando om de code te compileren met de OCaml
+native code compiler, ocamlopt. In tegenstelling tot ocamlc produceert deze
+geen OCaml bytecode, maar machinecode. Het resultaat kan sneller uitgevoerd
+worden.
+Voeg extra features toe als je daar zin in hebt. (Nog een lijstje maken van
+leuke ideeen.)
+
+Stuur je resultaat in zijn geheel op naar tcs@cs.vu.nl, maar zonder eventueel
+gecompileerde bestanden.
