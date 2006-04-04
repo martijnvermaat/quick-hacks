@@ -2,26 +2,53 @@ Opzetje opdracht tekst.
 
 GameOfLife
 
-* Groter programmeren in OCaml
+* Functioneel programmeren
 * Intro Game of Life
 * Opzet Game of Life in OCaml
 * Download voorbeeldcode en lever werkend in
 
 
-Groter programmeren in OCaml
+Functioneel programmeren
 
-Functioneel programmeren is een paradigma waarbij functies een centrale rol spelen. Vergelijk object-georienteerd (objecten) en logisch programmeren (relaties). Een functie is hier als we die uit de wiskunde kennen, niet een functie als in C of Java (procedures en methoden).
+Functioneel programmeren is een paradigma waarbij functies een centrale rol
+spelen. Vergelijk object-georienteerd (objecten) en logisch programmeren
+(relaties). Een functie is hier als we die uit de wiskunde kennen, niet een
+functie als in C of Java (procedures en methoden).
 
-Functioneel programmeren is een vorm van declaratief programmeren, net als logisch programmeren. Declaratief wil zeggen dat je beschrijft wat je programma moet doen, in tegenstelling tot hoe je programma iets moet doen (imperatief).
+Functioneel programmeren is een vorm van declaratief programmeren, net als
+logisch programmeren. Declaratief wil zeggen dat je beschrijft wat je
+programma moet doen, in tegenstelling tot hoe je programma iets moet doen
+(imperatief).
 
-Over het algemeen wordt verwacht dat een pure functionele programmeertaal de volgende eigenschappen heeft:
+Over het algemeen wordt verwacht dat een pure functionele programmeertaal de
+volgende eigenschappen heeft:
 
-* Hogere orde functies
-* Recursie
-* Geen state / single assignment / immutable data
-* Referential transparency / geen side effects
+* - Hogere orde functies
+    Functies kunnen geparameteriseerd worden met functies.
+  - Functies zijn first-class
+    Functies zijn waarden net als alle anderen mbt maken en gebruiken.
 
-todo.
+* - Recursie
+    Een functie kan 'zichzelf' aanroepen met een 'kleinere' input waarde.
+  - Tail-call optimalisatie
+    De compiler optimaliseert een recursieve aanroep wanneer deze het laatste
+    is dat gedaan wordt in een functie definitie.
+
+* - Referential transparency
+    Functie aanroepen kunnen zonder verandering van betekenis vervangen worden
+    door de return waarde van de functies. Dit betekent dat functies geen side
+    effects hebben.
+  - Single assignment
+    Variabelen, of beter gezegd namen, kunnen slechts een keer een waarde
+    krijgen en ze houden deze. Waarden kunnen gemaakt worden mbv andere
+    waarden, maar kunnen niet overschreven worden (immutable).
+  Dit betekent dat er dus geen impliciete state is zoals in veel imperatieve
+  talen.
+
+* (Closures, pattern matching, lazy evaluation, etc.)
+
+
+
 
 
 Intro Game of Life
