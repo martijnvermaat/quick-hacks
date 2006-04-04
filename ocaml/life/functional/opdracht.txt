@@ -86,6 +86,7 @@ wordt met de transitiefunctie de nieuwe state van c berekend. De input van de
 transitiefunctie zijn de states van c en buren c1...cn van c op tijdstop t-1.
 
 [ voorbeeldje met een plaatje ]
+[ wat meer meta info over Life ]
 
 
 Opzet Game of Life in OCaml
@@ -138,8 +139,29 @@ In het bestand 'make' staat een commando om de code te compileren met de OCaml
 native code compiler, ocamlopt. In tegenstelling tot ocamlc produceert deze
 geen OCaml bytecode, maar machinecode. Het resultaat kan sneller uitgevoerd
 worden.
+Zoek op internet naar voorbeelden van Game of Life patronen en probeer deze in
+je programma.
 Voeg extra features toe als je daar zin in hebt. (Nog een lijstje maken van
 leuke ideeen.)
 
 Stuur je resultaat in zijn geheel op naar tcs@cs.vu.nl, maar zonder eventueel
 gecompileerde bestanden.
+
+
+-- 
+
+Objective Caml - Documentation and user's manual
+http://caml.inria.fr/pub/docs/manual-ocaml/
+
+Wikipedia: Conway's Game of Life
+http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+
+Life Lexicon Home Page
+http://www.argentum.freeserve.co.uk/lex_home.htm
+
+Paul's Page of Conway's Life Miscellany
+http://radicaleye.com/lifepage/
+
+MathWorld: Cellular Automaton
+http://mathworld.wolfram.com/CellularAutomaton.html
+(MathWorld is niet altijd even betrouwbaar wat mij betreft...)
