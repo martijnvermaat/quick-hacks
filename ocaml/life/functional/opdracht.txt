@@ -53,7 +53,8 @@ Daarnaast heeft OCaml ook imperatieve constructies (for-loops, mutable data),
 een module systeem en object georienteerde constructies.
 
 Omdat dit een practicum functioneel programmeren is gebruiken we vooral het
-functionele deel van OCaml.
+functionele deel van OCaml. Met de meeste van de genoemde eigenschappen heb je
+al kennis gemaakt.
 
 
 Intro Game of Life
@@ -88,8 +89,38 @@ transitiefunctie zijn de states van c en buren c1...cn van c op tijdstop t-1.
 
 Opzet Game of Life in OCaml
 
-Input en output routines zijn typisch iets dat natuurlijker te programmeren is
-op een imperatieve manier.
+Input en output routines, inclusief het gebruik van de Graphics module, zijn
+typisch dingen die natuurlijker te programmeren zijn op een imperatieve
+manier. Dit deel van het programma hoef je daarom niet te maken, maar krijg je
+cadeau.
 
+Om de code te begrijpen moeten we alleen de ; operator nog uitleggen. Dit is
+de sequentiele compositie operator die twee expressies na elkaar uitvoert en
+de waarde van de tweede geeft (en dus een imperatieve constructie).
+Verwar de ; operator niet met het ; teken waarmee je in bijvoorbeeld Java een
+statement afsluit.
 
-todo.
+[ gegeven is life.ml ]
+
+Het model van Game of Life en functies die daarop werken definieren we in een
+aparte file, world.ml. De bijbehorende world.mli interface bevat de namen van
+datatypen en functies die vanuit andere files gebruikt kunnen worden.
+
+Een imperatieve manier om de staat van het model te beschrijven is met een
+matrix (een array van arrays). In een functionele stijl gebruiken we geen
+mutable datastructuren. In plaats daarvan zouden we voor een lijst van lijsten
+kunnen kiezen, maar omdat we dan geen directe toegang tot de cellen hebben
+zoals bij een array zou het programma waarschijnlijk niet erg snel zijn.
+
+Daarom beschrijven we de staat van het model met een verzameling van
+coordinaten die precies de levende cellen aangeven. Deze aanpak heeft nog een
+aantal voordelen boven een matrix. Ons model is nu conceptueel oneindig groot,
+terwijl een matrix vaste eindige afmetingen heeft. Bedenk eens wat een Game of
+Life programma op basis van een matrix moet doen met cellen die zich tegen de
+randen van de matrix bevinden.
+
+(Ander voordeel is dat we heel snel alle levende cellen plus hun buren kunnen
+uitrekenen.)
+
+[ gegeven is world.mli ]
+[ gegeven is een opzetje voor world.ml dat liefst alvast compileert ]
