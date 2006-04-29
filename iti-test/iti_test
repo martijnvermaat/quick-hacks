@@ -19,13 +19,14 @@
 #   naturals                                      #
 #   four                                          #
 #   queues                                        #
+#   toy                                           #
 #                                                 # 
 #                                                 #
-# 2005-04-27, Martijn Vermaat                     #
+# 2006-04-30, Martijn Vermaat                     #
 # mvermaat@cs.vu.nl                               #
 #                                                 #
 # Gemaakt voor het practicum Inleiding            #
-# Theoretische Informatica 2005                   #
+# Theoretische Informatica 2005, 2006             #
 #                                                 #
 ###################################################
 
@@ -52,6 +53,7 @@ if [ -n "$1" ] && [ "$1" = "--help" ]; then
     echo "  naturals"
     echo "  four"
     echo "  queues"
+    echo "  toy"
     exit 0
 fi
 
@@ -82,12 +84,13 @@ case "$1" in
     naturals ) MODULE=naturals ;;
     four     ) MODULE=four ;;
     queues   ) MODULE=queues ;;
+    toy      ) MODULE=toy ;;
     default  ) MODULE="" ;;
 esac
 
 if [ -z "$MODULE" ]; then
     echo "Geen geldige test opgegeven, kies uit:"
-    echo "  naturals four queues"
+    echo "  naturals four queues toy"
     echo $USE_HELP
     exit 1
 fi

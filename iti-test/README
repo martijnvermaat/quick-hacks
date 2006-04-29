@@ -5,7 +5,7 @@ tests voor OCaml interface implementaties.
 
 Dit wordt gebruikt voor het automatisch testen
 van practicum uitwerkingen bij het vak Inleiding
-Theoretische Informatica.
+Theoretische Informatica (2005, 2006).
 
 
 Configuratie:
@@ -15,12 +15,14 @@ een dir met daarin:
   naturals.mli
   four.mli
   queues.mli
+  toy.mli
   test_naturals.ml
   test_four.ml
   test_queues.ml
+  test_toy.ml
 
 De LIB_DIR variabele moet een dir zijn waar we
 de OUnit module kunnen vinden.
 
 
-2005-04-29, Martijn Vermaat (mvermaat@cs.vu.nl)
+2006-04-30, Martijn Vermaat (mvermaat@cs.vu.nl)
