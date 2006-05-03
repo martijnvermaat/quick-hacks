@@ -27,7 +27,7 @@ let test_confusion _ =
   assert_bool "nxt(c) and c" ((nxt c) <> c);
   assert_bool "nxt(d) and d" ((nxt d) <> d);
   assert_bool "nxt(c) and d" ((nxt c) <> d);
-  assert_bool "nxt(nxt(d)) and c" ((nxt (nxt c)) <> d)
+  assert_bool "nxt(nxt(d)) and c" ((nxt (nxt d)) <> c)
 
 
 let test_suite = "toy" >:::
