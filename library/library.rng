@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<element name="library" xmlns="http://relaxng.org/ns/structure/1.0">
+    <zeroOrMore>
+        <element name="item">
+            <interleave>
+                <element name="title">
+                    <text />
+                </element>
+                <element name="authors">
+                    <oneOrMore>
+                        <element name="author">
+                            <text />
+                        </element>
+                    </oneOrMore>
+                </element>
+                <element name="date">
+                    <text />
+                </element>
+                <element name="type">
+                    <text />
+                </element>
+                <element name="language">
+                    <text />
+                </element>
+                <optional>
+                    <element name="locations">
+                        <interleave>
+                            <optional>
+                                <element name="physically">
+                                    <text />
+                                </element>
+                            </optional>
+                            <optional>
+                                <element name="url">
+                                    <text />
+                                </element>
+                            </optional>
+                        </interleave>
+                    </element>
+                </optional>
+            </interleave>
+        </element>
+    </zeroOrMore>
+</element>

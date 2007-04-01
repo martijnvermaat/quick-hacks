@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<library>
+    <item>
+        <title>Algebraïsche specificaties</title>
+        <authors>
+            <author>Yde Venema</author>
+            <author>Roel de Vrijer</author>
+        </authors>
+        <date>1994-08-26</date>
+        <type>Course Syllabus</type>
+        <language>nl</language>
+        <locations>
+            <physically>Binder 1</physically>
+            <url>http://www.cs.vu.nl/~rdv/as.pdf</url>
+        </locations>
+    </item>
+    <item>
+        <title>Introducing ASF+SDF Using the Lambda-calculus as Example</title>
+        <authors>
+            <author>Arie van Deursen</author>
+        </authors>
+        <date>1994-08-23</date>
+        <type>Article</type>
+        <language>en</language>
+        <locations>
+            <physically>Binder 1</physically>
+            <url>ftp://ftp.cwi.nl/pub/gipe/reports/Deu92.ps.Z</url>
+        </locations>
+    </item>
+    <item>
+        <title>Locic of knowledge with justifications from the provability perspective</title>
+        <authors>
+            <author>Sergei Artemov</author>
+            <author>Elena Nogina</author>
+        </authors>
+        <date>2004-09-24</date>
+        <type>Article</type>
+        <language>en</language>
+        <locations>
+            <physically>Binder 1</physically>
+            <url>http://www.cs.gc.cuny.edu/~sartemov/publications/TR-2004011.pdf</url>
+        </locations>
+    </item>
+    <item>
+        <title>Monotonic Modal Logics</title>
+        <authors>
+            <author>Helle Hvid Hansen</author>
+        </authors>
+        <date>2003-10-15</date>
+        <type>Thesis</type>
+        <language>en</language>
+        <locations>
+            <physically>Binder 1</physically>
+            <url>http://citeseer.ist.psu.edu/673825.html</url>
+        </locations>
+    </item>
+    <item>
+        <title>Scala By Example - Draft</title>
+        <authors>
+            <author>Martin Odersky</author>
+        </authors>
+        <date>2004-01-23</date>
+        <type>Book</type>
+        <language>en</language>
+        <locations>
+            <physically>Binder 1</physically>
+            <url>http://scala.epfl.ch/docu/files/ScalaByExample.pdf</url>
+        </locations>
+    </item>
+    <item>
+        <title>Meta-Programming with Concrete Object Syntax</title>
+        <authors>
+            <author>Eelco Visser</author>
+        </authors>
+        <date>2002</date>
+        <type>Article</type>
+        <language>en</language>
+        <locations>
+            <physically>Binder 1</physically>
+            <url>http://citeseer.ist.psu.edu/visser02metaprogramming.html</url>
+        </locations>
+    </item>
+    <item>
+        <title>Concrete Syntax for Objects - Domain-Specific Language Embedding and Assimilation without Restrictions</title>
+        <authors>
+            <author>Martin Bravenboer</author>
+            <author>Eelco Visser</author>
+        </authors>
+        <date>2004</date>
+        <type>Article</type>
+        <language>en</language>
+        <locations>
+            <physically>Binder 1</physically>
+            <url>http://www.cs.uu.nl/~visser/ftp/BV04.pdf</url>
+        </locations>
+    </item>
+</library>
