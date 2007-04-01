@@ -1,0 +1,10 @@
+equations
+
+  [1]  true or P = true
+  [2]  false or P = P
+
+  [3]  true and P = P
+  [4]  false and P = false
+
+  [5]  not true = false
+  [6]  not false = true

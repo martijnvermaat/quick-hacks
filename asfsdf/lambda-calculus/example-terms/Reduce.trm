@@ -1,0 +1,6 @@
+%% example reduction
+
+lm-red(
+    (lambda y x.y)
+    (lambda y.x)
+)

@@ -1,0 +1,16 @@
+equations
+
+  [1]  [Ids1] ++ [Ids2] = [Ids1, Ids2]
+
+  [2]  X in IList == false
+       ===================
+       IList - X = IList
+
+  [3]  [Ids1, X, Ids2] - X = [Ids1,Ids2] - X
+
+  [4]  X in [] = false
+  [5]  X in [X, Ids1] = true
+
+  [6]  X != Y
+       ============================
+       X in [Y, Ids1] = X in [Ids1]

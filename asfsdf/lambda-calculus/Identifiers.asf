@@ -1,0 +1,3 @@
+equations
+
+  [1]  prime( id(\xi) ) =  id(\xi "z")

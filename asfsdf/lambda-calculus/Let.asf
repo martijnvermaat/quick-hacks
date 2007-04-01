@@ -1,0 +1,4 @@
+equations
+
+  [e1]  expand(E, (let (V:E1))) = E[V:=E1]
+  [e2]  expand(E, (let D+ D)) =  expand(expand(E, (let D)), (let D+))

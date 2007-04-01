@@ -1,0 +1,15 @@
+%% Taken from the ASF+SDF Meta Environment
+
+module Comments
+
+
+imports Layout
+
+exports
+
+  lexical syntax
+    "%%" ~[\n]* "\n"    -> LAYOUT
+    "%" ~[\n\%]+ "%"    -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\%]

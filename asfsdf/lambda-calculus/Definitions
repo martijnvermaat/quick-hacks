@@ -1,0 +1,50 @@
+(let
+   %%  Booleans
+   (l-true        : lambda x . lambda y . x)
+   (l-false       : lambda x . lambda y . y)
+   (l-not         : lambda t . t l-false l-true)
+   (if-then-else  : lambda e e1 e2 . (e e1 e2))
+   (l-and         : lambda x y . if-then-else x y l-false  )
+
+   %% Church's Numerals, N = lambda f  x . f^N x
+   (zero         : lambda f x . x)
+   (succ         : lambda n f x  . n f  ( f x ))
+   (add          : lambda m n f x . m f (n f x))
+   (iszero       : lambda n . n (lambda x . l-false) l-true)
+
+   %% Pairs
+   (fst          : lambda p. p l-true)
+   (snd          : lambda p. p l-false)
+   (pair         : lambda e1 e2 . (lambda f . f e1 e2))
+
+   %% Fixed Points
+   (fix          : lambda f . (lambda x . f(x x)) (lambda x . f(x x)))
+
+   %% more complicated numeric operations, pred:
+   (prefn        : lambda f p .
+                   (pair
+                     l-false
+                     (if-then-else (fst p) (snd p) (f (snd p)))
+                   )
+   )
+   (pre          : lambda n f x . snd (n (prefn f) (pair l-true x)))
+
+   %% Barendrechts numerals
+  (bzero         : lambda x . x)
+  (bsucc         : lambda n . (pair l-false n))
+  (bpred         : lambda n . (snd n))
+  (biszero       : lambda n . (fst n) l-true l-false)
+  (badd          : fix (lambda badd n m .
+                          (biszero n)
+                          m
+                          (bsucc (badd (bpred n) m))
+                        )
+  )
+  (bmultfn       : lambda fun n m .
+                          if-then-else
+                          (biszero n)
+                          bzero
+                          (badd m (fun (bpred n) m))
+  )
+  (bmult         : fix bmultfn)
+)

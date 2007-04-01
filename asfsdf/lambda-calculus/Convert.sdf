@@ -1,0 +1,11 @@
+module Convert
+
+
+imports Substitute
+
+exports
+
+  context-free syntax
+    alpha( L-EXP )              -> L-EXP {prefer}
+    beta( L-EXP )               -> L-EXP {prefer}
+    eta( L-EXP )                -> L-EXP {prefer}

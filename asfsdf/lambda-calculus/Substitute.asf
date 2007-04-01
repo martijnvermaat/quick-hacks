@@ -1,0 +1,20 @@
+equations
+
+  [1]  V [ V := E ] = E
+
+  [2]  V1 != V2
+       ===================
+       V1 [ V2 := E ] = V1
+
+  [3]  (E1 E2) [V := E0] = E1 [V := E0] E2 [V := E0]
+
+  [4]  (lambda V . E1) [V := E0] = lambda V . E1
+
+  [5]  V1 != V0,  not (V0 in FV(E1) and V1 in FV(E0)) == true
+       ========================================================
+       (lambda V1 . E1) [V0 := E0] = lambda V1 .  E1 [V0 := E0]
+
+  [6]  V1 != V0,  not (V0 in FV(E1) and V1 in FV(E0)) == false,
+       V2 := get-fresh(V1, FV(E0) ++ FV(E1))
+       ==================================================================
+      (lambda V1 . E1) [V0 := E0] = lambda V2 .  E1 [V1 := V2] [V0 := E0]

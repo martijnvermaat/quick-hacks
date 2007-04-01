@@ -1,0 +1,26 @@
+module Lambda-Syntax
+
+
+imports Identifiers Comments
+
+exports
+
+  sorts L-EXP
+
+  context-free syntax
+    ID                                  -> L-EXP {constructor}
+    "lambda" ID+ "." L-EXP              -> L-EXP {constructor}
+    L-EXP L-EXP                         -> L-EXP {constructor,left}
+    "(" L-EXP ")"                       -> L-EXP {bracket}
+
+  context-free priorities
+    L-EXP L-EXP -> L-EXP                >
+    "lambda" ID+ "." L-EXP -> L-EXP
+
+  context-free start-symbols
+    L-EXP
+
+  variables
+    "E" [0-9]*                          -> L-EXP
+    "V" [0-9]*                          -> ID
+    "Vs" [0-9]*                         -> ID+

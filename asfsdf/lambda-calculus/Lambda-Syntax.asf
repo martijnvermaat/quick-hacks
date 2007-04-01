@@ -1,0 +1,3 @@
+equations
+
+  [1]  lambda Vs1 Vs2 . E = lambda Vs1 . lambda Vs2 . E

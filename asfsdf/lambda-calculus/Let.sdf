@@ -1,0 +1,17 @@
+module Let
+
+
+imports Lambda-Syntax Substitute Reduce
+
+exports
+
+  sorts DEF LET
+
+  context-free syntax
+    expand( L-EXP, LET )                -> L-EXP
+    "(" ID ":" L-EXP ")"                -> DEF  {constructor}
+    "(" "let" DEF+ ")"                  -> LET  {constructor}
+
+  variables
+    "D" [0-9z]* "+"                     -> DEF+
+    "D" [0-9z]*                         -> DEF

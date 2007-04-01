@@ -1,0 +1,22 @@
+module Id-Lists
+
+
+imports Identifiers Booleans
+
+exports
+
+  sorts ID-LIST
+
+  context-free syntax
+    "[" { ID "," }* "]"         -> ID-LIST {constructor}
+    ID-LIST "-" ID              -> ID-LIST
+    ID-LIST "++" ID-LIST        -> ID-LIST {left}
+    ID "in" ID-LIST             -> BOOL
+
+  context-free start-symbols
+    ID-LIST
+
+  variables
+    "Ids" [12]                  -> {ID ","}*
+    [XY]                        -> ID
+    "IList"                     -> ID-LIST

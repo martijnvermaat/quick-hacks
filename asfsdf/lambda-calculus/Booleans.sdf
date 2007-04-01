@@ -1,0 +1,28 @@
+module Booleans
+
+
+imports Layout
+
+exports
+
+  sorts BOOL
+
+  context-free syntax
+    "true"                      -> BOOL {constructor}
+    "false"                     -> BOOL {constructor}
+    BOOL "and" BOOL             -> BOOL {left}
+    BOOL "or" BOOL              -> BOOL {left}
+    "not" BOOL                  -> BOOL
+    "(" BOOL ")"                -> BOOL {bracket}
+
+  context-free priorities
+    "not" BOOL -> BOOL          >
+    BOOL "and" BOOL -> BOOL     >
+    BOOL "or" BOOL -> BOOL
+
+  context-free start-symbols
+    BOOL
+
+hiddens
+  variables
+    "P"                         -> BOOL

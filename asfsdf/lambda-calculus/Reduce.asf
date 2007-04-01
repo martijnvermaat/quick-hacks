@@ -1,0 +1,32 @@
+equations
+
+  [h0]  is-beta-redex?( (lambda V . E1) E2) = true
+
+  [default-h1]  is-beta-redex?( E ) = false
+
+  [h2]  has-beta-redex?(V) = false
+  [h3]  has-beta-redex?(lambda V . E) = has-beta-redex?(E)
+  [h4]  has-beta-redex?(E1 E2) = is-beta-redex?(E1 E2) or has-beta-redex?(E1) or has-beta-redex?(E2)
+
+  [m1]  lm-step(lambda V . E) = lambda V . lm-step(E)
+  [m2]  lm-step(V) = V
+
+  [m3]  is-beta-redex? (E1 E2) == true
+        ==============================
+        lm-step(E1 E2) = beta(E1 E2)
+
+  [m4]  is-beta-redex?(E1 E2) == false,  has-beta-redex?(E1) == true
+        ============================================================
+        lm-step(E1 E2) = lm-step(E1) E2
+
+  [m5]  is-beta-redex?(E1 E2) == false,  has-beta-redex?(E1) == false
+        =============================================================
+        lm-step(E1 E2) = E1 lm-step(E2)
+
+  [m6]  has-beta-redex?(E) == true
+        ==============================
+        lm-red(E) = lm-red(lm-step(E))
+
+  [m7]  has-beta-redex?(E) == false
+        ===========================
+        lm-red(E) = E

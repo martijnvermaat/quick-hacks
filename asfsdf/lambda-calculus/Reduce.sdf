@@ -1,0 +1,12 @@
+module Reduce
+
+
+imports Convert
+
+exports
+
+  context-free syntax
+      lm-step( L-EXP )                 -> L-EXP {prefer}
+      lm-red( L-EXP )                  -> L-EXP {prefer}
+      "has-beta-redex?"( L-EXP )       -> BOOL
+      "is-beta-redex?"( L-EXP )        -> BOOL

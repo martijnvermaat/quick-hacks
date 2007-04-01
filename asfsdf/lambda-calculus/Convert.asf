@@ -1,0 +1,18 @@
+equations
+
+  [1]  beta(  (lambda V . E1) E2 ) = E1 [ V := E2 ]
+
+  [2]  V1 := get-fresh(V0, FV(E))
+       ================================================
+       alpha( lambda V0 . E ) = lambda V1 . E[V0 := V1]
+
+  [3]  V in FV(E) == false
+       =========================
+       eta( lambda V . E V ) = E
+
+
+  [default-4]  alpha( E ) = E
+
+  [default-5]  beta( E ) = E
+
+  [default-6]  eta( E ) = E

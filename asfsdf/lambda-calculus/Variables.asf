@@ -1,0 +1,13 @@
+equations
+
+  [1]  FV( V ) = [ V ]
+  [2]  FV( E1 E2 ) = FV(E1) ++ FV(E2)
+  [3]  FV( lambda V . E ) = FV(E) - V
+
+  [4]  V in IList == true
+       ================================================
+       get-fresh(V, IList) = get-fresh(prime(V), IList)
+
+  [5]  V in IList == false
+       =======================
+       get-fresh(V, IList) = V

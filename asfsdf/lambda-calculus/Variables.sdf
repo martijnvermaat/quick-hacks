@@ -1,0 +1,10 @@
+module Variables
+
+
+imports Id-Lists Lambda-Syntax
+
+exports
+
+  context-free syntax
+    "FV" ( L-EXP )                      -> ID-LIST
+    get-fresh( ID, ID-LIST )            -> ID

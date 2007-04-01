@@ -1,0 +1,13 @@
+module Substitute
+
+
+imports Variables
+
+exports
+
+  context-free syntax
+    L-EXP "[" ID ":=" L-EXP "]"                 -> L-EXP
+
+  context-free priorities
+    L-EXP "[" ID ":=" L-EXP "]" -> L-EXP        >
+    L-EXP L-EXP -> L-EXP
