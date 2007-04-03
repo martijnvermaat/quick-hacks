@@ -9,7 +9,7 @@
 /*
     Nu Compact
 
-    Version: 0.1, 2005-05-29
+    Version: 0.2, 2007-04-03
 
     http://www.cs.vu.nl/~mvermaat/greasemonkey
 
@@ -22,6 +22,15 @@
     screen.
     Nu Compact removes the pictures on the frontpage, by
     transforming stories with pictures to plain links.
+
+
+    Changelog
+
+    2007-04-03 - 0.2
+    * Adapted to new nu.nl layout
+
+    2005-05-29 - 0.1
+    * Initial version
 
 
     Nu Compact is Open Source and licensed under the new
@@ -43,15 +52,44 @@ function rewritePicturizedStories() {
     var stories, story, link, links, newLink, header;
 
     var sections = [
-            {color: 'a9d9ff', title: 'Algemeen'},
-            {color: 'ffbdbd', title: 'Economie'},
-            {color: 'cac6f7', title: 'Internet'},
-            {color: 'bde7bd', title: 'Sport'}
+            {
+                title: 'Algemeen',
+                color: 'a9d9ff',
+                class: 'verloopAlgemeen',
+                icon: 'img/ico_pijl_1.gif'
+            },
+            {
+                title: 'Economie',
+                color: 'ffbdbd',
+                class: 'verloopBeurs',
+                icon: 'images/ico_pijl_2.gif'
+            },
+            {
+                title: 'Internet',
+                color: 'cac6f7',
+                class: 'verloopInternet',
+                icon: 'images/ico_pijl_3.gif'
+            },
+            {
+                title: 'Sport',
+                color: 'bde7bd',
+                class: 'verloopSport',
+                icon: 'images/ico_pijl_4.gif'
+            },
+            {
+                title: 'Overig',
+                color: 'f5e47f',
+                class: 'verloopOverig',
+                icon: 'images/ico_pijl_5.gif'
+            }
     ];
 
+    var xpath_sections = sections.map
+        ( function(s) { return "(@class='" + s.class + "')"; } ).join(" or ");
+    xpath_sections = "//tr[" + xpath_sections + "]";
+
     // Find containers for picturized stories
-    stories = document.evaluate("//tr[(@valign='top') or (@bgcolor='#ffbdbd') or " +
-                                "(@bgcolor='#cac6f7') or (@bgcolor='#bde7bd')]",
+    stories = document.evaluate(xpath_sections,
                                 document,
                                 null,
                                 XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
@@ -78,11 +116,18 @@ function rewritePicturizedStories() {
         // Create new link container div
         newLink = document.createElement('div');
 
+        if (i < sections.length) {
+            icon = sections[i].icon;
+        } else {
+            icon = '/img/ico_pijl_1.gif';
+        }
+
         // Ok, this is ugly
         newLink.innerHTML =
-            '<b><img src="/img/pijl_trans.gif" border="0" alt="" width="4" height="9"' +
-            ' hspace="4" vspace="0"> <a class="link" href="' + link.getAttribute('href') +
-            '"> ' + link.firstChild.nodeValue + '</a></b><br>';
+            '<b><img src="' + icon + '" border="0" alt="" width="4" height="7"' +
+            ' hspace="4" vspace="0" class="pijl1"> <a class="link" href="' +
+            link.getAttribute('href') + '"> ' + link.firstChild.nodeValue +
+            '</a></b><br>';
 
         // Add plain link for this story
         links.insertBefore(newLink, links.firstChild);
@@ -93,10 +138,12 @@ function rewritePicturizedStories() {
         }
 
         // Create a section header
-        header = document.createElement('td');
-        header.style.background = '#' + sections[i].color;
-        header.style.width = '364px';
-        header.appendChild(document.createTextNode(sections[i].title));
+        if (i < sections.length) {
+            header = document.createElement('td');
+            header.style.background = '#' + sections[i].color;
+            header.style.width = '364px';
+            header.appendChild(document.createTextNode(sections[i].title));
+        }
 
         // Place section header
         story.appendChild(header);
