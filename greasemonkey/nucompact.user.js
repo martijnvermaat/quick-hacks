@@ -26,10 +26,18 @@
     too much space, so Nu Compact removes them.
 
 
+    Known bugs:
+    * We should also remove the stupid column soundbites on
+      the right side of the frontpage.
+    * We should render the entire page black and suggest some
+      other source for news.
+
+
     Changelog
 
     2007-04-03 - 0.2.1
     * Also remove logo and date
+    * Added known bugs
 
     2007-04-03 - 0.2
     * Adapted to new nu.nl layout
