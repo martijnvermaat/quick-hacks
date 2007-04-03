@@ -9,7 +9,7 @@
 /*
     Nu Compact
 
-    Version: 0.2, 2007-04-03
+    Version: 0.2.1, 2007-04-03
 
     http://www.cs.vu.nl/~mvermaat/greasemonkey
 
@@ -21,10 +21,15 @@
     and prevent me from having the entire frontpage in one
     screen.
     Nu Compact removes the pictures on the frontpage, by
-    transforming stories with pictures to plain links.
+    transforming stories with pictures to plain links. Also, I
+    know what the current date is and the nu.nl logo takes up
+    too much space, so Nu Compact removes them.
 
 
     Changelog
+
+    2007-04-03 - 0.2.1
+    * Also remove logo and date
 
     2007-04-03 - 0.2
     * Adapted to new nu.nl layout
@@ -153,6 +158,24 @@ function rewritePicturizedStories() {
 }
 
 
+function removeUselessHeader() {
+
+    var header;
+
+    // Find the useless header (it contains a td with class 'noprint')
+    header = document.evaluate("//tr[td[@class='noprint']]",
+                               document,
+                               null,
+                               XPathResult.FIRST_ORDERED_NODE_TYPE,
+                               null).singleNodeValue;
+
+    // Hide it because it's useless
+    header.parentNode.removeChild(header);
+
+}
+
+
+removeUselessHeader();
 rewritePicturizedStories();
 
 
