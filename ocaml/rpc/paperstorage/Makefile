@@ -4,7 +4,7 @@ OCAMLMKTOP = /usr/bin/ocamlfind ocamlmktop
 RPCGEN = /usr/bin/ocamlrpcgen
 RPCGEN_FLAGS = -int unboxed
 
-REQUIRES =  unix,equeue,rpc
+REQUIRES =  unix,equeue,rpc,extlib
 RPC_GENERATED = paperstorage_aux.mli paperstorage_aux.ml \
                 paperstorage_clnt.mli paperstorage_clnt.ml
 

@@ -21,11 +21,17 @@ let create_client hostname =
 let do_add hostname author title filename =
 
   let paper =
+    let content =
+      try
+        Std.input_file ~bin:true filename
+      with
+          Sys_error e -> failwith ("Cannot read from file: " ^ e)
+    in
     {paper = {
        number = None;
        author = author;
        title  = title;
-       content = Some filename}}
+       content = Some content}}
   in
 
   let client = create_client hostname in    
