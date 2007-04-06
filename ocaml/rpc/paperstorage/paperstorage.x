@@ -11,8 +11,13 @@ const MAX_MESSAGE_LENGTH = 255;
 /* Basic datatypes */
 
 enum status {
-    STATUS_SUCCESS = 0,
-    STATUS_ERROR   = 1
+    STATUS_SUCCESS = 1,
+    STATUS_FAILURE = 2
+};
+
+enum result_type {
+    SPARSE   = 1,
+    DETAILED = 2
 };
 
 typedef opaque data <>;
@@ -43,7 +48,7 @@ struct add_in {
 union add_out switch(status result) {
     case STATUS_SUCCESS:
         document paper;
-    case STATUS_ERROR:
+    case STATUS_FAILURE:
         message reason;
 };
 
@@ -52,13 +57,13 @@ union add_out switch(status result) {
 
 struct get_in {
     int number;
-    int complete;
+    result_type representation;
 };
 
 union get_out switch(status result) {
     case STATUS_SUCCESS:
         document paper;
-    case STATUS_ERROR:
+    case STATUS_FAILURE:
         message reason;
 };
 

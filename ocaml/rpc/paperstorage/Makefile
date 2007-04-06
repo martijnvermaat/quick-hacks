@@ -1,13 +1,15 @@
 OCAMLC = /usr/bin/ocamlfind ocamlc
 OCAMLOPT = /usr/bin/ocamlfind ocamlopt
+OCAMLMKTOP = /usr/bin/ocamlfind ocamlmktop
 RPCGEN = /usr/bin/ocamlrpcgen
+RPCGEN_FLAGS = -int unboxed
 
 REQUIRES =  unix,equeue,rpc
 RPC_GENERATED = paperstorage_aux.mli paperstorage_aux.ml \
                 paperstorage_clnt.mli paperstorage_clnt.ml
 
 
-all: paperclient
+all: paperclient papertop
 
 
 paperclient: paperstorage_aux.cmi paperstorage_aux.cmo \
@@ -16,8 +18,13 @@ paperclient: paperstorage_aux.cmi paperstorage_aux.cmo \
 	$(OCAMLC) -o paperclient -package $(REQUIRES) -linkpkg \
               paperstorage_aux.cmo paperstorage_clnt.cmo paperclient.ml
 
+papertop: paperstorage_aux.cmi paperstorage_aux.cmo \
+          paperstorage_clnt.cmi paperstorage_clnt.cmo
+	$(OCAMLMKTOP) -o papertop -package $(REQUIRES) -linkpkg \
+                  paperstorage_aux.cmo paperstorage_clnt.cmo
+
 $(RPC_GENERATED): paperstorage.x
-	$(RPCGEN) -aux -clnt paperstorage.x
+	$(RPCGEN) -aux -clnt $(RPCGEN_FLAGS) paperstorage.x
 
 
 .SUFFIXES: .cmo .cmi .cmx .ml .mli
@@ -31,4 +38,4 @@ $(RPC_GENERATED): paperstorage.x
 
 
 clean:
-	rm -f *~ *.cmi *.cmo *.cmx $(RPC_GENERATED) paperclient
+	rm -f *~ *.cmi *.cmo *.cmx $(RPC_GENERATED) paperclient papertop
