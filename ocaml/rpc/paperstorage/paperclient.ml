@@ -16,6 +16,18 @@ let create_client hostname =
 
 
 (*
+  Call remote procedure.
+*)
+let call_proc proc client arguments =
+  try
+    proc client arguments
+  with
+      Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
+    | Rpc.Rpc_server e          -> failwith (Printexc.to_string
+                                               (Rpc.Rpc_server e))
+
+
+(*
   Add our paper to the server.
 *)
 let do_add hostname author title filename =
@@ -35,13 +47,7 @@ let do_add hostname author title filename =
   in
 
   let client = create_client hostname in    
-  let result =
-      try
-        CLNT.add_proc client paper
-      with
-          Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
-        | Rpc.Rpc_server e          -> failwith (Printexc.to_string
-                                                   (Rpc.Rpc_server e))
+  let result = call_proc CLNT.add_proc client paper
   in
 
     Rpc_client.shut_down client;
@@ -62,20 +68,14 @@ let do_get hostname number include_content =
     let n =
       try
         int_of_string number
-      with Failure _ -> failwith ("Not a valid number: " ^ number)
+      with Failure _ -> failwith ("Not a valid paper number: " ^ number)
     in
       {document_number = n;
        representation  = if include_content then detailed else sparse}
   in
 
   let client = create_client hostname in    
-  let result =
-      try
-        CLNT.get_proc client param
-      with
-          Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
-        | Rpc.Rpc_server e          -> failwith (Printexc.to_string
-                                                   (Rpc.Rpc_server e))
+  let result = call_proc CLNT.get_proc client param
   in
 
     Rpc_client.shut_down client;
@@ -114,13 +114,7 @@ let do_fetch hostname number =
 let do_list hostname =
 
   let client = create_client hostname in    
-  let result =
-      try
-        CLNT.list_proc client ()
-      with
-          Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
-        | Rpc.Rpc_server e          -> failwith (Printexc.to_string
-                                                   (Rpc.Rpc_server e))
+  let result = call_proc CLNT.list_proc client ()
   in
 
     Rpc_client.shut_down client;
@@ -178,4 +172,5 @@ let paper_client () =
 (*
   Start main program.
 *)
-let _ = paper_client ()
+let _ =
+  try paper_client () with Failure s -> print_endline s; exit 1
