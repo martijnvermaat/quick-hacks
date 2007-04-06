@@ -11,7 +11,8 @@ let create_client hostname =
     CLNT.create_portmapped_client hostname Rpc.Tcp
   with
       Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
-    | Rpc.Rpc_server e          -> failwith (Printexc.to_string (Rpc.Rpc_server e))
+    | Rpc.Rpc_server e          -> failwith (Printexc.to_string
+                                               (Rpc.Rpc_server e))
 
 
 (*
@@ -33,7 +34,8 @@ let do_add hostname author title filename =
         CLNT.add_proc client paper
       with
           Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
-        | Rpc.Rpc_server e          -> failwith (Printexc.to_string (Rpc.Rpc_server e))
+        | Rpc.Rpc_server e          -> failwith (Printexc.to_string
+                                                   (Rpc.Rpc_server e))
   in
 
     Rpc_client.shut_down client;
@@ -48,7 +50,7 @@ let do_add hostname author title filename =
 (*
   Retreive paper details from the server.
 *)
-let do_details hostname number =
+let do_get hostname number include_content =
 
   let param =
     let n =
@@ -56,7 +58,8 @@ let do_details hostname number =
         int_of_string number
       with Failure _ -> failwith ("Not a valid number: " ^ number)
     in
-      {number' = n; representation = sparse}
+      {document_number = n;
+       representation  = if include_content then detailed else sparse}
   in
 
   let client = create_client hostname in    
@@ -65,55 +68,71 @@ let do_details hostname number =
         CLNT.get_proc client param
       with
           Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
-        | Rpc.Rpc_server e          -> failwith (Printexc.to_string (Rpc.Rpc_server e))
+        | Rpc.Rpc_server e          -> failwith (Printexc.to_string
+                                                   (Rpc.Rpc_server e))
   in
 
     Rpc_client.shut_down client;
 
+    result
+
+
+(*
+  Retreive paper author and name from the server.
+*)
+let do_details hostname number =
+
+  let result = do_get hostname number false in
     match result with
         `status_success {author = author; title = title} ->
-          print_endline ("Author: " ^ author);
-          print_endline ("Title: " ^ title)
+          print_endline ("Author: ``" ^ author ^ "''");
+          print_endline ("Title:  ``" ^ title ^ "''")
       | `status_failure m -> failwith m
 
 
 (*
-  Retreive paper contents from the server.
+  Retreive paper content from the server.
 *)
 let do_fetch hostname number =
 
-  let param =
-    let n =
-      try
-        int_of_string number
-      with Failure _ -> failwith ("Not a valid number: " ^ number)
-    in
-      {number' = n; representation = detailed}
-  in
-
-  let client = create_client hostname in    
-  let result =
-      try
-        CLNT.get_proc client param
-      with
-          Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
-        | Rpc.Rpc_server e          -> failwith (Printexc.to_string (Rpc.Rpc_server e))
-  in
-
-    Rpc_client.shut_down client;
-
+  let result = do_get hostname number true in
     match result with
         `status_success {content = Some s} -> print_string s
-      | `status_success _                  -> failwith "Received paper without content"
-      | `status_failure m                  -> failwith m
+      | `status_success _ -> failwith "Received paper without content"
+      | `status_failure m -> failwith m
 
 
 (*
   Retreive paper listing from the server.
 *)
 let do_list hostname =
-  (* TODO *)
-  ()
+
+  let client = create_client hostname in    
+  let result =
+      try
+        CLNT.list_proc client ()
+      with
+          Unix.Unix_error (e, _, _) -> failwith (Unix.error_message e)
+        | Rpc.Rpc_server e          -> failwith (Printexc.to_string
+                                                   (Rpc.Rpc_server e))
+  in
+
+    Rpc_client.shut_down client;
+
+    let rec print_papers paper =
+      match paper with
+          None -> ()
+        | Some {item = {number = Some number;
+                        author = author;
+                        title = title};
+                next = p} ->
+            print_endline ("Paper " ^ (string_of_int number));
+            print_endline ("  Author: ``" ^ author ^ "''");
+            print_endline ("  Title:  ``" ^ title ^ "''");
+            print_papers p
+        | Some _ -> failwith "Received paper without number"
+    in
+      print_papers result.papers
 
 
 (*
@@ -122,7 +141,9 @@ let do_list hostname =
 let paper_client () =
 
   let usage_error () =
-    print_endline "usage: paperclient add <hostname> <author> <title> <filename.{pdf|doc}>";
+    print_string "usage: ";
+    print_endline
+      "paperclient add <hostname> <author> <title> <filename.{pdf|doc}>";
     print_endline "       paperclient details <hostname> <number>";
     print_endline "       paperclient fetch <hostname> <number>";
     print_endline "       paperclient list <hostname>";

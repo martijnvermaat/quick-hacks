@@ -56,7 +56,7 @@ union add_out switch(status result) {
 /* GET_PROC input and output types */
 
 struct get_in {
-    int number;
+    int number => document_number;
     result_type representation;
 };
 
