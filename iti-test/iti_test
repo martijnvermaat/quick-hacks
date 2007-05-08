@@ -20,13 +20,14 @@
 #   four                                          #
 #   queues                                        #
 #   toy                                           #
+#   world                                         #
 #                                                 # 
 #                                                 #
-# 2006-04-30, Martijn Vermaat                     #
+# 2007-05-08, Martijn Vermaat                     #
 # mvermaat@cs.vu.nl                               #
 #                                                 #
 # Gemaakt voor het practicum Inleiding            #
-# Theoretische Informatica 2005, 2006             #
+# Theoretische Informatica 2005, 2006, 2007       #
 #                                                 #
 ###################################################
 
@@ -54,6 +55,7 @@ if [ -n "$1" ] && [ "$1" = "--help" ]; then
     echo "  four"
     echo "  queues"
     echo "  toy"
+    echo "  world"
     exit 0
 fi
 
@@ -85,12 +87,13 @@ case "$1" in
     four     ) MODULE=four ;;
     queues   ) MODULE=queues ;;
     toy      ) MODULE=toy ;;
+    world    ) MODULE=world ;;
     default  ) MODULE="" ;;
 esac
 
 if [ -z "$MODULE" ]; then
     echo "Geen geldige test opgegeven, kies uit:"
-    echo "  naturals four queues toy"
+    echo "  naturals four queues toy world"
     echo $USE_HELP
     exit 1
 fi
@@ -105,8 +108,8 @@ TMP_DIR=/tmp/$USER-$TIME
 ITI_DIR=/home/mvt600/public/iti
 LIB_DIR=/home/mvt600/public/ocaml
 
-OCAML=/usr/bin/ocaml
-OCAMLC=/usr/bin/ocamlc
+OCAML=/usr/local/bin/ocaml
+OCAMLC=/usr/local/bin/ocamlc
 
 
 # Zorgen dat we een gezonden temp dir hebben
