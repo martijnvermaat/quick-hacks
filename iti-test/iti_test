@@ -102,11 +102,11 @@ TIME=`date '+%H%M%S'`
 
 CUR_DIR=`pwd`
 TMP_DIR=/tmp/$USER-$TIME
-ITI_DIR=/home/mvermaat/public/iti
-LIB_DIR=/home/mvermaat/public/ocaml
+ITI_DIR=/home/mvt600/public/iti
+LIB_DIR=/home/mvt600/public/ocaml
 
-OCAML=/usr/local/bin/ocaml
-OCAMLC=/usr/local/bin/ocamlc
+OCAML=/usr/bin/ocaml
+OCAMLC=/usr/bin/ocamlc
 
 
 # Zorgen dat we een gezonden temp dir hebben
@@ -151,7 +151,7 @@ if [ -n "$2" ] && [ -f "$2" ]; then
 
     # Compileren is gelukt, nu de test uitvoeren
 
-    $OCAML -I /home/mvermaat/public/ocaml unix.cma oUnit.cma $MODULE.cmo test_$MODULE.ml
+    $OCAML -I $LIB_DIR unix.cma oUnit.cma $MODULE.cmo test_$MODULE.ml
 
     cd $CUR_DIR
     rm -Rf $TMP_DIR
