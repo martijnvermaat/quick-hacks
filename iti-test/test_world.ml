@@ -115,13 +115,13 @@ let test_glider _ =
 
 
 let test_suite = "world" >:::
-  ["two points:\n\n  **"                 >:: test_two_points;
-   "point:\n\n  *"                       >:: test_point;
-   "block:\n\n  **\n  **"                >:: test_block;
-   "blinker:\n\n  ***"                   >:: test_blinker;
-   "bucket:\n\n  * *\n  ***"             >:: test_bucket;
-   "deep bucket:\n\n  * *\n  * *\n  ***" >:: test_deep_bucket;
-   "glider:\n\n  ***\n  *\n   *"         >:: test_glider]
+  ["two points:\n\n  **\n\nshould disappear"                                              >:: test_two_points;
+   "point:\n\n  *\n\nshould disappear"                                                    >:: test_point;
+   "block:\n\n  **\n  **\n\nshould stay the same"                                         >:: test_block;
+   "blinker:\n\n  ***\n\nshould evolve to\n\n   *\n   *\n   *         "                   >:: test_blinker;
+   "bucket:\n\n  * *\n  ***\n\nshould evolve to\n\n  * *\n  * *\n   *"                    >:: test_bucket;
+   "deep bucket:\n\n   * *\n   * *\n   ***\n\nshould evolve to\n\n  ** **\n   * *\n    *" >:: test_deep_bucket;
+   "glider:\n\n  ***\n  *\n   *\n\nshould evolve to\n\n   *\n  **\n  * *"                 >:: test_glider]
 
 
 let _ = run_test_tt_main test_suite
