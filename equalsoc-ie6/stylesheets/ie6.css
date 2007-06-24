@@ -1,0 +1,12 @@
+
+
+#subnav li.folder {
+   background-image: none;
+   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/subnav-folder.png', sizingMethod='scale');
+}
+
+/* gaat niet werken in ie6... */
+#subnav li.folder:hover {
+   background-image: none;
+   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/subnav-folder-over.png', sizingMethod='scale');
+}
