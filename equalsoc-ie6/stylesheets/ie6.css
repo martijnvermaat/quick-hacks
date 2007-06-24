@@ -1,12 +1,44 @@
+/* These style definitions and comments apply to IE6 only */
 
-
-#subnav li.folder {
-   background-image: none;
-   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/subnav-folder.png', sizingMethod='scale');
+/* Workaround for :hover pseudo-class selector on elements other than <a/>
+   The hover class gets set by some javascript */
+.buttons button.hover {
+    border-color: #051949;
+    color: #fff;
+    background: #4464a3;
 }
 
-/* gaat niet werken in ie6... */
-#subnav li.folder:hover {
-   background-image: none;
-   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/subnav-folder-over.png', sizingMethod='scale');
+/* Float isn't inherited */
+#nav li a {
+    float: left;
+}
+
+/* :hover pseudo-class selector is stronger than class selector */
+#nav li.active a:hover {
+    color: #fff;
+}
+
+/* Float isn't inherited, element doesn't scale up */
+#subnav li {
+    float: left;
+    width: 194px;  /* #subnav{width=220} - {padding-left=26} = 194*/
+}
+
+/* Workaround for transparent background image */
+#subnav li.folder {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/subnav-folder.png', sizingMethod='crop');
+}
+
+/* Workaround for :hover pseudo-class selector on elements other than <a/>
+   The hover class gets set by some javascript */
+#subnav li.folder.hover {
+    background-image: none;
+    background-color: #4464a3 !important;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/subnav-folder-over.png', sizingMethod='crop');
+}
+
+/* Links placed above a filter are not clickable */
+#subnav li.folder a {
+    position: relative;
 }
