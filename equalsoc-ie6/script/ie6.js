@@ -1,5 +1,5 @@
 /*
-  Add some event handlers to compensate for IE6 incompetence
+  Add some event handlers to compensate for IE6 incompetence.
 */
 function addHandlers() {
 
@@ -9,6 +9,8 @@ function addHandlers() {
 
         for (var i = 0; i < subnav.childNodes.length; i++) {
             var li = subnav.childNodes[i];
+            // IE6 doesn't know double class selectors, so we have to
+            // explicitely restrict ourselves to li.hover elements.
             if (li.tagName == 'LI' && hasClassName(li, 'folder'))
                 addHoverEvent(li);
         }
@@ -24,7 +26,7 @@ function addHandlers() {
 
 
 /*
-  Add the 'hover' class to this element on mouse hover
+  Add the 'hover' class to this element on mouse hover.
 */
 function addHoverEvent(el) {
     el.onmouseover = function() { addClassName(this, 'hover');    };
@@ -33,14 +35,14 @@ function addHoverEvent(el) {
 
 
 /*
-  Do the magic
+  Do the magic.
 */
 if (window.attachEvent)
     window.attachEvent("onload", addHandlers);
 
 
 /*
-  Test if element has given class
+  Test if element has given class.
 */
 function hasClassName(el, name) {
 
@@ -57,7 +59,7 @@ function hasClassName(el, name) {
 
 
 /*
-  Remove given class from element
+  Remove given class from element.
 */
 function removeClassName(el, name) {
 
@@ -77,7 +79,7 @@ function removeClassName(el, name) {
 
 
 /*
-  Add given class to element
+  Add given class to element.
 */
 function addClassName(el, name) {
     el.className += " " + name;
