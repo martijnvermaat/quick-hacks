@@ -1,6 +1,6 @@
 <?php
 // Turn debugging on
-define('SCUTTLE_DEBUG',true);
+define('SCUTTLE_DEBUG',false);
 
 // generic debugging function
 // Sample:

@@ -89,7 +89,10 @@ function createURL($page = '', $ending = '') {
     if (!$cleanurls && $page != '') {
         $page .= '.php';
     }
-    return $root . $page .'/'. $ending;
+    if ($ending != '') {
+        $page .= '/';
+    }
+    return $root . $page . $ending;
 }
 
 function message_die($msg_code, $msg_text = '', $msg_title = '', $err_line = '', $err_file = '', $sql = '', $db = NULL) {

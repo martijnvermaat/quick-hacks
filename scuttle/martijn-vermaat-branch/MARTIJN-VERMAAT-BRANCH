@@ -1,0 +1,40 @@
+This branch from Scuttle 0.7.2 contains some changes for personal use and some
+changes to make it all work on Dreamhost.
+
+2007-07-07, Martijn Vermaat <martijn@vermaat.name>
+
+
+* Clean URLs and PHP5 CGI
+  M      functions.inc.php
+  M      .htaccess
+  M      api/.htaccess
+
+  We want to use PHP5, but there is a bug in the clean URL handling in the
+  PHP5 version used on Dreamhost. Adding the MultiViews option to Apache and
+  making sure URLs don't end with a slash makes things work.
+
+  However, for the del.icio.us API, we need to run the PHP4 Apache module,
+  because that's the only way to use HTTP Basic Authentication.
+
+
+* Disable user registration
+  M      templates/toolbar.inc.php
+  M      api/.htaccess
+  M      register.php
+
+
+* Configuration for my Dreamhost setup
+  A  +   config.inc.php.dreamhost
+
+
+* No debugging mode
+  M      debug.inc.php
+
+
+* Use Scuttle with Epilicious
+
+  For use with the Epiphany extension Epilicious, change the following two
+  lines in /usr/lib/epiphany/2.18/extensions/libepilicious/delicious.py:
+
+  _DWS_BASE_URI = 'http://martijn.vermaat.name/bookmarks/'
+  _DWS_API_URI = 'http://martijn.vermaat.name/bookmarks/api/'

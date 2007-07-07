@@ -1,4 +1,4 @@
-Options +FollowSymlinks
+Options +FollowSymlinks +MultiViews
 AcceptPathInfo On
 RewriteEngine On
 RewriteBase /

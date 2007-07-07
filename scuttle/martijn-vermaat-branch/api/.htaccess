@@ -1,3 +1,9 @@
+# We need Basic HTTP Authentication, which is only available
+# if PHP is run as Apache module.
+# By default, PHP5 is run as CGI, the following line switches
+# to PHP4 Apache module.
+AddHandler application/x-httpd-php .php
+
 RewriteEngine On
 RewriteRule ^tags/get tags_get.php
 RewriteRule ^posts/dates posts_dates.php
