@@ -31,6 +31,11 @@ changes to make it all work on Dreamhost.
   M      debug.inc.php
 
 
+* Branch information and upstream reference
+  A  +   MARTIJN-VERMAAT-BRANCH
+  M      templates/about.tpl.php
+
+
 * Use Scuttle with Epilicious
 
   For use with the Epiphany extension Epilicious, change the following two
