@@ -8,7 +8,7 @@
 *)
 
 
-type symbol = Blank | One
+type symbol = int option
 type position = int
 type direction = Left | Right
 
@@ -24,8 +24,8 @@ let empty_tape = (PositionSet.empty, 0)
 
 let rec set_symbol cells symbol position =
   match symbol with
-      Blank -> PositionSet.remove position cells
-    | One   -> PositionSet.add position cells
+      Some _ -> PositionSet.add position cells
+    | None   -> PositionSet.remove position cells
 
 let load_tape symbols =
   let (cells, position) = empty_tape in
@@ -47,9 +47,9 @@ let do_step tape symbol direction =
 let get_symbol tape position =
   let (cells, position) = tape in
     if PositionSet.mem position cells then
-      One
+      Some 1
     else
-      Blank
+      None
 
 let current_symbol tape =
   let (_, position) = tape in
@@ -68,18 +68,3 @@ let get_tape tape =
   and after = make_list position (PositionSet.max_elt cells)
   in
     before, (get_symbol tape position), after
-
-
-(* below is for other file *)
-
-type state = int
-type rule = state * symbol * state * symbol * direction
-type machine = rule list * state * tape
-
-let rules = [(1, One, 1, Blank, Right);
-             (1, Blank, 0, Blank, Right)]
-
-let do_step' machine =
-  let (rules, state, tape) = machine in
-  let (_, _, s, c, d) = List.find (fun (s, c, _, _, _) -> s = state && c = (current_symbol tape)) rules in
-    rules, s, (do_step tape c d)
