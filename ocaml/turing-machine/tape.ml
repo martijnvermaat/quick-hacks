@@ -45,7 +45,7 @@ let do_step tape symbol direction =
     ((set_symbol cells symbol position), new_position)
 
 let get_symbol tape position =
-  let (cells, position) = tape in
+  let (cells, _) = tape in
     if PositionSet.mem position cells then
       Some 1
     else
@@ -55,7 +55,6 @@ let current_symbol tape =
   let (_, position) = tape in
     get_symbol tape position
 
-(* todo: fix if there are no 1 cells *)
 let get_tape tape =
   let rec make_list low high =
     if (low < high) then
@@ -64,7 +63,7 @@ let get_tape tape =
       []
   in
   let (cells, position) = tape in
-  let before = make_list (PositionSet.min_elt cells) position
-  and after = make_list position (PositionSet.max_elt cells)
+  let before = make_list (PositionSet.min_elt (PositionSet.add position cells)) position
+  and after = make_list position (PositionSet.max_elt (PositionSet.add position cells))
   in
     before, (get_symbol tape position), after

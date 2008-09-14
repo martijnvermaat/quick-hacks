@@ -2,9 +2,27 @@ open Tape
 open Machine
 
 
+let show machine =
+  (* todo: print vertical *)
+  let state = get_state machine
+  and (before, symbol, after) = Machine.get_tape machine
+  and print_symbol = function
+      None   -> print_string " "
+    | Some _ -> print_string "1"
+  in
+    print_string "s  ";
+    List.iter print_symbol before;
+    print_symbol symbol;
+    List.iter print_symbol after;
+    print_endline "";
+    print_int state;
+    print_string ("  " ^ (String.make (List.length before) ' ') ^ "^");
+    print_endline (String.make (List.length after) ' ')
+
+
 let turing program tape =
   let machine = new_machine program tape in
-    print_endline "hoi"
+    show (run machine)
 
 
 let main () =
