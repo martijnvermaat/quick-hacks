@@ -8,7 +8,7 @@ let show machine =
   and (before, symbol, after) = Machine.get_tape machine
   and print_symbol = function
       None   -> print_string " "
-    | Some _ -> print_string "1"
+    | Some s -> print_int s
   in
     print_string "s  ";
     List.iter print_symbol before;
@@ -51,10 +51,8 @@ let main () =
       let parse_symbol s =
         if s = " " then
           None
-        else if s = "1" then
-          Some 1
         else
-          raise (Failure "Only blanks and 1's are supported")
+          Some (int_of_string s)
       and parse_direction d =
         match d with
             'r' -> Right
