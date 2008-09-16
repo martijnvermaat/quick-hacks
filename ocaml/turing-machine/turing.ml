@@ -79,22 +79,30 @@ let main () =
     in
       List.concat (List.map convert (List.map int_of_string input))
 
-  and program_file = ref ""
+  and program_file = ref None
   and input = ref []
   in
+  let arguments = Arg.align [("-p", Arg.String (fun f -> program_file := Some f), " Program")]
+  and description = "Run turing machine"
+  in
 
-    Arg.parse
-      [("-p", Arg.String (fun f -> program_file := f), "Program")]
-      (fun i -> input := !input @ [i])
-      "Run turing machine";
+    Arg.parse arguments (fun i -> input := !input @ [i]) description;
 
-    try
-      turing
-        (parse_program (read_lines !program_file))
-        (parse_input !input)
-    with
-        Failure e ->
-          print_endline e;
+    match !program_file with
+        Some file ->
+          begin
+            try
+              turing
+                (parse_program (read_lines file))
+                (parse_input !input)
+            with
+                Failure e ->
+                  print_endline e;
+                  exit 1
+          end
+      | None ->
+          print_endline "Required argument `-p' missing";
+          Arg.usage arguments description;
           exit 1
 
 
