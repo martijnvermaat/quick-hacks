@@ -70,45 +70,38 @@ let main () =
       with
           Failure e -> raise (Failure ("Error parsing program (" ^ e ^ ")"))
 
-  in
-  let rec parse_tape s =
-    try
-      begin
-        match String.sub s 0 1 with
-            " " -> None
-          | c   -> Some (int_of_string c)
-      end :: (parse_tape (String.sub s 1 ((String.length s) - 1)))
-    with
-        Invalid_argument _ -> []
-      | Failure _          -> raise (Failure "Only 0-9 symbols are allowed on the tape")
+  and parse_input input =
+    let rec convert n =
+      if n = 0 then
+        [Some 1; None]
+      else
+        (Some 1)::(convert (n - 1))
+    in
+      List.concat (List.map convert (List.map int_of_string input))
 
   and program_file = ref None
-  and input = ref None
+  and input = ref []
   in
   let arguments = Arg.align [("-p", Arg.String (fun f -> program_file := Some f), " Program")]
-  and description = "./turing -p program tape"
+  and description = "Run turing machine"
   in
 
-    Arg.parse arguments (fun i -> input := Some i) description;
+    Arg.parse arguments (fun i -> input := !input @ [i]) description;
 
-    match !program_file, !input with
-        Some program, Some tape ->
+    match !program_file with
+        Some file ->
           begin
             try
               turing
-                (parse_program (read_lines program))
-                (parse_tape tape)
+                (parse_program (read_lines file))
+                (parse_input !input)
             with
                 Failure e ->
                   print_endline e;
                   exit 1
           end
-      | None, _ ->
+      | None ->
           print_endline "Required argument `-p' missing";
-          Arg.usage arguments description;
-          exit 1
-      | _, None ->
-          print_endline "Required tape missing";
           Arg.usage arguments description;
           exit 1
 
