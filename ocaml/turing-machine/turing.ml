@@ -10,12 +10,12 @@ let show machine =
       None   -> print_string " "
     | Some s -> print_int s
   in
-    print_string "s  ";
+    print_string ("s " ^ (String.make " " (String.length state)));
     List.iter print_symbol before;
     print_symbol symbol;
     List.iter print_symbol after;
     print_endline "";
-    print_int state;
+    print_string state;
     print_string ("  " ^ (String.make (List.length before) ' ') ^ "^");
     print_endline (String.make (List.length after) ' ')
 

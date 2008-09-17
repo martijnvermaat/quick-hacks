@@ -1,6 +1,6 @@
 open Tape
 
-type state = int
+type state = string
 type rule = state * symbol * state * symbol * direction
 type machine = rule list * state * tape
 
@@ -17,7 +17,7 @@ let rec run machine =
       Not_found -> machine
 
 let new_machine rules input =
-  rules, 1, (load_tape input)
+  rules, "1", (load_tape input)
 
 let get_state machine =
   let (_, state, _) = machine in

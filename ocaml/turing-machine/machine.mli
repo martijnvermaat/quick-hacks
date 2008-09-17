@@ -1,6 +1,6 @@
 open Tape
 
-type state = int
+type state = string
 type rule = state * symbol * state * symbol * direction
 type machine
 
