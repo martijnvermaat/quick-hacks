@@ -1,7 +1,3 @@
-%{
-open Tape
-open Machine
-%}
 %token <string> ID
 %token EOL
 %start main
@@ -24,15 +20,15 @@ symbol:
       try
         Some (int_of_string $1)
       with
-          Failure _ -> raise Parsing.Parse_error
+        | Failure _ -> raise Parsing.Parse_error
   }
 ;
 direction:
   ID {
     match $1 with
-        "l"     -> Left
-      | "r"     -> Right
-      | "left"  -> Left
-      | "right" -> Right
+      | "l"     -> Tape.Left
+      | "r"     -> Tape.Right
+      | "left"  -> Tape.Left
+      | "right" -> Tape.Right
       | _       -> raise Parsing.Parse_error
   }
