@@ -1,1 +1,0 @@
-ocamlopt tape.mli machine.mli && ocamlopt tape.ml machine.ml turing.ml -o turing
