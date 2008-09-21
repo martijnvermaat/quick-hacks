@@ -10,7 +10,7 @@ let show machine =
       None   -> print_string " "
     | Some s -> print_int s
   in
-    print_string ("s " ^ (String.make " " (String.length state)));
+    print_string ("s " ^ (String.make (String.length state) ' '));
     List.iter print_symbol before;
     print_symbol symbol;
     List.iter print_symbol after;
@@ -27,49 +27,18 @@ let turing program tape =
 
 let main () =
 
-  let read_lines file =
-    let lines = ref []
-    and cin =
+  let parse_program file =
+    let rec parse_rule lexbuf =
       try
-        open_in file
+        (parse_rule lexbuf) @ [(Parser.main Lexer.token lexbuf)]
       with
-          Sys_error e -> raise (Failure ("Error: " ^ e))
-    in
-    let rec read () =
-      try
-        lines := !lines @ [input_line cin];
-        read ()
-      with
-          End_of_file -> ()
-        | Sys_error e -> raise (Failure ("Error: " ^ e))
-    in
-      read ();
-      !lines
-
-  and parse_program lines =
-    let parse line =
-      let parse_symbol s =
-        if s = " " then
-          None
-        else
-          Some (int_of_string s)
-      and parse_direction d =
-        match d with
-            'r' -> Right
-          | 'l' -> Left
-          | _   -> raise (Failure "Not a direction")
-      in
-        (int_of_string (String.sub line 0 1),
-         parse_symbol (String.sub line 1 1),
-         int_of_string (String.sub line 2 1),
-         parse_symbol (String.sub line 3 1),
-         parse_direction (String.get line 4))
+          Lexer.Eof -> []
     in
       try
-        List.map parse lines
+        parse_rule (Lexing.from_channel (open_in file))
       with
-          Failure e -> raise (Failure ("Error parsing program (" ^ e ^ ")"))
-
+          Sys_error e         -> raise (Failure ("Error: " ^ e))
+        | Parsing.Parse_error -> raise (Failure ("Error parsing program `" ^ file ^ "'"))
   in
   let rec parse_tape s =
     try
@@ -96,7 +65,7 @@ let main () =
           begin
             try
               turing
-                (parse_program (read_lines program))
+                (parse_program program)
                 (parse_tape tape)
             with
                 Failure e ->
