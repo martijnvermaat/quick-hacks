@@ -1,14 +1,14 @@
-type symbol = int option
+type symbol    = int option
 type direction = Left | Right
 
 type tape
 
-val empty_tape : tape
+val empty : tape
 
-val load_tape : symbol list -> tape
+val create : symbol list -> tape
 
-val do_step : tape -> symbol -> direction -> tape
+val step : symbol -> direction -> tape -> tape
 
-val current_symbol : tape -> symbol
+val read : tape -> symbol
 
-val get_tape : tape -> (symbol list * symbol * symbol list)
+val contents : tape -> (symbol list * symbol * symbol list)
