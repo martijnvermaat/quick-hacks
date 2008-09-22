@@ -2,6 +2,9 @@ type state   = string
 type rule    = state * Tape.symbol * state * Tape.symbol * Tape.direction
 type machine
 
+exception Converged
+exception Deadlock
+
 val create : rule list -> state -> state -> Tape.symbol list -> machine
 
 val step : machine -> machine

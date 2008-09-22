@@ -7,6 +7,9 @@ type state   = string
 type rule    = state * Tape.symbol * state * Tape.symbol * Tape.direction
 type machine = rule list * state * state * Tape.tape
 
+exception Converged
+exception Deadlock
+
 
 (*
   New turing machine.
@@ -20,8 +23,15 @@ let create rules start_state stop_state symbols =
 *)
 let step machine =
   let (rules, state, stop_state, tape) = machine in
-  let (_, _, s, c, d) = List.find (fun (s, c, _, _, _) -> s = state && c = (Tape.read tape)) rules in
-  rules, s, stop_state, (Tape.step c d tape)
+  if state = stop_state then
+    raise Converged
+  else
+    let predicate (s, c, _, _, _) = (s = state && c = (Tape.read tape)) in
+    try
+      let (_, _, s, c, d) = List.find predicate rules in
+      rules, s, stop_state, (Tape.step c d tape)
+    with
+      | Not_found -> raise Deadlock
 
 
 (*
@@ -34,7 +44,7 @@ let rec run machine =
     let m = step machine in
     run m
   with
-    | Not_found -> machine
+    | Converged -> machine
 
 
 (*
