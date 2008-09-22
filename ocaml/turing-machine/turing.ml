@@ -1,7 +1,17 @@
+(*
+  Working with turing machines.
+*)
+
+
+(*
+  Print ASCII representation of the machine on stdout.
+
+  TODO: vertical printing
+  TODO: graphical printing (e.g. with cairo)
+*)
 let show machine =
-  (* todo: print vertical *)
-  let state = Machine.get_state machine
-  and (before, symbol, after) = Machine.get_tape machine
+  let state = Machine.state machine
+  and (before, symbol, after) = Machine.tape machine
   and print_symbol = function
     | None   -> print_string " "
     | Some s -> print_int s
@@ -17,37 +27,54 @@ let show machine =
 
 
 let turing program tape =
-  let machine = Machine.new_machine program tape in
+  let machine = Machine.create program "1" "0" tape in
   show (Machine.run machine)
+
+
+(*
+  Parse a file containing a list of rules.
+*)
+let parse_program file =
+  let rec parse_rule lexbuf line =
+    try
+      let rule = ProgramParser.main ProgramLexer.token lexbuf in
+      (parse_rule lexbuf (line + 1))@ [rule]
+    with
+      | Parsing.Parse_error ->
+          let e = "Error parsing program `" ^ file ^ "' (line "
+            ^ (string_of_int line) ^ ")"
+          in
+          raise (Failure e)
+      | ProgramLexer.Eof ->
+          []
+    in
+  try
+    parse_rule (Lexing.from_channel (open_in file)) 1
+  with
+    | Sys_error e -> raise (Failure ("Error: " ^ e))
+
+
+(*
+  Parse a string of digits and blanks.
+*)
+let rec parse_tape string =
+  try
+    let head = match String.sub string 0 1 with
+      | " " -> None
+      | c   -> Some (int_of_string c)
+    and tail = String.sub string 1 ((String.length string) - 1)
+    in
+    head :: (parse_tape tail)
+  with
+    | Invalid_argument _ -> []
+    | Failure _          ->
+        let e = "Only digits and blanks are allowed on the tape" in
+        raise (Failure e)
 
 
 let main () =
 
-  let parse_program file =
-    let rec parse_rule lexbuf =
-      try
-        (parse_rule lexbuf) @ [(ProgramParser.main ProgramLexer.token lexbuf)]
-      with
-        | ProgramLexer.Eof -> []
-    in
-    try
-      parse_rule (Lexing.from_channel (open_in file))
-    with
-      | Sys_error e         -> raise (Failure ("Error: " ^ e))
-      | Parsing.Parse_error -> raise (Failure ("Error parsing program `" ^ file ^ "'"))
-  in
-  let rec parse_tape s =
-    try
-      begin
-        match String.sub s 0 1 with
-          | " " -> None
-          | c   -> Some (int_of_string c)
-      end :: (parse_tape (String.sub s 1 ((String.length s) - 1)))
-    with
-      | Invalid_argument _ -> []
-      | Failure _          -> raise (Failure "Only 0-9 symbols are allowed on the tape")
-
-  and program_file = ref None
+  let program_file = ref None
   and input = ref None
   in
   let arguments = Arg.align [("-p", Arg.String (fun f -> program_file := Some f), " Program (required)")]

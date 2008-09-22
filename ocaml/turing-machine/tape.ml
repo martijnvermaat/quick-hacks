@@ -24,16 +24,7 @@ type tape  = cells * position
 (*
   Empty tape.
 *)
-let empty = (PositionMap.empty, 0)
-
-
-(*
-  Tape constructed from symbols with reading head on first symbol.
-*)
-let create symbols =
-  let f tape symbol = step symbol Right tape in
-  let cells, _ = (List.fold f empty symbols) in
-  cells, 0
+let empty = PositionMap.empty, 0
 
 
 (*
@@ -47,10 +38,19 @@ let step symbol direction tape =
       | None   -> PositionMap.remove position cells
   and new_position =
     match direction with
-      | Left  -> direction - 1
-      | Right -> direction + 1
+      | Left  -> position - 1
+      | Right -> position + 1
   in
   new_cells, new_position
+
+
+(*
+  Tape constructed from symbols with reading head on first symbol.
+*)
+let create symbols =
+  let f tape symbol = step symbol Right tape in
+  let cells, _ = (List.fold_left f empty symbols) in
+  cells, 0
 
 
 (*
@@ -69,12 +69,13 @@ let read tape =
   - list of symbols before the reading head
   - symbol at the reading head
   - list of symbols after the reading head
+
   TODO: clean up
 *)
 let contents tape =
   let cells, position = tape
   in
-  let rec blanks n = (* todo: ExtList.List.Make *)
+  let rec blanks n = (* TODO: use ExtList.List.Make *)
     if (n > 0) then
       None :: (blanks (n - 1))
       else

@@ -41,7 +41,7 @@ let rec run machine =
   Current state.
 *)
 let state machine =
-  let _, state, _ = machine in
+  let _, state, _, _ = machine in
   state
 
 
@@ -52,5 +52,5 @@ let state machine =
   - list of symbols after the reading head
 *)
 let tape machine =
-  let _, _, tape = machine in
+  let _, _, _, tape = machine in
   Tape.contents tape
