@@ -1,15 +1,13 @@
-open Tape
-
-type state = string
-type rule = state * symbol * state * symbol * direction
+type state   = string
+type rule    = state * Tape.symbol * state * Tape.symbol * Tape.direction
 type machine
 
-val do_step' : machine -> machine
+val create : rule list -> state -> state -> Tape.symbol list -> machine
+
+val step : machine -> machine
 
 val run : machine -> machine
 
-val new_machine : rule list -> symbol list -> machine
+val state : machine -> state
 
-val get_state : machine -> state
-
-val get_tape : machine -> (symbol list * symbol * symbol list)
+val tape : machine -> (Tape.symbol list * Tape.symbol * Tape.symbol list)
