@@ -8,6 +8,15 @@ define PROJ_turing
 endef
 export PROJ_turing
 
+define PROJ_graphical
+  SOURCES = $(SHARED) graphical.ml
+  RESULT = graphical
+  INCDIRS = +cairo
+  OCAMLBLDFLAGS = cairo.cma
+  OCAMLNLDFLAGS = cairo.cmxa
+endef
+export PROJ_graphical
+
 define PROJ_soare
   SOURCES = $(SHARED) soare.ml
   RESULT = soare
@@ -15,7 +24,7 @@ endef
 export PROJ_soare
 
 ifndef SUBPROJS
-  export SUBPROJS = turing soare
+  export SUBPROJS = turing graphical soare
 endif
 
 all:	bc
