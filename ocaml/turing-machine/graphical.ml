@@ -37,8 +37,25 @@ let show machine =
   (* Apply the ink *)
   Cairo.stroke ctx ;
 
-  Cairo.move_to ctx 350. ((float size) *. 0.75) ;
-  Cairo.show_text ctx "1" ;
+  (* Draw some characters *)
+
+  Cairo.select_font_face ctx "sans" Cairo.FONT_SLANT_NORMAL Cairo.FONT_WEIGHT_NORMAL ;
+  Cairo.set_font_size ctx ((float size) /. 2.) ;
+
+  let digits = ["4"; "2"; "1"; "j"; "i"; "h"; "a"; "P"; "p"] in
+
+  let fe = Cairo.font_extents ctx in
+
+  for i = 1 to (List.length digits) do
+
+    let n = List.nth digits (i - 1) in
+
+    let te = Cairo.text_extents ctx n in
+
+    Cairo.move_to ctx ((float (i * size)) -. te.Cairo.x_bearing -. te.Cairo.text_width /. 2.)
+      (((float size) *. 0.75) -. fe.Cairo.descent +. fe.Cairo.font_height /. 2.) ;
+    Cairo.show_text ctx n
+  done;
 
   (* Output a PNG file *)
   Cairo_png.surface_write_to_file surface "triangle.png"
