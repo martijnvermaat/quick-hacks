@@ -1,4 +1,4 @@
-export OCAMLMAKEFILE = OCamlMakefile
+export OCAMLMAKEFILE = /usr/share/ocamlmakefile/OCamlMakefile
 
 SHARED = tape.mli tape.ml machine.mli machine.ml programParser.mly programLexer.mll util.ml
 
@@ -11,7 +11,8 @@ export PROJ_turing
 define PROJ_graphical
   SOURCES = $(SHARED) graphical.ml
   RESULT = graphical
-  INCDIRS = +cairo
+  INCDIRS = +cairo +lablgtk2
+  CLIBS = mlcairo
   OCAMLBLDFLAGS = lablgtk.cma gtkInit.cmo cairo.cma cairo_lablgtk.cma
   OCAMLNLDFLAGS = lablgtk.cmxa gtkInit.cmx cairo.cmxa cairo_lablgtk.cmxa
 endef
