@@ -6,94 +6,143 @@
 let show area machine =
 
   let before, cell, after = Machine.tape machine in
-(*  let cells, size = 10, 50 in
-  let width, height = (cells + 1) * size, size * 2 in*)
-  let { Gtk.width = width ; Gtk.height = height } = area#misc#allocation in
-  let cells = 20 in
-  let size = width / cells in
-  let ctx = Cairo_lablgtk.create area#misc#window (*Cairo.image_surface_create Cairo.FORMAT_ARGB32 ~width ~height*) in
-  (*let ctx = Cairo.create surface in*)
+
+  let cells_left = 1 + List.length before in
+  let cells_right = List.length after + 1 in
+  let cells = cells_left + 1 + cells_right in
+
+  (* let { Gtk.width = width ; Gtk.height = height } = area#misc#allocation in *)
+
+  let ctx = Cairo_lablgtk.create area#misc#window in
+
+  (* Size of cell *)
+  let size = 50. in
+
+  (* We draw the visible cells, with a half blank cell on each side *)
+  let tape_top = size /. 4.
+  and tape_bottom = size *. 1.25
+  and tape_left = size /. 4. in
+  let tape_right = size *. (float cells) +. size +. tape_left in
+
+  area#set_size ~width:(int_of_float (tape_right +. size /. 4.)) ~height:(int_of_float (tape_bottom +. size));
+
+  let reading_head = tape_left +. (float (cells_left + 1)) *. size in
 
   (* White background *)
-  Cairo.set_source_rgb ctx 255. 255. 255. ;
-  Cairo.paint ctx ;
+  Cairo.set_source_rgb ctx 1. 1. 1.;
+  Cairo.paint ctx;
 
   (* Black foreground *)
-  Cairo.set_source_rgb ctx 0. 0. 0. ;
+  Cairo.set_source_rgb ctx 0. 0. 0.;
 
   (* Set thickness of brush *)
   (* Cairo.set_line_width ctx 4. ; *)
 
   (* Draw tape *)
-  Cairo.move_to ctx 0. ((float size) /. 4.) ;
-  Cairo.rel_line_to ctx (float width) 0. ;
-  Cairo.move_to ctx 0. ((float size) *. 1.25) ;
-  Cairo.rel_line_to ctx (float width) 0. ;
+  Cairo.move_to ctx tape_left tape_top;
+  Cairo.line_to ctx tape_right tape_top;
+  Cairo.move_to ctx tape_left tape_bottom;
+  Cairo.line_to ctx tape_right tape_bottom;
 
-  (* Draw cell delimiters *)
-  Cairo.move_to ctx (0.5 *. (float size)) ((float size) /. 4.) ;
-  for i = 0 to cells do
-    Cairo.rel_line_to ctx 0. (float size) ;
-    Cairo.rel_move_to ctx (float size) (float (-size))
+  (* Draw left cell delimiters *)
+  Cairo.move_to ctx (reading_head -. 0.5 *. size) tape_bottom;
+  for i = 1 to cells_left do
+    Cairo.rel_move_to ctx (-. size) (-. size);
+    Cairo.rel_line_to ctx 0. size
   done;
+
+  (* Draw right cell delimiters *)
+  Cairo.move_to ctx (reading_head +. 0.5 *. size) tape_bottom;
+  for i = 1 to cells_right do
+    Cairo.rel_move_to ctx size (-. size);
+    Cairo.rel_line_to ctx 0. size
+  done;
+
+  (* Draw middle cell delimiters *)
+  Cairo.move_to ctx (reading_head -. 0.5 *. size) tape_top;
+  Cairo.rel_line_to ctx 0. size;
+  Cairo.move_to ctx (reading_head +. 0.5 *. size) tape_top;
+  Cairo.rel_line_to ctx 0. size;
 
   (* Apply the ink *)
   Cairo.stroke ctx ;
 
   (* Draw digits *)
   Cairo.select_font_face ctx "sans" Cairo.FONT_SLANT_NORMAL Cairo.FONT_WEIGHT_NORMAL ;
-  Cairo.set_font_size ctx ((float size) /. 2.) ;
+  Cairo.set_font_size ctx (size /. 2.) ;
 
   let fe = Cairo.font_extents ctx in
 
-  let num_before = min (List.length before) ((cells - 1) / 2) in
-  let num_after = min (List.length after) (cells - ((cells - 1) / 2) - 1) in
-
-  for i = -num_before to num_after do
-
-    let c =
-      if i = 0 then cell
-      else if i < 0 then List.nth before ((List.length before) + i)
-      else List.nth after (i - 1)
-    in
-
+  (* Draw left digits *)
+  for i = 0 to (List.length before - 1) do
+    let c = List.nth before (List.length before - 1 - i) in
     match c with
       | None   -> ()
       | Some n ->
-
           let s = string_of_int n in
-
           let te = Cairo.text_extents ctx s in
-
-          Cairo.move_to ctx ((float (((cells - 1) / 2 + 1) * size)) +. (float (i * size)) -. te.Cairo.x_bearing -. te.Cairo.text_width /. 2.)
-            (((float size) *. 0.75) -. fe.Cairo.descent +. fe.Cairo.font_height /. 2.) ;
+          Cairo.move_to ctx (reading_head -. size *. ((float i) +. 1.) -. te.Cairo.x_bearing -. te.Cairo.text_width /. 2.)
+            (((tape_top +. tape_bottom) /. 2.) -. fe.Cairo.descent +. fe.Cairo.font_height /. 2.);
           Cairo.show_text ctx s
-
   done;
 
+  (* Draw right digits *)
+  for i = 0 to (List.length after - 1) do
+    let c = List.nth after (List.length after - 1 - i) in
+    match c with
+      | None   -> ()
+      | Some n ->
+          let s = string_of_int n in
+          let te = Cairo.text_extents ctx s in
+          Cairo.move_to ctx (reading_head +. size *. ((float i) +. 1.) -. te.Cairo.x_bearing -. te.Cairo.text_width /. 2.)
+            (((tape_top +. tape_bottom) /. 2.) -. fe.Cairo.descent +. fe.Cairo.font_height /. 2.);
+          Cairo.show_text ctx s
+  done;
+
+  (* Draw center digit *)
+  begin match cell with
+    | None   -> ()
+    | Some n ->
+        let s = string_of_int n in
+        let te = Cairo.text_extents ctx s in
+        Cairo.move_to ctx (reading_head -. te.Cairo.x_bearing -. te.Cairo.text_width /. 2.)
+          (((tape_top +. tape_bottom) /. 2.) -. fe.Cairo.descent +. fe.Cairo.font_height /. 2.);
+        Cairo.show_text ctx s
+  end;
+
+  let pi = 4. *. atan 1. in
+
   (* Reading head *)
-  Cairo.move_to ctx (float (((cells - 1) / 2 + 1) * size)) ((float size) *. 1.25) ;
-  Cairo.line_to ctx ((float ((cells - 1) / 2) +. 0.5) *. (float size)) ((float size) *. 1.75) ;
-  Cairo.line_to ctx ((float ((cells - 1) / 2) +. 1.5) *. (float size)) ((float size) *. 1.75) ;
-  Cairo.close_path ctx ;
-  Cairo.stroke ctx
+  Cairo.move_to ctx reading_head (tape_bottom +. size /. 8.);
+  Cairo.rel_line_to ctx (-. size /. 4.) (size /. 2.);
+  Cairo.rel_line_to ctx (size /. 2.) 0.;
+  Cairo.close_path ctx;
+  Cairo.stroke_preserve ctx;
+  Cairo.set_source_rgb ctx 0.5 0.5 0.5;
+  Cairo.fill ctx;
+  Cairo.set_source_rgb ctx 0. 0. 0.;
+  Cairo.arc ctx reading_head (tape_bottom +. size /. 8.) (size /. 8.) 0. (2. *. pi);
+  Cairo.fill ctx
 
   (* Output a PNG file *)
   (*Cairo_png.surface_write_to_file surface "triangle.png"*)
 
 
 let turing program start_state stop_state tape =
-  let w = GWindow.window ~title:"Turing Machine" () in
+  let w = GWindow.window ~title:"Turing Machine" ~width:500 ~height:200 () in
   ignore (w#connect#destroy GMain.quit) ;
 
+  let scrolled_window = GBin.scrolled_window ~border_width:10
+    ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC ~packing:w#add () in
+
   let b = GPack.vbox ~spacing:6 ~border_width:12
-    ~packing:w#add () in
+    ~packing:scrolled_window#add_with_viewport () in
 
   let f = GBin.frame ~shadow_type:`IN
     ~packing:(b#pack ~expand:true ~fill:true) () in
 
   let area = GMisc.drawing_area
-    ~width:800 ~height:200
+    (*~width:800 ~height:200*)
     ~packing:f#add () in
 
   let machine = ref (Machine.create program start_state stop_state tape) in
