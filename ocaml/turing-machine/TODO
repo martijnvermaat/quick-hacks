@@ -3,3 +3,8 @@ Records instead of tuples
 String representations of datatypes
 Useful assertions printing info including data as string
 Use extlib
+Show rules (and highlight matching and last used)
+Show number of steps, current state
+Allow edit of rules
+Save edited rules
+Fix drawing code

@@ -3,9 +3,9 @@
 *)
 
 
-let show area machine =
+let draw_tape area tape =
 
-  let before, cell, after = Machine.tape machine in
+  let before, cell, after = tape in
 
   let cells_left = 1 + List.length before in
   let cells_right = List.length after + 1 in
@@ -16,7 +16,7 @@ let show area machine =
   let ctx = Cairo_lablgtk.create area#misc#window in
 
   (* Size of cell *)
-  let size = 50. in
+  let size = (*50.*) 50. in
 
   (* We draw the visible cells, with a half blank cell on each side *)
   let tape_top = size /. 4.
@@ -24,7 +24,8 @@ let show area machine =
   and tape_left = size /. 4. in
   let tape_right = size *. (float cells) +. size +. tape_left in
 
-  area#set_size ~width:(int_of_float (tape_right +. size /. 4.)) ~height:(int_of_float (tape_bottom +. size));
+  (* don't use this (as it will trigger a new expose_event), use set_request_size oid *)
+  (*area#set_size ~width:(int_of_float (tape_right +. size /. 4.)) ~height:(int_of_float (tape_bottom +. size));*)
 
   let reading_head = tape_left +. (float (cells_left + 1)) *. size in
 
@@ -129,41 +130,59 @@ let show area machine =
 
 
 let turing program start_state stop_state tape =
-  let w = GWindow.window ~title:"Turing Machine" ~width:500 ~height:200 () in
-  ignore (w#connect#destroy GMain.quit) ;
 
-  let scrolled_window = GBin.scrolled_window ~border_width:10
-    ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC ~packing:w#add () in
-
-  let b = GPack.vbox ~spacing:6 ~border_width:12
-    ~packing:scrolled_window#add_with_viewport () in
-
-  let f = GBin.frame ~shadow_type:`IN
-    ~packing:(b#pack ~expand:true ~fill:true) () in
-
+  let window = GWindow.window
+    ~title:"Turing Machine"
+    () in
+  let areas = GPack.vbox
+    ~packing:window#add
+    () in
+  let scroller = GBin.scrolled_window
+    ~hpolicy:`AUTOMATIC
+    ~vpolicy:`NEVER
+    ~height:200
+    ~packing:areas#add
+    () in
   let area = GMisc.drawing_area
-    (*~width:800 ~height:200*)
-    ~packing:f#add () in
+    ~packing:scroller#add_with_viewport
+    () in
+  let buttons = GPack.hbox
+    ~packing:areas#add
+    () in
+  let button_step = GButton.button
+    ~label:"Step"
+    ~packing:buttons#add
+    () in
+  let buffer = GText.buffer
+    ~text:"rules"
+    () in
+  let view = GText.view
+    ~buffer:buffer
+    ~packing:areas#add
+    () in
 
   let machine = ref (Machine.create program start_state stop_state tape) in
 
-  let draw area _ = begin
-    show area !machine;
-    true
-  end
+  let area_expose _ =
+    draw_tape area (Machine.tape !machine);
+    false
   in
-
-  let step area a = begin
+  let step _ =
     try
-      machine := Machine.step !machine
+      machine := Machine.step !machine;
+      (* TODO: trigger expose by gdk_window_invalidate_rect *)
+      ignore (area_expose ())
     with
       | Machine.Deadlock -> print_endline "Reached a deadlock"
-  end ; draw area a
   in
-  ignore (area#event#connect#expose (draw area)) ;
-  ignore (w#event#connect#key_press (step area)) ;
 
-  w#show ();
+  ignore (area#event#connect#expose area_expose);
+  ignore (button_step#connect#clicked step);
+
+  ignore (window#connect#destroy GMain.quit);
+  ignore (window#event#connect#delete (fun _ -> GMain.quit (); true));
+
+  window#show ();
   GMain.Main.main ()
 
 
