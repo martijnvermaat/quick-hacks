@@ -133,7 +133,11 @@ let turing program start_state stop_state tape =
 
   let machine = ref (Machine.create program start_state stop_state tape) in
 
-  let window = new Window.main_window () in
+  let window = new Layout.main_window () in
+
+  let source_buffer = GSourceView.source_buffer ~text:"test" () in
+  let source_view = GSourceView.source_view ~source_buffer:source_buffer
+    ~packing:window#program_scroller#add () in
 
   let area_expose _ =
     draw_tape window#tape (Machine.tape !machine);
@@ -147,9 +151,18 @@ let turing program start_state stop_state tape =
     with
       | Machine.Deadlock -> print_endline "Reached a deadlock"
   in
+  let run _ =
+    try
+      machine := Machine.run !machine;
+      (* TODO: trigger expose by gdk_window_invalidate_rect *)
+      ignore (area_expose ())
+    with
+      | Machine.Deadlock -> print_endline "Reached a deadlock"
+  in
 
   ignore (window#tape#event#connect#expose area_expose);
   ignore (window#button_step#connect#clicked step);
+  ignore (window#button_run#connect#clicked run);
 
   ignore (window#toplevel#connect#destroy GMain.quit);
   ignore (window#toplevel#event#connect#delete (fun _ -> GMain.quit (); true));

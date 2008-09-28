@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Sep 28 14:17:34 2008 -->
+<!--Generated with glade3 3.4.5 on Sun Sep 28 15:07:55 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="main_window">
     <property name="title" translatable="yes">Turing Machine</property>
@@ -172,16 +172,17 @@
         </child>
         <child>
           <widget class="GtkScrolledWindow" id="tape_scroller">
+            <property name="height_request">125</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
             <child>
               <widget class="GtkViewport" id="viewport1">
                 <property name="visible">True</property>
                 <property name="resize_mode">GTK_RESIZE_QUEUE</property>
                 <child>
                   <widget class="GtkDrawingArea" id="tape">
+                    <property name="width_request">533</property>
                     <property name="visible">True</property>
                   </widget>
                 </child>
@@ -189,6 +190,7 @@
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -212,13 +214,19 @@
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
             <property name="position">3</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkTextView" id="program">
+          <widget class="GtkScrolledWindow" id="program_scroller">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <child>
+              <placeholder/>
+            </child>
           </widget>
           <packing>
             <property name="position">4</property>
