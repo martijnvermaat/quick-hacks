@@ -131,40 +131,12 @@ let draw_tape area tape =
 
 let turing program start_state stop_state tape =
 
-  let window = GWindow.window
-    ~title:"Turing Machine"
-    () in
-  let areas = GPack.vbox
-    ~packing:window#add
-    () in
-  let scroller = GBin.scrolled_window
-    ~hpolicy:`AUTOMATIC
-    ~vpolicy:`NEVER
-    ~height:200
-    ~packing:areas#add
-    () in
-  let area = GMisc.drawing_area
-    ~packing:scroller#add_with_viewport
-    () in
-  let buttons = GPack.hbox
-    ~packing:areas#add
-    () in
-  let button_step = GButton.button
-    ~label:"Step"
-    ~packing:buttons#add
-    () in
-  let buffer = GText.buffer
-    ~text:"rules"
-    () in
-  let view = GText.view
-    ~buffer:buffer
-    ~packing:areas#add
-    () in
-
   let machine = ref (Machine.create program start_state stop_state tape) in
 
+  let window = new Window.main_window () in
+
   let area_expose _ =
-    draw_tape area (Machine.tape !machine);
+    draw_tape window#tape (Machine.tape !machine);
     false
   in
   let step _ =
@@ -176,13 +148,13 @@ let turing program start_state stop_state tape =
       | Machine.Deadlock -> print_endline "Reached a deadlock"
   in
 
-  ignore (area#event#connect#expose area_expose);
-  ignore (button_step#connect#clicked step);
+  ignore (window#tape#event#connect#expose area_expose);
+  ignore (window#button_step#connect#clicked step);
 
-  ignore (window#connect#destroy GMain.quit);
-  ignore (window#event#connect#delete (fun _ -> GMain.quit (); true));
+  ignore (window#toplevel#connect#destroy GMain.quit);
+  ignore (window#toplevel#event#connect#delete (fun _ -> GMain.quit (); true));
 
-  window#show ();
+  window#toplevel#show ();
   GMain.Main.main ()
 
 

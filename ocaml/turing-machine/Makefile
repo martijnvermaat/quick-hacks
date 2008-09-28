@@ -9,12 +9,12 @@ endef
 export PROJ_turing
 
 define PROJ_graphical
-  SOURCES = $(SHARED) graphical.ml
+  SOURCES = $(SHARED) window.glade graphical.ml
   RESULT = graphical
   INCDIRS = +cairo +lablgtk2
   CLIBS = mlcairo
-  OCAMLBLDFLAGS = lablgtk.cma gtkInit.cmo cairo.cma cairo_lablgtk.cma
-  OCAMLNLDFLAGS = lablgtk.cmxa gtkInit.cmx cairo.cmxa cairo_lablgtk.cmxa
+  OCAMLBLDFLAGS = lablgtk.cma gtkInit.cmo lablglade.cma cairo.cma cairo_lablgtk.cma
+  OCAMLNLDFLAGS = lablgtk.cmxa gtkInit.cmx lablglade.cmxa cairo.cmxa cairo_lablgtk.cmxa
 endef
 export PROJ_graphical
 

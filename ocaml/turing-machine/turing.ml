@@ -4,11 +4,11 @@
 
 
 let turing program start_state stop_state tape =
-  let machine = Machine.create program start_state stop_state tape in
-  try
-    Util.show (Machine.run machine)
-  with
-    | Machine.Deadlock -> print_endline "Reached a deadlock"
+  let machine = ref (Machine.create program start_state stop_state tape) in
+  while true do
+    machine := Machine.step !machine;
+    Util.show !machine;
+  done
 
 
 let main () =
