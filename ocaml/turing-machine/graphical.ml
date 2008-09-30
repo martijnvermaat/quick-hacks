@@ -3,6 +3,7 @@
 *)
 
 
+(* Why does OCaml not know about Pi? *)
 let pi = 4. *. atan 1.
 
 
@@ -23,13 +24,7 @@ let draw_tape tape (area : GMisc.drawing_area) =
   in
 
   let cells_before, current_cell, cells_after = tape in
-
   let cells = cells_before @ (current_cell :: cells_after) in
-
-  let num_cells_before = List.length cells_before
-  and num_cells_after  = List.length cells_after
-  and num_cells        = List.length cells
-  in
 
   (* Width and height of [area] *)
   let { Gtk.width = width ; Gtk.height = height } = area#misc#allocation in
@@ -50,17 +45,22 @@ let draw_tape tape (area : GMisc.drawing_area) =
   and margin_top    = cell_height *. 0.25
   in
 
+  (* Some convenient numbers *)
+  let extra_cells_width = float num_extra_cells *. cell_width
+  and tape_width =
+    float (List.length cells + num_extra_cells * 2) *. cell_width
+  and reading_head =
+    margin_left
+    +. (float (num_extra_cells + (List.length cells_before)) +. 0.5)
+    *. cell_width
+  in
+
   (* New required width of [area] *)
-  let width = int_of_float (ceil (margin_left
-                                  +. float (num_cells + num_extra_cells * 2)
-                                  *. cell_width
-                                  +. margin_right))
+  let width = int_of_float (ceil (margin_left +. tape_width +. margin_right))
   in
 
   (* Request new width of [area] *)
   area#misc#set_size_request ~width ();
-
-  (*let reading_head = tape_left +. (float (cells_left + 1)) *. size in*)
 
   (* Create Cairo context on [area] *)
   let ctx = Cairo_lablgtk.create area#misc#window in
@@ -83,7 +83,7 @@ let draw_tape tape (area : GMisc.drawing_area) =
   (* Prepare left fadeout mask *)
   let fade_left = Cairo.Pattern.create_linear
     ~x0:margin_left ~y0:0.
-    ~x1:(float num_extra_cells *. cell_width +. margin_left) ~y1:0.
+    ~x1:(extra_cells_width +. margin_left) ~y1:0.
   in
   Cairo.Pattern.add_color_stop_rgba fade_left ~off:0. ~red:0. ~green:0. ~blue:0. ~alpha:0.;
   Cairo.Pattern.add_color_stop_rgba fade_left ~off:1. ~red:0. ~green:0. ~blue:0. ~alpha:1.;
@@ -91,9 +91,9 @@ let draw_tape tape (area : GMisc.drawing_area) =
 
   (* Draw left end of tape *)
   Cairo.move_to ctx margin_left margin_top;
-  Cairo.rel_line_to ctx (float num_extra_cells *. cell_width) 0.;
+  Cairo.rel_line_to ctx extra_cells_width 0.;
   Cairo.move_to ctx margin_left (margin_top +. cell_height);
-  Cairo.rel_line_to ctx (float num_extra_cells *. cell_width) 0.;
+  Cairo.rel_line_to ctx extra_cells_width 0.;
 
   (* Draw left cell delimiters *)
   Cairo.move_to ctx (margin_left +. cell_width) margin_top;
@@ -107,21 +107,23 @@ let draw_tape tape (area : GMisc.drawing_area) =
 
   (* Prepare right fadeout mask *)
   let fade_right = Cairo.Pattern.create_linear
-    ~x0:(float width -. margin_right) ~y0:0.
-    ~x1:(float width -. margin_right -. float num_extra_cells *. cell_width) ~y1:0.
+    ~x0:(margin_left +. tape_width) ~y0:0.
+    ~x1:(margin_left +. tape_width -. extra_cells_width) ~y1:0.
   in
-  Cairo.Pattern.add_color_stop_rgba fade_right ~off:0. ~red:0. ~green:0. ~blue:0. ~alpha:0.;
-  Cairo.Pattern.add_color_stop_rgba fade_right ~off:1. ~red:0. ~green:0. ~blue:0. ~alpha:1.;
+  Cairo.Pattern.add_color_stop_rgba fade_right ~off:0.
+    ~red:0. ~green:0. ~blue:0. ~alpha:0.;
+  Cairo.Pattern.add_color_stop_rgba fade_right ~off:1.
+    ~red:0. ~green:0. ~blue:0. ~alpha:1.;
   Cairo.set_source ctx fade_right;
 
   (* Draw right end of tape *)
-  Cairo.move_to ctx (float width -. margin_right) margin_top;
-  Cairo.rel_line_to ctx (-. float num_extra_cells *. cell_width) 0.;
-  Cairo.move_to ctx (float width -. margin_right) (margin_top +. cell_height);
-  Cairo.rel_line_to ctx (-. float num_extra_cells *. cell_width) 0.;
+  Cairo.move_to ctx (margin_left +. tape_width) margin_top;
+  Cairo.rel_line_to ctx (-. extra_cells_width) 0.;
+  Cairo.move_to ctx (margin_left +. tape_width) (margin_top +. cell_height);
+  Cairo.rel_line_to ctx (-. extra_cells_width) 0.;
 
   (* Draw right cell delimiters *)
-  Cairo.move_to ctx (float width -. margin_right -. cell_width) margin_top;
+  Cairo.move_to ctx (margin_left +. tape_width -. cell_width) margin_top;
   for i = 1 to num_extra_cells do
     Cairo.rel_line_to ctx 0. cell_height;
     Cairo.rel_move_to ctx (-. cell_width) (-. cell_height)
@@ -134,14 +136,22 @@ let draw_tape tape (area : GMisc.drawing_area) =
   Cairo.set_source_rgb ctx 0. 0. 0.;
 
   (* Draw tape *)
-  Cairo.move_to ctx (margin_left +. float num_extra_cells *. cell_width) margin_top;
-  Cairo.line_to ctx (float width -. margin_right -. float num_extra_cells *. cell_width) margin_top;
-  Cairo.move_to ctx (margin_left +. float num_extra_cells *. cell_width) (margin_top +. cell_height);
-  Cairo.line_to ctx (float width -. margin_right -. float num_extra_cells *. cell_width) (margin_top +. cell_height);
+  Cairo.move_to ctx
+    (margin_left +. extra_cells_width)
+    margin_top;
+  Cairo.line_to ctx
+    (margin_left +. tape_width -. extra_cells_width)
+    margin_top;
+  Cairo.move_to ctx
+    (margin_left +. extra_cells_width)
+    (margin_top +. cell_height);
+  Cairo.line_to ctx
+    (margin_left +. tape_width -. extra_cells_width)
+    (margin_top +. cell_height);
 
   (* Draw cell delimiters *)
-  Cairo.move_to ctx (margin_left +. float num_extra_cells *. cell_width) margin_top;
-  for i = 1 to (num_cells - 1) do
+  Cairo.move_to ctx (margin_left +. extra_cells_width) margin_top;
+  for i = 1 to (List.length cells) - 1 do
     Cairo.rel_move_to ctx cell_width cell_height;
     Cairo.rel_line_to ctx 0. (-. cell_height);
   done;
@@ -157,39 +167,74 @@ let draw_tape tape (area : GMisc.drawing_area) =
   Cairo.set_font_size ctx font_size;
 
   let fe = Cairo.font_extents ctx in
+  let y_offset = fe.Cairo.descent -. fe.Cairo.font_height /. 2.
+  in
 
-  for i = 0 to num_cells - 1 do
-    let c = List.nth cells i in
-    match c with
+  for i = 0 to (List.length cells) - 1 do
+    Cairo.move_to ctx
+      (margin_left +. extra_cells_width +. (float i +. 0.5) *. cell_width)
+      (margin_top +. cell_height /. 2. -. y_offset);
+    match List.nth cells i with
       | None   -> ()
       | Some n ->
           let s = string_of_int n in
           let te = Cairo.text_extents ctx s in
-          Cairo.move_to ctx (margin_left +. (float (num_extra_cells + i) +. 0.5) *. cell_width -. te.Cairo.x_bearing -. te.Cairo.text_width /. 2.)
-            ((margin_top +. cell_height /. 2.) -. fe.Cairo.descent +. fe.Cairo.font_height /. 2.);
-          Cairo.show_text ctx s
+          let x_offset = te.Cairo.x_bearing +. te.Cairo.text_width /. 2. in
+          Cairo.rel_move_to ctx (-. x_offset) 0.;
+          Cairo.show_text ctx s;
   done;
 
   (* Reading head *)
-  Cairo.move_to ctx (margin_left +. (float (num_extra_cells + num_cells_before) +. 0.5) *. cell_width) (margin_top +. cell_height *. 1.125);
+  (* TODO: Make this nicer *)
+  Cairo.move_to ctx reading_head (margin_top +. cell_height *. 1.125);
   Cairo.rel_line_to ctx (-. cell_width /. 4.) (cell_height /. 2.);
   Cairo.rel_line_to ctx (cell_width /. 2.) 0.;
   Cairo.close_path ctx;
   Cairo.stroke_preserve ctx;
-  Cairo.set_source_rgb ctx 0.5 0.5 0.5;
+  Cairo.set_source_rgb ctx 0.5 0.5 0.9;
   Cairo.fill ctx;
+  Cairo.set_source_rgb ctx 1. 1. 1.;
+  Cairo.arc ctx
+    reading_head (margin_top +. cell_height *. 1.125)
+    (cell_width /. 8.) 0.
+    (2. *. pi);
+  Cairo.fill_preserve ctx;
   Cairo.set_source_rgb ctx 0. 0. 0.;
-  Cairo.arc ctx (margin_left +. (float (num_extra_cells + num_cells_before) +. 0.5) *. cell_width) (margin_top +. cell_height *. 1.125) (cell_width /. 8.) 0. (2. *. pi);
-  Cairo.fill ctx
+  Cairo.stroke ctx;
+
+  (* Draw small symbol of current cell *)
+  Cairo.set_font_size ctx (font_size /. 2.5);
+  let s = match current_cell with
+    | None   -> "B"
+    | Some n -> string_of_int n
+  in
+  let fe = Cairo.font_extents ctx in
+  let te = Cairo.text_extents ctx s in
+  let x_offset = te.Cairo.x_bearing +. te.Cairo.text_width /. 2.
+  and y_offset = fe.Cairo.descent -. fe.Cairo.font_height /. 2.
+  in
+  Cairo.move_to ctx
+    (reading_head -. x_offset)
+    (margin_top +. cell_height *. 1.125 -. y_offset);
+  Cairo.show_text ctx s
 
 
 let turing program start_state stop_state tape =
 
-  let machine = ref (Machine.create program start_state stop_state tape) in
+  let machine = ref (Machine.create (Util.parse_program program) start_state stop_state tape) in
 
   let window = new Layout.main_window () in
 
-  let source_buffer = GSourceView.source_buffer ~text:"test" () in
+  let text =
+    let ic = open_in program in
+    let size = in_channel_length ic in
+    let buf = String.create size in
+    really_input ic buf 0 size;
+    close_in ic;
+    buf
+  in
+
+  let source_buffer = GSourceView.source_buffer ~text () in
   let source_view = GSourceView.source_view ~source_buffer:source_buffer
     ~packing:window#program_scroller#add () in
 
@@ -201,17 +246,14 @@ let turing program start_state stop_state tape =
   let step _ =
     try
       machine := Machine.step !machine;
-      (* GtkBase.Widget.queue_draw w#as_widget *)
-      (*ignore (area_expose ())*)
-      Gdk.Window.invalidate_rect window#tape#misc#window None false;
+      GtkBase.Widget.queue_draw window#tape#as_widget
     with
       | Machine.Deadlock -> print_endline "Reached a deadlock"
   in
   let run _ =
     try
       machine := Machine.run !machine;
-      (*ignore (area_expose ())*)
-      Gdk.Window.invalidate_rect window#tape#misc#window None false
+      GtkBase.Widget.queue_draw window#tape#as_widget
     with
       | Machine.Deadlock -> print_endline "Reached a deadlock"
   in
@@ -252,7 +294,7 @@ let main () =
         begin
           try
             turing
-              (Util.parse_program program)
+              program
               start
               stop
               (Util.parse_tape tape)
