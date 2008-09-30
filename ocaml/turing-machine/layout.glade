@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Sep 30 16:28:31 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Sep 30 23:31:24 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="main_window">
     <property name="title" translatable="yes">Turing Machine</property>
-    <property name="default_width">580</property>
-    <property name="default_height">400</property>
+    <property name="default_width">640</property>
+    <property name="default_height">480</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
