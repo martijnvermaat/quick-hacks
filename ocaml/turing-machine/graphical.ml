@@ -3,7 +3,7 @@
 *)
 
 
-let draw_tape area tape =
+let draw_tape (area:GMisc.drawing_area) tape =
 
   let before, cell, after = tape in
 
@@ -11,12 +11,12 @@ let draw_tape area tape =
   let cells_right = List.length after + 1 in
   let cells = cells_left + 1 + cells_right in
 
-  (* let { Gtk.width = width ; Gtk.height = height } = area#misc#allocation in *)
+  let {Gtk.width = width ; Gtk.height = height } = area#misc#allocation in
 
   let ctx = Cairo_lablgtk.create area#misc#window in
 
   (* Size of cell *)
-  let size = (*50.*) 50. in
+  let size = (float height) /. 2.1 in
 
   (* We draw the visible cells, with a half blank cell on each side *)
   let tape_top = size /. 4.
@@ -26,6 +26,8 @@ let draw_tape area tape =
 
   (* don't use this (as it will trigger a new expose_event), use set_request_size oid *)
   (*area#set_size ~width:(int_of_float (tape_right +. size /. 4.)) ~height:(int_of_float (tape_bottom +. size));*)
+
+  area#misc#set_size_request ~width:(int_of_float (tape_right +. size /. 4.)) ~height ();
 
   let reading_head = tape_left +. (float (cells_left + 1)) *. size in
 
@@ -140,22 +142,23 @@ let turing program start_state stop_state tape =
     ~packing:window#program_scroller#add () in
 
   let area_expose _ =
+    print_endline "ja";
     draw_tape window#tape (Machine.tape !machine);
     false
   in
   let step _ =
     try
       machine := Machine.step !machine;
-      (* TODO: trigger expose by gdk_window_invalidate_rect *)
-      ignore (area_expose ())
+      (*ignore (area_expose ())*)
+      Gdk.Window.invalidate_rect window#tape#misc#window None false;
     with
       | Machine.Deadlock -> print_endline "Reached a deadlock"
   in
   let run _ =
     try
       machine := Machine.run !machine;
-      (* TODO: trigger expose by gdk_window_invalidate_rect *)
-      ignore (area_expose ())
+      (*ignore (area_expose ())*)
+      Gdk.Window.invalidate_rect window#tape#misc#window None false
     with
       | Machine.Deadlock -> print_endline "Reached a deadlock"
   in

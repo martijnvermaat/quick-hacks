@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Sep 28 15:07:55 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Sep 30 16:28:31 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="main_window">
     <property name="title" translatable="yes">Turing Machine</property>
+    <property name="default_width">580</property>
+    <property name="default_height">400</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -150,6 +152,7 @@
               <widget class="GtkToolButton" id="button_step">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Step</property>
+                <property name="stock_id">gtk-go-forward</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -159,6 +162,7 @@
               <widget class="GtkToolButton" id="button_run">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Run</property>
+                <property name="stock_id">gtk-goto-last</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
