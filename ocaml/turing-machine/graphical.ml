@@ -17,6 +17,8 @@ let draw_tape tape (area : GMisc.drawing_area) =
     need more space.
     We draw the part of the tape that contains non-blank cells and a number
     of extra blank cells on both ends.
+
+    TODO: Use margins of widget
   *)
 
   let num_extra_cells = 3    (* Number of extra blank cells on each end *)
@@ -219,24 +221,31 @@ let draw_tape tape (area : GMisc.drawing_area) =
   Cairo.show_text ctx s
 
 
+let show_program file_name source_buffer =
+  let channel = open_in file_name in
+  let size = in_channel_length channel in
+  let buffer = String.create size in
+  really_input channel buffer 0 size;
+  close_in channel;
+  source_buffer#set_text buffer
+
+
 let turing program start_state stop_state tape =
 
   let machine = ref (Machine.create (Util.parse_program program) start_state stop_state tape) in
 
   let window = new Layout.main_window () in
 
-  let text =
-    let ic = open_in program in
-    let size = in_channel_length ic in
-    let buf = String.create size in
-    really_input ic buf 0 size;
-    close_in ic;
-    buf
-  in
-
-  let source_buffer = GSourceView.source_buffer ~text () in
-  let source_view = GSourceView.source_view ~source_buffer:source_buffer
+  let source_buffer = GSourceView.source_buffer ~text:"" () in
+  let source_view = GSourceView.source_view
+    ~source_buffer:source_buffer
     ~packing:window#program_scroller#add () in
+
+  source_view#misc#modify_font_by_name "Monospace";
+
+  show_program program source_buffer;
+
+  let steps = ref 0 in
 
   let area_expose _ =
     print_endline "ja";
@@ -246,6 +255,9 @@ let turing program start_state stop_state tape =
   let step _ =
     try
       machine := Machine.step !machine;
+      steps := !steps + 1;
+      window#state#set_label (Machine.state !machine);
+      window#steps#set_label (string_of_int !steps);
       GtkBase.Widget.queue_draw window#tape#as_widget
     with
       | Machine.Deadlock -> print_endline "Reached a deadlock"
@@ -257,8 +269,28 @@ let turing program start_state stop_state tape =
     with
       | Machine.Deadlock -> print_endline "Reached a deadlock"
   in
+  let load_program _ =
+    let file_chooser = GWindow.file_chooser_dialog
+      ~action:`OPEN
+      ~parent:window#toplevel
+      ~destroy_with_parent:true
+      ~title:"Open program" ()
+    in
+    file_chooser#add_button_stock `CANCEL `CANCEL ;
+    file_chooser#add_select_button_stock `OPEN `OPEN ;
+    begin match file_chooser#run () with
+      | `OPEN ->
+          begin match file_chooser#filename with
+            | Some s -> show_program s source_buffer
+            | None   -> ()
+          end
+      | `DELETE_EVENT | `CANCEL -> ()
+    end ;
+    file_chooser#destroy ()
+  in
 
   ignore (window#tape#event#connect#expose area_expose);
+  ignore (window#button_open#connect#clicked load_program);
   ignore (window#button_step#connect#clicked step);
   ignore (window#button_run#connect#clicked run);
 
