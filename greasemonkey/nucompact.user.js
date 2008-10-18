@@ -9,7 +9,7 @@
 /*
     Nu Compact
 
-    Version: 0.2.1, 2007-04-03
+    Version: 0.2.2, 2008-10-18
 
     http://www.cs.vu.nl/~mvermaat/greasemonkey
 
@@ -34,6 +34,9 @@
 
 
     Changelog
+
+    2008-10-18 - 0.2.2
+    * Added video section
 
     2007-04-03 - 0.2.1
     * Also remove logo and date
@@ -94,6 +97,12 @@ function rewritePicturizedStories() {
                 color: 'f5e47f',
                 class: 'verloopOverig',
                 icon: 'images/ico_pijl_5.gif'
+            },
+            {
+                title: 'Video',
+                color: 'c4d4ed',
+                class: 'verloopNUvideo',
+                icon: 'images/ico_video.png'
             }
     ];
 
@@ -137,7 +146,7 @@ function rewritePicturizedStories() {
 
         // Ok, this is ugly
         newLink.innerHTML =
-            '<b><img src="' + icon + '" border="0" alt="" width="4" height="7"' +
+            '<b><img src="' + icon + '" border="0" alt=""' + /* width="4" height="7"' +*/
             ' hspace="4" vspace="0" class="pijl1"> <a class="link" href="' +
             link.getAttribute('href') + '"> ' + link.firstChild.nodeValue +
             '</a></b><br>';
