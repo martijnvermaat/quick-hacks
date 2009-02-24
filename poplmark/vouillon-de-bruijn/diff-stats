@@ -1,0 +1,43 @@
+Some statistics on the diff between part a and part b. First remove
+the alternate reduction calculus from part a.
+
+First for line counts, some measuring:
+
+  wc -l part-a.v
+    1507
+
+  wc -l part-b.v
+    2652 part-b.v
+
+  diff -ruN part-a.v part-b.v | grep '^-\|^+' | wc -l
+    1483
+
+Real difference: 2652 - 1507 = 1145
+Real total:      2652 + 1507 = 4159
+
+Now some measuring for byte counts:
+
+  gzip -c part-a.v | wc -c
+    11080
+
+  gzip -c part-b.v | wc -c
+    19695
+
+  diff -ruN part-a.v part-b.v | grep '^-\|^+' | gzip -c | wc -c
+    12583
+
+Real difference: 19695 - 11080 = 8615
+Real total:      19695 + 11080 = 30775
+
+Interpretation:
+
+Would the files be 100% different, we expect a diff of 4159 (30775).
+would part-b be a verbatim copy of part-a with some additions, we expect
+a diff of 1145 (8615).
+
+The measured diff is 1483 (12583) which is much closer to the latter.
+
+Conjecture: this shows part-b is for the most part verbatim copying of
+part-a with some additions.
+
+It would be interesting if part-b could re-use more of part-a.
