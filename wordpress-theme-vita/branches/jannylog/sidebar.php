@@ -7,17 +7,24 @@
     <?php J_ShowRecentPosts();?>
     <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar(1) ) : else : ?>
     <li class="boxr caty clearfix">
-      <h2>Archives</h2>
+      <h2>Archieven</h2>
       <ul>
         <?php wp_get_archives('type=monthly'); ?>
       </ul>
     </li>
     <li class="boxr caty clearfix">
+      <h3>Onderwerpen</h3>
+      <ul>
+        <?php wp_tag_cloud('smallest=10&largest=18'); ?>
+      </ul>
+    </li>
+<!--    <li class="boxr caty clearfix">
       <h3>Categories</h3>
       <ul>
         <?php wp_list_categories('show_count=0&title_li='); ?>
       </ul>
     </li>
+!-->
     <?php endif; // End of Sidebar ?>
   </ul>
 </div>

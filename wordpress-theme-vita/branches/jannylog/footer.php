@@ -3,7 +3,7 @@
 </div>
 <!-- /sub page -->
 <br class="clear" />
-<div class="thetop"><a href="#top" id="to-top">&uarr; Top</a></div>
+<div class="thetop"><a href="#top" id="to-top">&uarr; Naar boven</a></div>
 <div id="footer-out">
   <div id="footer">
     <hr />

@@ -50,7 +50,7 @@
           <?php the_content('Lees de rest van dit bericht &rarr;'); ?>
         </div>
         <p class="postmetadata">
-          <?php the_tags('Onderwerpen: ','','<br />');?>
+          <?php the_tags('Onderwerpen: ',', ','<br />');?>
 <!--          <span class="catr">Categorie
           <?php the_category(', ') ?>
           </span> -->

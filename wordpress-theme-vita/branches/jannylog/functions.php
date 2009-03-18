@@ -12,13 +12,13 @@
 function J_ShowAbout() { ?>
 
 <li class="about boxr">
-  <h2>About</h2>
+  <h2>Over mij</h2>
   <p>Aenean dui quam, pellentesque ut, commodo ac, tempor aliquam, turpis. Etiam accumsan rhoncus nisi. Morbi velit enim, mollis et, elementum sit amet, egestas sed, diam. Curabitur scelerisque, nulla et facilisis fringilla, sapien elit auctor augue, at porttitor ipsum nibh faucibus ligula.</p>
-  <p class="stats">Stats: <span class="catr"><a title="<?php global $numcmnts;echo $numcmnts;?> Post">
+  <p class="stats">Ik heb: <span class="catr"><a title="<?php global $numcmnts;echo $numcmnts;?> berichten">
     <?php global $numposts;echo $numposts; ?>
-    </a> Posts</span>, <span class="comr"><a title="<?php global $numcmnts;echo $numcmnts;?> Comments">
+    </a> berichten</span>, <span class="comr"><a title="<?php global $numcmnts;echo $numcmnts;?> reacties">
     <?php global $numcmnts;echo $numcmnts;?>
-    </a></span> Comments</p>
+    </a></span> reacties</p>
 </li>
 <?php }	function J_ShowRecentPosts() {?>
 <li class="boxr lasties">
@@ -33,7 +33,7 @@ function J_ShowAbout() { ?>
     <li><span>
       <?php the_time('m - d') ?>
       </span>
-      <div class="inin"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>">
+      <div class="inin"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanente link naar <?php the_title(); ?>">
         <?php the_title(); ?>
         </a></div>
     </li>
@@ -156,7 +156,7 @@ function list_comment($comment, $args, $depth) {
 	  </div>
       <div class="rightarea">      
       <div class="comment-author vcard by">
-         <?php printf(__('<cite class="fn">%s</cite> <span class="says">says:</span>'), get_comment_author_link()) ?>
+         <?php printf(__('<cite class="fn">%s</cite> <span class="says">zegt:</span>'), get_comment_author_link()) ?>
       </div>
       <?php if ($comment->comment_approved == '0') : ?>
          <em><?php _e('Your comment is awaiting moderation.') ?></em>

@@ -56,7 +56,7 @@ $tcount = count($jh_trackbacks);
 <? } ?>
 <? // End Trackbacks ?>
 <?php if ($comments) : ?>
-<h3 id="comments"><?php echo $ccount;?> Comments</h3>
+<h3 id="comments"><?php echo $ccount;?> Reacties</h3>
 <ol class="commentlist">
   <?php foreach ($comments as $comment) : ?>
   <?php if($comment->comment_type == '') { ?>
@@ -87,7 +87,7 @@ $tcount = count($jh_trackbacks);
       <?php comment_text() ?>
       <small class="commentmetadata"><a href="#comment-<?php comment_ID() ?>" title="">
       <?php comment_date('F jS, Y') ?>
-      at
+      om
       <?php comment_time() ?>
       </a>
       <?php edit_comment_link('e','',''); ?>

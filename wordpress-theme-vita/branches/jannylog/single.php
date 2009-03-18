@@ -5,38 +5,38 @@
     <div class="gap">
       <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
       <div class="post" id="post-<?php the_ID(); ?>">
-        <h2 class="post-title"><a class="intitle" href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>">
+        <h2 class="post-title"><a class="intitle" href="<?php the_permalink() ?>" rel="bookmark" title="Permanente link naar <?php the_title(); ?>">
           <?php the_title(); ?>
           </a></h2>
-        <div class="timr"> Posted on
+        <div class="timr"> Geplaatst op
           <?php the_time('F d, Y') ?>
-          by
+          door
           <?php the_author() ?>
           <?php edit_post_link('e', '<span class="editr">[', '] </span>'); ?>
         </div>
         <div class="entry">
-          <?php the_content('Read the rest of this entry &rarr;'); ?>
+          <?php the_content('Lees de rest van het bericht &rarr;'); ?>
         </div>
         <p class="postmetadata">
-          <?php the_tags('Tags: ',', ','<br />');?>
-          <span class="catr">Category
+          <?php the_tags('Onderwerpen: ',', ','<br />');?>
+<!--          <span class="catr">Category
           <?php the_category(', ') ?>
-          </span>
+          </span> -->
 			<?php if (('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 				// Both Comments and Pings are open ?>
-				<br />Trackback: <a href="<?php trackback_url(); ?>" rel="trackback">trackback</a> from your own site.
+				<br />Trackback: <a href="<?php trackback_url(); ?>" rel="trackback">trackback</a> vanaf je eigen site.
 
 			<?php } elseif (!('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 				// Only Pings are Open ?>
-				<br />Responses are currently closed, but you can <a href="<?php trackback_url(); ?> " rel="trackback">trackback</a> from your own site.
+				<br />Reageren is op dit moment gesloten, maar je kunt <a href="<?php trackback_url(); ?> " rel="trackback">een trackback</a> doen vanaf je eigen site.
 
 			<?php } elseif (('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 				// Comments are open, Pings are not ?>
-				<br />You can skip to the end and leave a response. Pinging is currently not allowed.
+				<br />Je kunt onderaan een reactie achterlaten.
 
 			<?php } elseif (!('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 				// Neither Comments, nor Pings are open ?>
-				<br />Both comments and pings are currently closed.
+				<br />Reageren is op dit moment gesloten.
 
 			<?php } ?>
 
@@ -46,7 +46,7 @@
 	<?php comments_template('', true); ?>
 
       <?php endwhile; else: ?>
-      <p>Sorry, no posts matched your criteria.</p>
+      <p>Sorry, geen berichten voldoen aan je criteria.</p>
       <?php endif; ?>
       <div class="navigation">
         <div class="alignleft">

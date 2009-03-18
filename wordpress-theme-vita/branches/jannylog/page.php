@@ -9,15 +9,15 @@
           <?php the_title(); ?>
         </h2>
         <div class="entry">
-          <?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
-          <?php wp_link_pages(array('before' => '<p><strong>Pages:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
+          <?php the_content('<p class="serif">Lees de rest van de pagina &raquo;</p>'); ?>
+          <?php wp_link_pages(array('before' => '<p><strong>Pagina's:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
         </div>
       </div>
 
       <?php comments_template(); ?>
 
       <?php endwhile; endif; ?>
-      <?php edit_post_link('Edit this entry.', '<p>', '</p>'); ?>
+      <?php edit_post_link('Bewerk deze pagina.', '<p>', '</p>'); ?>
 </div> <!-- /gap -->
 </div> <!-- /content -->
 </div> <!-- /content-wrap -->

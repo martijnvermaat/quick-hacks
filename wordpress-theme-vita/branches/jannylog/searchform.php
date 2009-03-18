@@ -3,10 +3,10 @@
     <?php
 $value = wp_specialchars($s, 1);
 if (!$value) {
-$value = 'To Search, just type and enter';
+$value = 'Doorzoek de site...';
 }
 ?>
-    <input type="text" value="<?php echo $value; ?>" name="s" id="s" onfocus="if (this.value == 'To Search, just type and enter') {this.value = '';}" onblur="if (this.value == '') {this.value = 'To Search, just type and enter';}" />
-    <input type="submit" id="searchsubmit" value="Search" />
+    <input type="text" value="<?php echo $value; ?>" name="s" id="s" onfocus="if (this.value == 'Doorzoek de site...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Doorzoek de site...';}" />
+    <input type="submit" id="searchsubmit" value="Zoeken" />
   </div>
 </form>
