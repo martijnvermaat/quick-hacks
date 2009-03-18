@@ -23,7 +23,7 @@
 							http://binarybonsai.com/archives/2004/08/17/time-since-plugin/ */
 							/* $entry_datetime = abs(strtotime($post->post_date) - (60*120)); echo time_since($entry_datetime); echo ' ago'; */ ?>
         op
-        <?php the_time('l, F jS, Y') ?>
+        <?php the_time('l, d F, Y') ?>
         om
         <?php the_time() ?>
 <!--        and is filed under

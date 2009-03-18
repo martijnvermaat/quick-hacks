@@ -13,7 +13,7 @@
           <?php comments_popup_link('0', '1', '%'); ?>
           </span></h2>
         <div class="timr"> Geplaatst op
-          <?php the_time('F d, Y') ?>
+          <?php the_time('d F, Y') ?>
           door
           <?php the_author() ?>
           <?php edit_post_link('e', '<span class="editr">[', '] </span>'); ?>

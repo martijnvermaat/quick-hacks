@@ -31,7 +31,7 @@ function J_ShowAbout() { ?>
   $do_not_duplicate = $post->ID; ?>
     <!-- Do stuff... -->
     <li><span>
-      <?php the_time('m - d') ?>
+      <?php the_time('d - m') ?>
       </span>
       <div class="inin"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanente link naar <?php the_title(); ?>">
         <?php the_title(); ?>

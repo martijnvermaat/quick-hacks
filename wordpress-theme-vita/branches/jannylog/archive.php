@@ -9,7 +9,7 @@
       <h2 class="pagetitle">Archief voor &#8216;<?php echo single_cat_title(); ?>&#8217;</h2>
       <?php /* If this is a daily archive */ } elseif (is_day()) { ?>
       <h2 class="pagetitle">Archief voor
-        <?php the_time('F jS, Y'); ?>
+        <?php the_time('d F, Y'); ?>
       </h2>
       <?php /* If this is a monthly archive */ } elseif (is_month()) { ?>
       <h2 class="pagetitle">Archief voor
@@ -41,7 +41,7 @@
           <?php comments_popup_link('0', '1', '%'); ?>
           </span></h2>
         <div class="timr"> Geplaatst op
-          <?php the_time('F d, Y') ?>
+          <?php the_time('d F, Y') ?>
           door
           <?php the_author() ?>
           <?php edit_post_link('e', '<span class="editr">[', '] </span>'); ?>
