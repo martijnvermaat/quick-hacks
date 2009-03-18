@@ -1,0 +1,641 @@
+/*  
+Theme Name: vita
+Theme URI: http://wpgpl.com/themes/vita/
+Description: Vita is Red, Gree, and White theme. This theme is 3 Columns and Perfect for Make money online
+Version: 1.5
+Author: Nurudin Jauhari
+Author URI: http://wpgpl.com/
+Tags: three-columns,fixed-width, red, green,custom-header
+	
+	Crafted on 21 July 2008
+	Last Edit: 15 March 2009 05.15  +7 GMT
+
+	The CSS, XHTML and design is released under GPL:
+	http://www.opensource.org/licenses/gpl-license.php
+
+*/
+
+/* Social Style 
+********************* */
+
+html {
+	height: 100%;
+	margin-bottom: 0.1em;
+}
+* {
+	padding: 0;
+	margin: 0;
+}
+img {
+	border: 0;
+}
+p, blockquote, ul, ol, pre, code {
+	line-height: 1.6em;
+	margin: 0 0 0.7em;
+}
+blockquote {
+	margin-left: 30px;
+	border-left: 2px solid #ddd;
+	padding-left: 10px;
+}
+dl {
+	margin: 1em 0;
+}
+dt {
+	font-weight: bold;
+}
+dd {
+	margin: 0.5em;
+	padding: 0;
+}
+img.centered {
+	text-align: center;
+}
+img.alignright {
+	float: right;
+	margin: 0 0 4px 4px;
+}
+img.alignleft {
+	float: left;
+	margin: 0 4px 4px 0;
+}
+.aligncenter {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+.alignright {
+	text-align: right;
+}
+.alignleft {
+	text-align: left;
+}
+hr {
+	display: none;
+}
+body {
+	font: 13px Helvetica, arial, verdana, tahoma, sans-serif;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+a {
+	text-decoration: none;
+}
+a:link, a:visited {
+	color: #C00000;
+}
+a:hover, a:active {
+}
+h1, h2, h3, h4, h5, h6 {
+	/*	font-family: Georgia, Verdana, Arial, Serif; */
+	font-family: Arial, Verdana, Serif;
+}
+/* Etc
+******************** */
+br.clear {
+	clear: both;
+}
+/* clearfix */
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {
+	display: inline-block;
+}
+/* Hides from IE-mac \*/
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
+/* Design 
+******************** */
+#page {
+	text-align: left;
+	width: 970px;
+	margin: 0 auto;
+}
+#sub-page {
+	margin-top: 25px;
+}
+#content-wrap {
+	float: left;
+	width: 100%;
+}
+#content {
+	margin: 0 470px 0 0;/*	margin: 0 280px 0 190px;*/
+}
+.side1 {
+	width: 250px;
+	float: left;
+	margin-left: -250px;
+}
+.side2 {
+	width: 180px;
+	float: left;
+	margin-left: -450px;
+}
+#footer-out {
+	border-top: 1px solid #ccc;
+	margin-top: 10px;
+	background: #fff;
+}
+#footer {
+	margin: 10px auto 20px;
+	padding: 0;
+	text-align: left;
+	color: #999;
+	width: 970px;
+	font-size: 120%;
+}
+#footer a {
+	color: #666;
+	text-decoration: underline;
+}
+.thetop {
+	width: 970px;
+	text-align: left;
+	margin: 10px auto 0;
+}
+/*myHead */
+#pager {
+	height: 10px;
+}
+#headr {
+	position: relative;
+}
+#headr .description {
+	display: none;
+}
+#splash {
+	height: 150px;
+	position: relative;
+	background: url(images/splash/tofu.jpg) 0 0 no-repeat;
+}
+#splash h1 a {
+	font-size: 120%;
+	padding: 6px 15px 10px;
+	letter-spacing: -2pt;
+	background: transparent url(images/ico/h1-bg.png);
+	color: #fff;
+	position: absolute;
+	top: 0;
+	left: 20px;
+}
+#top {
+	background: #C00000;
+}
+#navr {
+	height: 35px;
+	padding-top: 5px;
+	position: relative;
+	margin: 0 auto 10px auto;
+	text-align: right;
+	width: 970px;
+}
+#navr ul {
+	list-style: none;
+	padding-top: 5px;
+}
+#navr ul li {
+	display: inline;
+}
+#navr ul li a {
+	padding: 4px 10px;
+	color: #fff;
+	font-size: 110%;
+	font-weight: bold;
+}
+#navr ul li a:hover {
+	background: #AB1D1A;
+	color: #fff;
+}
+#navr ul li.current_page_item a {
+	background: #FF8F8D;
+	color: #C00000;
+}
+.search {
+	position: relative;
+}
+.search #s {
+	width: 170px;
+	padding: 4px;
+	border: 1px solid #666;
+}
+#searchsubmit {
+	padding: 3px 2px;
+	background: #C00000;
+	color: #fff;
+	right: 0;
+	position: absolute;
+	top: 0;
+	border: 1px solid #FF8F8D;
+	border-bottom: 1px solid #6C0200;
+	border-bottom: 1px solid #6C0200;
+}
+/*myPost */
+.post {
+	margin-bottom: 30px;
+}
+.timr {
+	color: #098400;
+	font-size: 110%;
+	margin-bottom: 15px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+}
+.post h2.post-title {
+	position: relative;
+	width: 100%;
+}
+.post h2 {
+	font-size: 190%;
+	letter-spacing: -1pt;
+	margin-bottom: 5px;
+}
+a.intitle {
+	padding-right: 45px;
+}
+.post h2 a {
+	color: #000;
+}
+.postmetadata {
+	color: #999;
+}
+.postmetadata a {
+	color: #666;
+	text-decoration: underline;
+}
+.post ul, .post ol {
+	margin-left: 30px;
+}
+.commr {
+	position: absolute;
+	right: 0;
+	top: 0;
+	text-align: center;
+}
+.commr a:link, .commr a:visited {
+	color: #fff;
+	background: url(images/ico/commr.gif) 0 0 no-repeat;
+	height: 37px;
+	font-weight: normal;
+	font-size: 90%;
+	width: 42px;
+	padding-top: 5px;
+	display: block;
+}
+.commr a:hover {
+	background: url(images/ico/commr.gif) 0 -42px no-repeat;
+	color: #fff;
+}
+.linkspage {
+}
+.thelist h2 {
+	font-size: 120%;
+}
+.thelist ul {
+	list-style: none;
+}
+.thelist ul ul {
+	list-style: square;
+}
+.thelist ul ul li {
+	margin-left: 30px;
+}
+
+.arlist {
+	margin-bottom: 30px;
+}
+.arlist h3, #archivebox h3 {
+	font-size: 140%;
+}
+.arlist li {
+	float: left;
+	width: 120px;
+}
+.navigation {
+	margin-bottom: 20px;
+	min-height: 20px;
+}
+.navigation a {
+	color: #098400;
+}
+.navigation .alignleft {
+	float: left;
+	width: 50%;
+}
+.navigation .alignright {
+	float: right;
+	text-align: right;
+	width: 50%;
+}
+
+/* Begin Calendar */
+#wp-calendar {
+	empty-cells: show;
+	margin: 10px auto 0;
+	width: 155px;
+	}
+
+#wp-calendar #next a {
+	padding-right: 10px;
+	text-align: right;
+	}
+
+#wp-calendar #prev a {
+	padding-left: 10px;
+	text-align: left;
+	}
+
+#wp-calendar a {
+	display: block;
+	}
+
+#wp-calendar caption {
+	text-align: center;
+	width: 100%;
+	}
+
+#wp-calendar td {
+	padding: 3px 0;
+	text-align: center;
+	}
+
+#wp-calendar td.pad:hover { /* Doesn't work in IE */
+	background-color: #fff; }
+/* End Calendar */
+
+
+
+/* Begin Various Tags & Classes */
+acronym, abbr, span.caps {
+	cursor: help;
+	}
+
+/* Captions */
+.aligncenter,
+div.aligncenter {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wp-caption {
+	border: 1px solid #ddd;
+	text-align: center;
+	background-color: #f3f3f3;
+	padding-top: 4px;
+	margin: 10px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.wp-caption img {
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+}
+
+.wp-caption p.wp-caption-text {
+	font-size: 15px;
+	line-height: 17px;
+	padding: 0 4px 5px;
+	margin: 0;
+}
+/* End captions */
+/* WP */
+img.alignright {
+	display:inline;
+	margin:0 0 2px 7px;
+	padding:4px;
+}
+
+img.alignleft {
+	display:inline;
+	margin:0 7px 2px 0;
+	padding:4px;
+}
+
+.alignright {
+	float:right;
+}
+
+.alignleft {
+	float:left;
+}
+.wp-caption {
+	border:1px solid #ddd;
+	text-align:center;
+	background-color:#f3f3f3;
+	padding-top:4px;
+	margin:10px;
+}
+
+.wp-caption img {
+	border:0 none;
+	margin:0;
+	padding:0;
+}
+
+.wp-caption p.wp-caption-text {
+	font-size:11px;
+	line-height:17px;
+	margin:0;
+	padding:0 4px 5px;
+}
+
+img.centered,.aligncenter,div.aligncenter {
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+}
+code, pre {
+	width: 480px;
+	overflow: auto;
+}
+
+
+/*myday */
+.side1 ul, .side2 ul {
+	list-style: none;
+	line-height: 20px;
+}
+.side1 h2, .side1 h3 {
+	border-bottom: 1px solid #ccc;
+	font-size: 15px;
+	margin-bottom: 10px;
+}
+.side2 h2, .side2 h3 {
+	font-size: 15px;
+	margin-bottom: 5px;
+	color: #fff;
+	height: 24px;
+	padding-left: 8px;
+	padding-top: 2px;
+	background: url(images/ico/h-side.gif) 0 0 no-repeat;
+}
+.widget, .boxr, .categories, .linkcat {
+	margin-bottom: 20px;
+}
+.caty li {
+	float: left;
+	width: 120px;
+}
+.stats {
+	background: #efefef;
+	padding: 2px 2px 2px 10px;
+	font-size: 90%;
+}
+.lasties span {
+	float: left;
+	width: 45px;
+}
+.inin {
+	padding-left: 50px;
+}
+.side1 a:hover {
+	background: #C00000;
+	color: #fff;
+}
+.side2 a {
+	color: #098400;
+}
+.side2 a:hover {
+	color: #098400;
+	text-decoration: underline;
+}
+.side2 .gapy {
+	background: #ddd url(images/bg/side2-shade.gif) 0 bottom repeat-x;
+	padding: 10px 10px 100px;
+}
+
+/*mycomment */
+#respond h3, h3#trackbacks,h3#pings, h3#comments {
+	margin: 20px 0;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 4px;
+}
+h3#trackbacks, h3#pings {
+	position: relative;
+}
+img.iright {
+	position: absolute;
+	right: 0;
+	top: 5px;
+}
+
+.trackbacklist, .commentlist {
+	list-style: none;
+}
+.trackbacklist li, .commentlist li {
+	position: relative;
+	border-bottom: 1px solid #ddd;
+}
+.commentlist ul {
+	list-style: none;
+	padding-left: 30px;
+}
+.track {
+	margin-bottom: 20px;
+}
+.timer a {
+	color: #076C00;
+}
+.numero a {
+	float: right;
+	color: #ccc;
+	font-size: 170%;
+}
+.commentmetadata {
+	position: absolute;
+	bottom: 0px;
+	left: 100px;
+	color: #999;
+}
+.commentmetadata a {
+	color: #999;
+	text-decoration: underline;
+}
+.comment {
+	padding: 10px 0;
+}
+.c-entry {
+	margin-bottom: 20px;
+}
+.reply {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+.alt {
+	margin-bottom: 10px;
+}
+.leftarea {
+	float: left;
+	width: 100px;
+}
+.rightarea {
+	margin-left: 100px;
+}
+.formin textarea {
+	width: 490px;
+	padding: 4px;
+	border: 1px solid #999;
+	}
+	.formin textarea:hover,.formin textarea:focus {
+		border: 1px solid #555;
+		}
+.formin input {
+	padding: 4px;
+	border: 1px solid #999;
+}
+.formin input:hover,.formin input:focus {
+	border: 1px solid #555;
+}
+.formin #submit {
+	background: #098400;
+	border: 2px solid #098400;
+	color: #fff;
+	padding: 4px 10px;
+	border-right: 2px solid #076C00;
+	border-bottom: 2px solid #076C00;
+}
+.formin #submit {
+	background: #098400;
+	border: 2px solid #098400;
+	color: #fff;
+	padding: 4px 10px;
+	border-right: 2px solid #076C00;
+	border-bottom: 2px solid #076C00;
+}
+.formin #submit:hover,.formin #submit:focus {
+	background: #222;
+	border: 2px solid #666;
+	color: #fff;
+	padding: 4px 10px;
+	border-right: 2px solid #000;
+	border-bottom: 2px solid #000;
+}
+
+img.wp-smiley { 
+   vertical-align: -25%; 
+	border: none;
+}
+
+/* Change Log ****
+1.0	: First Public Released
+1.1	: Fix Custom Image Header
+1.2	: Add Trackback / Pingback URL
+1.3	: Fix Comment Problem and Image Smiley
+1.4 : Fix Tag Layout, and Enable Threaded Comment (WordPress 2.7)
+1.5 : Move Hosting Themes Server and fix some issues
+*** */
