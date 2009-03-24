@@ -16,7 +16,7 @@
       <p class="<?php echo $classname; ?>"><?php echo $attachment_link; ?><br />
         <?php echo basename($post->guid); ?></p>
       <?php the_content('<p class="serif">Lees de rest van dit bericht &raquo;</p>'); ?>
-      <?php wp_link_pages(array('before' => '<p><strong>Pagina's:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
+      <?php wp_link_pages(array('before' => '<p><strong>Pagina\'s:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
       <p class="postmetadata alt"> <small> Dit bericht is geplaast
         <?php /* This is commented, because it requires a little adjusting sometimes.
 							You'll need to download this plugin, and follow the instructions:
