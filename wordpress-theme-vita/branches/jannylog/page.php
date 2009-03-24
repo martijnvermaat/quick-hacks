@@ -10,7 +10,7 @@
         </h2>
         <div class="entry">
           <?php the_content('<p class="serif">Lees de rest van de pagina &raquo;</p>'); ?>
-          <?php wp_link_pages(array('before' => '<p><strong>Pagina's:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
+          <?php wp_link_pages(array('before' => '<p><strong>Pagina\'s:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
         </div>
       </div>
 
