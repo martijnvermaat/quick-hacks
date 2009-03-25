@@ -7,12 +7,12 @@
 <div id="footer-out">
   <div id="footer">
     <hr />
+    <p>&copy; 2009 Janny Vermaat</p>
     <p> <strong>
       <?php bloginfo('name');?>
-      </strong> &copy; Powered by <a href="http://wordpress.org/">WordPress
+      </strong> op <a href="http://wordpress.org/">WordPress
       <?php bloginfo('version'); ?>
-      </a> </p>
-    <p class="right"> <span><a href="http://wpgpl.com/themes/vita/" title="WordPress Theme: Vita">Vita</a> 1.5 design by <a href="http://wpgpl.com/">WP GPL</a></span></p>
+      </a> met thema <a href="http://wpgpl.com/themes/vita/" title="WordPress Theme: Vita">Vita</a> 1.5 door <a href="http://wpgpl.com/">WP GPL</a></p>
     <br class="clear" />
   </div>
 </div>
