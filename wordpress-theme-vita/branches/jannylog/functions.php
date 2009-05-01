@@ -13,7 +13,7 @@ function J_ShowAbout() { ?>
 
 <li class="about boxr">
   <h2>Over mij</h2>
-  <p>Ik ben Janny, 54 jaar, getrouwd en moeder van 4 kinderen die niet meer
+  <p>Ik ben Janny, 55 jaar, getrouwd en moeder van 4 kinderen die niet meer
 thuis wonen. Ongeveer 18 jaar geleden ben ik begonnen met patchwork en
 quilten en dit doe ik nog steeds met veel plezier. Afgelopen jaar zijn we
 verhuisd van een heel oud huis naar een nieuw huis waarin ik een fijne
