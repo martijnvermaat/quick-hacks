@@ -1,3 +1,49 @@
+/***********************************************************************
+
+    Competitie rekending
+
+    0.1, 2009-08-17
+    Martijn Vermaat, martijn@vermaat.name
+
+    Given a time or distance performed at a competition event, calculate
+    the number of points.
+
+    Formulas are taken from 'Formules en Constanten' [1], January 2004
+    version, part of Wedstrijdreglement Atletiekunie.
+
+    [1] http://www.atletiekunie.nl/upload/File/Dutch_Athletes/Formules%20en%20constanten%20(20-11-03).doc
+
+***********************************************************************/
+
+
+/***********************************************************************
+
+    Available functions
+
+    ********************************************************************
+
+    calculator.events()
+
+    Returns an array of event titles. The array indices can be used as
+    the first parameter to the calculate function.
+
+    ********************************************************************
+
+    calculator.calculate(event, sex, performance)
+
+        event:       index
+        sex:         boolean
+        performance: distance or time
+
+    Returns number of points as integer. The value true for  parameter
+    sex indicates a male athlete, false a female athlete. The
+    performance parameter is either a distance in meters as float, or a
+    time in seconds as float. A time in seconds is optionally preceeded
+    by a time in minutes as float and a : character.
+
+***********************************************************************/
+
+
 var calculator = function() {
 
 
