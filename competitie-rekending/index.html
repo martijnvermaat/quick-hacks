@@ -31,7 +31,7 @@ function calculate() {
                                   document.getElementById('male').checked,
                                   document.getElementById('performance').value);
 
-    output = (result == -1) ? '' : result.toString() + ' punten';
+    output = (isNaN(result)) ? '' : result.toString() + ' punten';
 
     document.getElementById('result').firstChild.nodeValue = output;
 
@@ -43,7 +43,7 @@ function calculate() {
 <p>Tijden in seconden, afstanden in meters.</p>
 
 <p>
-<select id="events" name="events" onclick="calculate()">
+<select id="events" name="events" onkeyup="calculate()" onchange="calculate()">
     <option value="dummy">Kies een onderdeel
 </select>
 </p>
