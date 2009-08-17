@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="calculate.js">var dummy;</script>
+    <title>Competitie puntentelling</title>
+</head>
+
+<body>
+
+<script type="text/javascript">
+window.onload = function() {
+
+    var events = calculator.events();
+    var list = document.getElementById('events');
+    var option;
+
+    for (i = 0; i < events.length; i++) {
+        option = document.createElement('option');
+        option.value = i;
+        option.appendChild(document.createTextNode(events[i]));
+        list.appendChild(option);
+    }
+
+};
+
+function calculate() {
+
+    result = calculator.calculate(document.getElementById('events').value,
+                                  document.getElementById('male').checked,
+                                  document.getElementById('performance').value);
+
+    output = (result == -1) ? '' : result.toString() + ' punten';
+
+    document.getElementById('result').firstChild.nodeValue = output;
+
+}
+</script>
+
+<h1>Competitie rekending</h1>
+
+<p>Tijden is seconden, afstanden in meters.</p>
+
+<select id="events" name="events" onclick="calculate()">
+    <option value="dummy">Kies een onderdeel
+</select>
+<input type="radio" name="sex" id="male" onclick="calculate()" checked="true"><label for="male">Mannen</label>
+<input type="radio" name="sex" id="female" onclick="calculate()"><label for="female">Vrouwen</label>
+<input type="text" name="performance" id="performance" onkeyup="calculate()">
+
+<p id="result">
+
+</body>
+
+</html>
