@@ -4,7 +4,7 @@ var calculator = function() {
     function timeFunction(a, b) {
 
         return function(time) {
-            return Math.round(a / time - b);  // Math.floor ?
+            return Math.floor(a / time - b);
         };
 
     };
@@ -13,7 +13,7 @@ var calculator = function() {
     function distanceFunction(a, b) {
 
         return function(distance) {
-            return Math.round(a * Math.sqrt(distance) - b);  // Math.floor ?
+            return Math.floor(a * Math.sqrt(distance) - b);
         };
 
     };
