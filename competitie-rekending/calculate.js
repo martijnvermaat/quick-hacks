@@ -40,6 +40,7 @@
     performance parameter is either a distance in meters as float, or a
     time in seconds as float. A time in seconds is optionally preceeded
     by a time in minutes as float and a : character.
+    Returns NaN in case of invalid parameter values.
 
     ********************************************************************
 
@@ -51,6 +52,7 @@
 
     Returns performance as a formatted string. See the points function
     for parameters event and sex.
+    Returns the empty string in case of invalid parameter values.
 
 ***********************************************************************/
 
@@ -62,7 +64,13 @@ var calculator = function() {
 
         return {
             points: function(time) {
-                return Math.max(0, Math.floor(a / time - b));
+                var parts = time.split(':');
+                var parsedTime = 0.0;
+                for (i = 0; i < parts.length; i++)
+                    parsedTime += parseFloat(parts[i]) * Math.pow(60, parts.length - i - 1);
+                if (isNaN(parsedTime) || parsedTime <= 0)
+                    return Number.NaN;
+                return Math.max(0, Math.floor(a / parsedTime - b));
             },
             performance: function(points) {
                 var performance;
@@ -90,7 +98,10 @@ var calculator = function() {
 
         return {
             points: function(distance) {
-                return Math.max(0, Math.floor(a * Math.sqrt(distance) - b));
+                var parsedDistance = parseFloat(distance);
+                if (isNaN(parsedDistance) || parsedDistance <= 0)
+                    return Number.NaN;
+                return Math.max(0, Math.floor(a * Math.sqrt(parsedDistance) - b));
             },
             performance: function(points) {
                 return Math.pow((points + b) / a, 2).toFixed(2).toString();
@@ -176,16 +187,8 @@ var calculator = function() {
 
             var f;
             var parsedEvent = parseInt(event);
-            var parts = performance.split(':');
-            var parsedPerformance = 0;
 
-            for (i = 0; i < parts.length; i++)
-                parsedPerformance += parseFloat(parts[i]) * Math.pow(60, parts.length - i - 1);
-
-            if (isNaN(parsedEvent) || isNaN(parsedPerformance))
-                return Number.NaN;
-
-            if (parsedPerformance <= 0)
+            if (isNaN(parsedEvent))
                 return Number.NaN;
 
             if (parsedEvent < 0 || parsedEvent >= events.length)
@@ -193,7 +196,7 @@ var calculator = function() {
 
             f = (sex) ? events[parsedEvent].men : events[parsedEvent].women;
 
-            return f.points(parsedPerformance);
+            return f.points(performance);
 
         },
 
