@@ -2,11 +2,11 @@
 
     Competitie rekending
 
-    0.1, 2009-08-17
+    0.2, 2009-08-18
     Martijn Vermaat, martijn@vermaat.name
 
     Given a time or distance performed at a competition event, calculate
-    the number of points.
+    the number of points. And the other way around.
 
     Formulas are taken from 'Formules en Constanten' [1], January 2004
     version, part of Wedstrijdreglement Atletiekunie.
@@ -29,17 +29,28 @@
 
     ********************************************************************
 
-    calculator.calculate(event, sex, performance)
+    calculator.points(event, sex, performance)
 
         event:       index
         sex:         boolean
         performance: distance or time
 
-    Returns number of points as integer. The value true for  parameter
+    Returns number of points as integer. The value true for parameter
     sex indicates a male athlete, false a female athlete. The
     performance parameter is either a distance in meters as float, or a
     time in seconds as float. A time in seconds is optionally preceeded
     by a time in minutes as float and a : character.
+
+    ********************************************************************
+
+    calculator.performance(event, sex, points)
+
+        event:  index
+        sex:    boolean
+        points: integer
+
+    Returns performance as a formatted string. See the points function
+    for parameters event and sex.
 
 ***********************************************************************/
 
@@ -47,74 +58,103 @@
 var calculator = function() {
 
 
-    function timeFunction(a, b) {
+    function timeEvent(a, b) {
 
-        return function(time) {
-            return Math.floor(a / time - b);
+        return {
+            points: function(time) {
+                return Math.max(0, Math.floor(a / time - b));
+            },
+            performance: function(points) {
+                var performance;
+                var seconds = a / (points + b);
+                if (seconds <= 0.0)
+                    return '';
+                if (seconds >= 60.0) {
+                    minutes = Math.floor(seconds / 60);
+                    seconds = (seconds % 60).toFixed(2);
+                    if (seconds >= 10.0)
+                        performance = minutes + ':' + seconds;
+                    else
+                        performance = minutes + ':0' + seconds;
+                } else {
+                    performance = seconds.toFixed(2).toString();
+                }
+                return performance;
+            }
         };
 
     };
 
 
-    function distanceFunction(a, b) {
+    function distanceEvent(a, b) {
 
-        return function(distance) {
-            return Math.floor(a * Math.sqrt(distance) - b);
+        return {
+            points: function(distance) {
+                return Math.max(0, Math.floor(a * Math.sqrt(distance) - b));
+            },
+            performance: function(points) {
+                return Math.pow((points + b) / a, 2).toFixed(2).toString();
+            }
         };
 
     };
 
 
-    var noFunction = function(performance) {
-        return Number.NaN;
-    }
+    var noEvent = {
+        points: function(performance) {
+            return Number.NaN;
+        },
+        performance: function(points) {
+            return '';
+        }
+    };
 
 
     var events = [
         {
             title: '100 meter',
-            men:   timeFunction(29550.0, 1881.50),
-            women: timeFunction(30672.00, 1682.50)
+            men:   timeEvent(29550.0, 1881.50),
+            women: timeEvent(30672.00, 1682.50)
         },
         {
             title: '200 meter',
-            men:   timeFunction(52611.4, 1547.10),
-            women: timeFunction(54720.00, 1342.00)
+            men:   timeEvent(52611.4, 1547.10),
+            women: timeEvent(54720.00, 1342.00)
         },
         {
             title: '400 meter',
-            men:   timeFunction(111960.0, 1433.50),
-            women: timeFunction(111720.00, 1084.50)
+            men:   timeEvent(111960.0, 1433.50),
+            women: timeEvent(111720.00, 1084.50)
         },
         {
             title: '800 meter',
-            men:   timeFunction(248544.0, 1323.20),
-            women: timeFunction(247200.00, 975.50)
+            men:   timeEvent(248544.0, 1323.20),
+            women: timeEvent(247200.00, 975.50)
         },
         {
             title: '1500 meter',
-            men:   timeFunction(489971.4, 1224.70),
-            women: timeFunction(557448.00, 1181.50)
+            men:   timeEvent(489971.4, 1224.70),
+            women: timeEvent(557448.00, 1181.50)
         },
         {
             title: '5000 meter',
-            men:   timeFunction(1786833.9, 1145.00),
-            women: noFunction
+            men:   timeEvent(1786833.9, 1145.00),
+            women: noEvent
         },
         {
             title: 'Hoogspringen',
-            men:   distanceFunction(2440.0, 2593.5),
-            women: distanceFunction(2635.6, 2501.5)
+            men:   distanceEvent(2440.0, 2593.5),
+            women: distanceEvent(2635.6, 2501.5)
         },
         {
             title: 'Verspringen',
-            men:   distanceFunction(1094.4, 2075.3),
-            women: distanceFunction(1076.3, 1729.4)
+            men:   distanceEvent(1094.4, 2075.3),
+            women: distanceEvent(1076.3, 1729.4)
         },
         {
             title: 'Discuswerpen',
-            men:   distanceFunction(249.8, 893.5),
-            women: distanceFunction(224.8, 686.5)
+            men:   distanceEvent(249.8, 893.5),
+            women: distanceEvent(224.8, 686.5)
         }
     ];
 
@@ -132,7 +172,7 @@ var calculator = function() {
         },
 
 
-        calculate: function(event, sex, performance) {
+        points: function(event, sex, performance) {
 
             var f;
             var parsedEvent = parseInt(event);
@@ -151,13 +191,34 @@ var calculator = function() {
             if (parsedEvent < 0 || parsedEvent >= events.length)
                 return Number.NaN;
 
-            var event = events[parsedEvent];
+            f = (sex) ? events[parsedEvent].men : events[parsedEvent].women;
 
-            f = (sex) ? event.men : event.women;
+            return f.points(parsedPerformance);
 
-            return Math.max(0, f(parsedPerformance));
+        },
 
-        }
+
+        performance: function(event, sex, points) {
+
+            var f;
+            var parsedEvent = parseInt(event);
+            var parsedPoints = parseInt(points);
+
+            if (isNaN(parsedEvent) || isNaN(parsedPoints))
+                return '';
+
+            if (parsedPoints < 0)
+                return '';
+
+            if (parsedEvent < 0 || parsedEvent >= events.length)
+                return '';
+
+            f = (sex) ? events[parsedEvent].men : events[parsedEvent].women;
+
+            return f.performance(parsedPoints);
+
+        },
+
 
     };
 

@@ -10,6 +10,11 @@
 <body>
 
 <script type="text/javascript">
+var TO_POINTS = 0;
+var TO_PERFORMANCE = 1;
+
+var direction = TO_POINTS;
+
 window.onload = function() {
 
     var events = calculator.events();
@@ -27,14 +32,35 @@ window.onload = function() {
 
 function calculate() {
 
-    result = calculator.calculate(document.getElementById('events').value,
-                                  document.getElementById('male').checked,
-                                  document.getElementById('performance').value);
+    var target;
+    var output = '';
 
-    output = (isNaN(result)) ? '' : result.toString() + ' punten';
+    if (direction == TO_POINTS) {
+        target = 'points';
+        points = calculator.points(document.getElementById('events').value,
+                                   document.getElementById('male').checked,
+                                   document.getElementById('performance').value);
+        if (!isNaN(points))
+            output = points.toString();
+    } else {
+        target = 'performance';
+        output = calculator.performance(document.getElementById('events').value,
+                                        document.getElementById('male').checked,
+                                        document.getElementById('points').value);
+    }
 
-    document.getElementById('result').firstChild.nodeValue = output;
+    document.getElementById(target).value = output;
 
+}
+
+function to_points() {
+    direction = TO_POINTS;
+    calculate();
+}
+
+function to_performance() {
+    direction = TO_PERFORMANCE;
+    calculate();
 }
 </script>
 
@@ -52,10 +78,12 @@ function calculate() {
 </p>
 
 <p>
-<input type="text" name="performance" id="performance" onkeyup="calculate()">
+<input type="text" name="performance" id="performance" onkeyup="to_points()">
 </p>
 
-<p id="result">
+<p>
+<input type="text" name="points" id="points" onkeyup="to_performance()">
+</p>
 
 </body>
 
