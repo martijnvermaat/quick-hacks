@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script type="text/javascript" src="calculate.js">var dummy;</script>
+    <script type="text/javascript" src="calculate.js"></script>
     <title>Competitie rekending</title>
 </head>
 
@@ -37,9 +37,9 @@ function calculate() {
 
     if (direction == TO_POINTS) {
         target = 'points';
-        points = calculator.points(document.getElementById('events').value,
-                                   document.getElementById('male').checked,
-                                   document.getElementById('performance').value);
+        var points = calculator.points(document.getElementById('events').value,
+                                       document.getElementById('male').checked,
+                                       document.getElementById('performance').value);
         if (!isNaN(points))
             output = points.toString();
     } else {

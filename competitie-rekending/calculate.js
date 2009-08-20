@@ -220,7 +220,7 @@ var calculator = function() {
 
             return f.performance(parsedPoints);
 
-        },
+        }
 
 
     };
