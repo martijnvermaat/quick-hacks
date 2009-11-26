@@ -31,7 +31,7 @@ var $services = array('AdGroup'   => null,
 var $auth_account_type = 'GOOGLE';
 var $auth_service = 'adwords';
 
-var $soap_endpoint = 'https://adwords-sandbox.google.com/api/adwords/cm/v200906';
+var $soap_endpoint = 'https://adwords-sandbox.google.com/api/adwords/cm/v200909';
 var $soap_wsdl = 'wsdl';
 
 var $namespace = 'https://adwords.google.com/api/adwords/cm/v200909';
@@ -58,10 +58,122 @@ function Adwords($email, $password, $client_email, $developer_token,
 }
 
 
-function get_all_ad_groups($campaign_id) {
+function get_campaigns($number = 0, $first = 0) {
+
+    $selector = $this->__campaign_selector_ids(array(),
+                                               $number,
+                                               $first);
+
+    return $this->__get_campaigns($selector);
+
+}
+
+
+function get_ad_groups_by_campaign($campaign_id, $number = 0, $first = 0) {
+
+    $selector = $this->__ad_group_selector_campaign_id($campaign_id,
+                                                       $number,
+                                                       $first);
+
+    return $this->__get_ad_groups($selector);
+
+}
+
+
+function get_criteria_by_ad_group($ad_group_id, $number = 0, $first = 0) {
+
+    $selector = $this->__criteria_selector_ad_group_id($ad_group_id,
+                                                       $number,
+                                                       $first);
+
+    return $this->__get_criteria($selector);
+
+}
+
+
+function __get_campaigns($selector) {
+
+    $request = '<get xmlns="'.$this->namespace.'">'.$selector.'</get>';
+
+    return $this->__call_service('CampaignService', $request, 'get');
+
+}
+
+
+function __get_ad_groups($selector) {
+
+    $request = '<get xmlns="'.$this->namespace.'">'.$selector.'</get>';
+
+    return $this->__call_service('AdGroupService', $request, 'get');
+
+}
+
+
+function __get_criteria($selector) {
+
+    $request = '<get xmlns="'.$this->namespace.'">'.$selector.'</get>';
+
+    return $this->__call_service('AdGroupCriterionService', $request, 'get');
+
+}
+
+
+function __campaign_selector_ids($campaign_ids, $number, $first) {
+
+    $paging = $this->__paging($number, $first);
+
+    return '<selector>
+              <ids>'.implode(' ', $campaign_ids).'</ids>
+              '.$paging.'
+            </selector>';
+
+}
+
+
+function __ad_group_selector_campaign_id($campaign_id, $number, $first) {
+
+    $paging = $this->__paging($number, $first);
+
+    return '<selector>
+              <campaignId>'.$campaign_id.'</campaignId>
+              '.$paging.'
+            </selector>';
+
+}
+
+
+function __criteria_selector_ad_group_id($ad_group_id, $number, $first) {
+
+    $paging = $this->__paging($number, $first);
+
+    return '<selector>
+              <idFilters>
+                <adGroupId>'.$ad_group_id.'</adGroupId>
+              </idFilters>
+              '.$paging.'
+            </selector>';
+
+}
+
+
+function __paging($number, $first) {
+
+    if ($number == 0) {
+        return '';
+    } else {
+        return '<paging>
+                  <startIndex>'.$first.'</startIndex>
+                  <numberResults>'.$number.'</numberResults>
+                </paging>';
+    }
+
+}
+
+
+function __call_service($name, $request, $request_type = 'get') {
 
     $auth = $this->__get_auth_token();
-    $service = $this->__get_service('AdGroupService');
+    $service = $this->__get_service($name);
 
     $headers =
 '<RequestHeader xmlns="' . $this->namespace . '">' .
@@ -75,35 +187,26 @@ function get_all_ad_groups($campaign_id) {
     $service->setHeaders($headers);
     $service->soap_defencoding = 'UTF-8';
 
-    $request_xml =
-  '<get xmlns="' . $this->namespace . '">' .
-  '<selector>' .
-  '<campaignId>' . $campaign_id . '</campaignId>' .
-  '</selector>' .
-'</get>';
+    $response = $service->call($request_type, $request);
 
-    $groups = $service->call('get', $request_xml);
-    $groups = $groups['rval']['entries'];
-
+    /* TODO
     if ($service->fault) {
         $this->show_fault($service);
+        // There is also something in $response['faultcode'] and $response['faultstring']
         return;
     }
+    */
 
-    # Convert to a list if we get back a single object.
-    if (!$groups[0]) {
-        $groups = array($groups);
+    $result = $response['rval'];
+
+    // TODO: move array casting to specific GET handling
+
+    /* Make sure we always return a list of result entries */
+    if (!$result['entries'][0]) {
+        $result['entries'] = array($result['entries']);
     }
 
-    # Display group info.
-    for ($i = 0; $i < count($groups); $i++) {
-        if ($groups[$i]) {
-            echo "\n\n";
-            print_r($groups[$i]);
-            //echo 'Group status is "' . $groups[$i]['status'] . '" and id is "' .
-            //$ads[$i]['ad']['id'] . '".' . "\n";
-        }
-    }
+    return $result;
 
 }
 
