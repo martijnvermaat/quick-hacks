@@ -2,8 +2,9 @@
 
     Competitie rekending
 
-    0.2, 2009-08-18
-    Martijn Vermaat, martijn@vermaat.name
+    0.3, 2010-01-27
+    Martijn Vermaat <martijn@vermaat.name>
+    Sander van der Kruyssen <sandiaan@gmail.com>
 
     Given a time or distance performed at a competition event, calculate
     the number of points. And the other way around.
@@ -148,9 +149,39 @@ var calculator = function() {
             women: timeEvent(557448.00, 1181.50)
         },
         {
+            title: '3000 meter',
+            men:   noEvent,
+            women: timeEvent(1197450.00, 1176.00)
+        },
+        {
             title: '5000 meter',
             men:   timeEvent(1786833.9, 1145.00),
             women: noEvent
+        },
+        {
+            title: '100 meter horden',
+            men:   noEvent,
+            women: timeEvent(24672.00, 895.50)
+        },
+        {
+            title: '110 meter horden',
+            men:   timeEvent(23955.3, 747.90),
+            women: noEvent
+        },
+        {
+            title: '400 meter horden',
+            men:   timeEvent(96830.9, 912.80),
+            women: timeEvent(112752.00, 925.70),
+        },
+        {
+            title: '4*100 meter',
+            men:   timeEvent(118175.1, 1880.65),
+            women: timeEvent(122328.00, 1677.75)
+        },
+        {
+            title: 'Zweedse estafette',
+            men:   timeEvent(247800.0, 1126.00),
+            women: timeEvent(261981.50, 865.00)
         },
         {
             title: 'Hoogspringen',
@@ -158,14 +189,34 @@ var calculator = function() {
             women: distanceEvent(2635.6, 2501.5)
         },
         {
+            title: 'Polsstokhoogspringen',
+            men:   distanceEvent(1040.0, 1272.5),
+            women: noEvent
+        },
+        {
             title: 'Verspringen',
             men:   distanceEvent(1094.4, 2075.3),
             women: distanceEvent(1076.3, 1729.4)
         },
         {
+            title: 'Hinkstapspringen',
+            men:   distanceEvent(762.9, 2074.5),
+            women: distanceEvent(750.3, 1730.6)
+        },
+        {
+            title: 'Kogelstoten',
+            men:   distanceEvent(462.5, 1001.8),
+            women: distanceEvent(429.5, 768.3)
+        },
+        {
             title: 'Discuswerpen',
             men:   distanceEvent(249.8, 893.5),
             women: distanceEvent(224.8, 686.5)
+        },
+        {
+            title: 'Speerwerpen',
+            men:   distanceEvent(190.2, 711.3),
+            women: distanceEvent(197.5, 482.5)
         }
     ];
 
