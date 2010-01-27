@@ -3,86 +3,33 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script type="text/javascript" src="calculate.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="calculator.js"></script>
+    <script type="text/javascript" src="ui.js"></script>
     <title>Competitie rekending</title>
 </head>
 
 <body>
 
-<script type="text/javascript">
-var TO_POINTS = 0;
-var TO_PERFORMANCE = 1;
-
-var direction = TO_POINTS;
-
-window.onload = function() {
-
-    var events = calculator.events();
-    var list = document.getElementById('events');
-    var option;
-
-    for (i = 0; i < events.length; i++) {
-        option = document.createElement('option');
-        option.value = i;
-        option.appendChild(document.createTextNode(events[i]));
-        list.appendChild(option);
-    }
-
-};
-
-function calculate() {
-
-    var target;
-    var output = '';
-
-    if (direction == TO_POINTS) {
-        target = 'points';
-        var points = calculator.points(document.getElementById('events').value,
-                                       document.getElementById('male').checked,
-                                       document.getElementById('performance').value);
-        if (!isNaN(points))
-            output = points.toString();
-    } else {
-        target = 'performance';
-        output = calculator.performance(document.getElementById('events').value,
-                                        document.getElementById('male').checked,
-                                        document.getElementById('points').value);
-    }
-
-    document.getElementById(target).value = output;
-
-}
-
-function to_points() {
-    direction = TO_POINTS;
-    calculate();
-}
-
-function to_performance() {
-    direction = TO_PERFORMANCE;
-    calculate();
-}
-</script>
-
 <h1>Competitie rekending</h1>
 
 <p>
-<select id="events" name="events" onkeyup="calculate()" onchange="calculate()">
+<select id="events" name="events">
     <option value="dummy">Kies een onderdeel
 </select>
 </p>
 
 <p>
-<input type="radio" name="sex" id="male" onclick="calculate()" checked="checked"><label for="male">Mannen</label>
-<input type="radio" name="sex" id="female" onclick="calculate()"><label for="female">Vrouwen</label>
+<input type="radio" name="sex" id="male" checked="checked"><label for="male">Mannen</label>
+<input type="radio" name="sex" id="female"><label for="female">Vrouwen</label>
 </p>
 
 <p>
-Prestatie: <input type="text" name="performance" id="performance" onkeyup="to_points()">
+Prestatie: <input type="text" name="performance" id="performance">
 </p>
 
 <p>
-Punten: <input type="text" name="points" id="points" onkeyup="to_performance()">
+Punten: <input type="text" name="points" id="points">
 </p>
 
 </body>
