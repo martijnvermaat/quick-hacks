@@ -3,6 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="screen.css">
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="calculator.js"></script>
     <script type="text/javascript" src="ui.js"></script>
@@ -13,24 +14,35 @@
 
 <h1>Competitie rekending</h1>
 
-<p>
-<select id="events" name="events">
-    <option value="dummy">Kies een onderdeel
-</select>
-</p>
+<ol class="fields">
+    <li>
+        <a href="#" id="bookmark" title="Bewaar dit resultaat">Bewaar dit resultaat</a>
+        <select id="events" name="events">
+            <option value="dummy">Kies een onderdeel
+        </select>
+    </li>
+    <li>
+        <input type="radio" name="sex" id="male" checked="checked"><label for="male">Mannen</label>
+        <input type="radio" name="sex" id="female"><label for="female">Vrouwen</label>
+    </li>
+    <li>
+        <label for="performance">Prestatie</label>
+        <input type="text" name="performance" id="performance">
+    </li>
+    <li>
+        <label for="points">Punten</label>
+        <input type="text" name="points" id="points">
+    </li>
+</ol>
 
-<p>
-<input type="radio" name="sex" id="male" checked="checked"><label for="male">Mannen</label>
-<input type="radio" name="sex" id="female"><label for="female">Vrouwen</label>
-</p>
+<ul id="bookmarks">
+</ul>
 
-<p>
-Prestatie: <input type="text" name="performance" id="performance">
-</p>
+<p id="sum"></p>
 
-<p>
-Punten: <input type="text" name="points" id="points">
-</p>
+<p class="note">Berekeningen komen uit
+  het <a href="http://www.atletiekunie.nl/upload/File/Dutch_Athletes/Formules%20en%20constanten%20(20-11-03).doc">wedstrijdreglement</a>
+  en <a href="http://www.phanos.org/">Phanos</a> is de beste club van het hele land.</p>
 
 </body>
 
