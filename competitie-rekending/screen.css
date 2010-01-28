@@ -1,3 +1,7 @@
+html {
+    background          :   #eee;
+}
+
 body {
     margin              :   10px;
     background          :   #eee;
@@ -51,8 +55,12 @@ ol.fields, #bookmarks {
 
 ol.fields li, #bookmarks li {
     list-style          :   none;
-    padding             :   5px 0 5px 0;
+    padding             :   0;
     margin              :   0;
+}
+
+ol.fields li {
+    padding             :   4px 0 4px 0;
 }
 
 #bookmark, .remove {
