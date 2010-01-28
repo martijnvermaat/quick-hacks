@@ -3,9 +3,12 @@ $(document).ready(function() {
 
     var TO_POINTS = 0;
     var TO_PERFORMANCE = 1;
-
     var direction = TO_POINTS;
-    var sum = 0;
+
+    var re_querystring = /^([^#?]*\??[^#]*)#?(.*)/;
+    var location = window.location.href;
+
+    var bookmarks = [];
 
 
     var calculate = function() {
@@ -23,61 +26,131 @@ $(document).ready(function() {
                                        $('#points').val()));
         }
 
-        if (isNaN(parseInt($('#events').val()))
-            || $('#points').val() == ''
-            || $('#performance').val() == '')
-            $('#bookmark').hide();
-        else
-            $('#bookmark').show();
+        updateBookmark();
 
     };
 
 
-    var to_points = function() {
+    var toPoints = function() {
         direction = TO_POINTS;
         calculate();
     };
 
 
-    var to_performance = function() {
+    var toPerformance = function() {
         direction = TO_PERFORMANCE;
         calculate();
     };
 
 
-    var bookmark = function() {
+    var updateBookmark = function() {
+
+        $('#bookmark').unbind('click');
+
+        if (isNaN(parseInt($('#events').val()))
+            || $('#points').val() == ''
+            || $('#performance').val() == '') {
+
+            $('#bookmark').bind('click', function() {
+                return false;
+            }).addClass('disabled');
+
+        } else {
+
+            $('#bookmark').click(function() {
+                bookmark($('#events').val(),
+                         $('#male').is(':checked'),
+                         $('#performance').val(),
+                         $('#points').val());
+                return false;
+            }).removeClass('disabled');
+
+        }
+
+    };
+
+
+    var bookmark = function(event, sex, performance, points) {
+
+        var hash = Math.floor(Math.random() * 100000000);
+
+        bookmarks.push({'hash'        : hash,
+                        'event'       : event,
+                        'sex'         : sex,
+                        'performance' : performance,
+                        'points'      : points});
 
         var r = $('<a href="#" class="remove">Verwijder dit resultaat</a>');
         r.attr('title', r.text()).click(function() {
+            bookmarks = $.grep(bookmarks, function(b, i) {
+                return b.hash != hash;
+            });
             $(this).parent().remove();
-            updateSum(-parseInt($('#points').val())); // TODO: this doesn't use current value of points
+            updateLink();
             return false;
         });
 
-        var sex = $('#male').is(':checked') ? 'm' : 'v';
-        var s = $('#events option:selected').text() + ' (' + sex + '): ' + $('#performance').val() + ', ' + $('#points').val();
+        var s = $('#events option[value=' + event + ']').text();
+        s += ' (' + (sex ? 'm' : 'v') + '): ';
+        s += performance + ', ' + points;
 
         $('#bookmarks').append(
             $('<li>').text(s).prepend(r)
         );
 
-        updateSum(parseInt($('#points').val()));
+        updateLink();
 
     };
 
 
-    var updateSum = function(points) {
+    var updateLink = function() {
 
-        sum += points;
-        var count = $('#bookmarks li').length;
+        $('#link').attr(
+            'href',
+            location.replace(re_querystring, '$1') + '#' +
+                encodeURIComponent(JSON.stringify(bookmarks))
+        );
 
-        if (count > 1) {
-            $('#sum').text(count + ' resultaten met een totaal van ' + sum + ' punten.').show();
+        if (bookmarks.length > 0) {
+            $('#bookmarks-title').show();
         } else {
-            $('#sum').hide();
+            $('#bookmarks-title').hide();
         }
 
-    }
+    };
+
+
+    var loadBookmarks = function() {
+
+        var s = decodeURIComponent(location.replace(re_querystring, '$2'));
+
+        try {
+            var p = JSON.parse(s);
+            for (i = 0; i < p.length; i++) {
+                bookmark(p[i].event, p[i].sex, p[i].performance, p[i].points);
+            }
+        } catch (e) {}
+
+    };
+
+
+    var ignoreNav = function(callback) {
+        // Call callback if key was not <tab> or <shift>
+        return function(e) {
+            if (e.keyCode != 9 && e.keyCode != 0)
+                callback(e);
+        };
+    };
+
+    var bookmarkShortcut = function(e) {
+        // Key 'b'
+        if (e.which == 98 || e.which == 66) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!$('#bookmark').hasClass('disabled'))
+                $('#bookmark').click();
+        }
+    };
 
 
     var events = calculator.events();
@@ -88,12 +161,14 @@ $(document).ready(function() {
 
     $('#male, #female').click(calculate);
 
-    $('#performance').keyup(to_points);
-    $('#points').keyup(to_performance);
+    $('#performance').keyup(ignoreNav(toPoints));
+    $('#points').keyup(ignoreNav(toPerformance));
 
-    $('#bookmark').click(function() { bookmark(); return false; }).hide();
+    $(document).keypress(bookmarkShortcut);
 
-    $('#sum').hide();
+    updateLink();
+    updateBookmark();
+    loadBookmarks();
 
 
 });
