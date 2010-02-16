@@ -11,7 +11,7 @@
       <?php bloginfo('name');?>
       </strong> op <a href="http://wordpress.org/">WordPress</a>
       <?php bloginfo('version'); ?>
-      met thema <a href="http://wpgpl.com/themes/vita/" title="WordPress Theme: Vita">Vita</a> 1.5 door <a href="http://wpgpl.com/">WP GPL</a></p>
+      met thema <a href="http://wpgpl.com/themes/vita/" title="WordPress Theme: Vita">Vita</a> 1.6 door <a href="http://wpgpl.com/">WP GPL</a></p>
     <p>&copy; 2009 Janny Vermaat</p>
     <br class="clear" />
   </div>

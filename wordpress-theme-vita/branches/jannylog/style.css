@@ -2,13 +2,13 @@
 Theme Name: vita
 Theme URI: http://wpgpl.com/themes/vita/
 Description: Vita is Red, Gree, and White theme. This theme is 3 Columns and Perfect for Make money online
-Version: 1.5
+Version: 1.6
 Author: Nurudin Jauhari
 Author URI: http://wpgpl.com/
 Tags: three-columns,fixed-width, red, green,custom-header
 	
 	Crafted on 21 July 2008
-	Last Edit: 15 March 2009 05.15  +7 GMT
+	Last Edit: 9 July 2009 6.36  +7 GMT
 
 	The CSS, XHTML and design is released under GPL:
 	http://www.opensource.org/licenses/gpl-license.php
@@ -153,6 +153,7 @@ br.clear {
 	color: #999;
 	width: 970px;
 	font-size: 120%;
+	position: relative;
 }
 #footer a {
 	color: #666;
@@ -213,7 +214,7 @@ br.clear {
 	font-weight: bold;
 }
 #navr ul li a:hover {
-	background: #AB1D1A;
+	background: #7C0000;
 	color: #fff;
 }
 #navr ul li.current_page_item a {
@@ -388,15 +389,11 @@ div.aligncenter {
 }
 
 .wp-caption {
-	border: 1px solid #ddd;
+	border: 1px solid #999 !important;
 	text-align: center;
 	background-color: #f3f3f3;
 	padding-top: 4px;
 	margin: 10px;
-	-moz-border-radius: 3px;
-	-khtml-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
 }
 
 .wp-caption img {
@@ -625,11 +622,19 @@ img.iright {
 	border-right: 2px solid #000;
 	border-bottom: 2px solid #000;
 }
+#footer .right {
+	position: absolute;
+	text-align: right;
+	right: 0;
+	top: 0;
+}
 
 img.wp-smiley { 
    vertical-align: -25%; 
 	border: none;
 }
+img#wpstats{width:0px;height:0px;overflow:hidden}
+
 
 /* Change Log ****
 1.0	: First Public Released
@@ -638,4 +643,5 @@ img.wp-smiley {
 1.3	: Fix Comment Problem and Image Smiley
 1.4 : Fix Tag Layout, and Enable Threaded Comment (WordPress 2.7)
 1.5 : Move Hosting Themes Server and fix some issues
+1.6 : Fix Page comment problem and WP Caption
 *** */

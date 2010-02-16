@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <?php comments_template(); ?>
+      <?php comments_template('', true); ?>
 
       <?php endwhile; endif; ?>
       <?php edit_post_link('Bewerk deze pagina.', '<p>', '</p>'); ?>
