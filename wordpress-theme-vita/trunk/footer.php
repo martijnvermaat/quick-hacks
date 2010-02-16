@@ -12,7 +12,7 @@
       </strong> &copy; Powered by <a href="http://wordpress.org/">WordPress
       <?php bloginfo('version'); ?>
       </a> </p>
-    <p class="right"> <span><a href="http://wpgpl.com/themes/vita/" title="WordPress Theme: Vita">Vita</a> 1.5 design by <a href="http://wpgpl.com/">WP GPL</a></span></p>
+    <p class="right"> <span><a href="http://wpgpl.com/themes/vita/" title="WordPress Theme: Vita">Vita</a> 1.6 design by <a href="http://wpgpl.com/">WP GPL</a></span></p>
     <br class="clear" />
   </div>
 </div>
