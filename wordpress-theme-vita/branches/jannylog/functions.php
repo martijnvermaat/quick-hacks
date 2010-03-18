@@ -26,6 +26,11 @@ inrichten van onze nieuwe tuin.</p>
     <?php global $numcmnts;echo $numcmnts;?>
     </a></span> reacties</p>
 </li>
+<li class="quiltingbloggers boxr">
+<p>
+<a href="http://quiltinggallery.com/quilting-bloggers/" style="display:block;width=180px;height:70px;background:url('http://quiltinggallery.com/images/quilting-bloggers-180.jpg') center center no-repeat;text-indent:-1000em;">Quilting Bloggers</a>
+</p>
+</li>
 <?php }	function J_ShowRecentPosts() {?>
 <li class="boxr lasties">
   <h3>
