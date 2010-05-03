@@ -1,0 +1,44 @@
+#!/usr/bin/env perl
+
+# Martijn Vermaat, martijn@vermaat.name
+#
+# Usage:
+# ./updatejson < participants.txt > ~/www/lv/results.js
+#
+# This generates a JSON file with results for all students.
+
+print 'var results = [';
+
+$first = 1;
+
+while (<>) {
+
+    last unless /,/;
+    <>;
+
+    $login = <>;
+    $results = <>;
+
+    if ($login =~ /^\s*([a-z]+)/) {
+
+        print ', ' unless $first;
+        $first = 0;
+
+        print "{ 'name' : '$1', 'results' : [";
+
+        $f = 1;
+        for (split(' ', $results)) {
+            print ', ' unless $f;
+            $f = 0;
+            print '0' if /[0-9]-/;
+            print '1' if /[0-9]~/;
+            print '2' if /[0-9]\+/;
+        }
+
+        print ']}';
+
+    }
+
+}
+
+print '];';
