@@ -56,13 +56,13 @@ function showResults() {
                     for (var j = 0; j < results[i]['results'].length; j++) {
                         switch (results[i]['results'][j]) {
                         case 0:
-                            s += '<span class="fail">&#10008;</span>'
+                            s += '<span class="fail">&#8722;</span>'
                             break;
                         case 1:
                             s += '<span class="pass">&#10004;</span>'
                             break;
                         case 2:
-                            s += '<span class="perfect">&#9733;</span>'
+                            s += '<span class="perfect">&#9829;</span>'
                             break;
                         }
                     }
@@ -73,12 +73,10 @@ function showResults() {
             }
     });
 
-    $('.results').css({'background-color' : '#ccc', 'border' : 'none',
-                       'font-size': '16px', 'font-weight' : 'bold'});
-    $('.results span').css({'display' : 'inline-block', 'width' :
-                            '30px', 'text-align' : 'center'});
-    $('.fail').css({'color' : 'red'});
-    $('.pass').css({'color' : 'green'});
-    $('.perfect').css({'color' : 'yellow'});
+    $('.results').css({'border' : 'none'});
+    $('.results span').css({'display' : 'inline-block', 'width' : '30px', 'text-align' : 'center', 'text-shadow' : '2px 2px 1px grey', 'font-size': '24px', 'font-weight' : 'bold'});
+    $('.fail').css({'color' : 'black'});
+    $('.pass').css({'color' : 'blue'});
+    $('.perfect').css({'color' : 'red'});
 
 }
