@@ -34,6 +34,8 @@ Lemma vcast_intro :
 Proof.
 intros A R n m v1 v2 H1 H2 i H.
 dependent destruction H1.
+(** Still consistent universe... *)
 dependent destruction H2.
+(** Universe inconsistency *)
 apply H.
 Qed.
