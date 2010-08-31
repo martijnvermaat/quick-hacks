@@ -13,13 +13,11 @@ function J_ShowAbout() { ?>
 
 <li class="about boxr">
   <h2>Over mij</h2>
-  <p>Ik ben Janny, 55 jaar, getrouwd en moeder van 4 kinderen die niet meer
-thuis wonen. Ongeveer 18 jaar geleden ben ik begonnen met patchwork en
-quilten en dit doe ik nog steeds met veel plezier. Afgelopen jaar zijn we
-verhuisd van een heel oud huis naar een nieuw huis waarin ik een fijne
-hobbykamer heb. Ook vind ik het erg leuk om te koken, ik wil dan ook
-regelmatig een recept plaatsen. Verder wil ik verslag doen van het
-inrichten van onze nieuwe tuin.</p>
+<p>
+Ik ben Janny en ik schrijf op dit weblog over mijn hobby's. Naast
+patchwork en quilten zijn dit koken en de laatste jaren ook wandelen.
+Verder schrijf ik af en toe een berichtje over onze tuin. Reacties zijn
+altijd welkom.</p>
   <p class="stats">Ik heb: <span class="catr"><a title="<?php global $numcmnts;echo $numcmnts;?> berichten">
     <?php global $numposts;echo $numposts; ?>
     </a> berichten</span>, <span class="comr"><a title="<?php global $numcmnts;echo $numcmnts;?> reacties">
