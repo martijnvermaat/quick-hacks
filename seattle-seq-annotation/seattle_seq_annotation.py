@@ -3,15 +3,18 @@
 # Annotate variants using SeattleSeq Annotation.
 #
 # Given a VCF file with variants, submit the file to the SeattleSeq Annotation
-# web interface. The annotation result is retrieved as gzipped tab-separated
-# file.
+# web interface [1]. The annotation result is retrieved as gzipped
+# tab-separated file.
 #
 # Usage:
 #   ./seattle_seq_annotation.py <input.vcf>
 #
 # The result is written to disk as <input.vcf.annotation.gz>.
 #
-# Requires the poster Python library: http://atlee.ca/software/poster/
+# Requires the poster Python library [2].
+#
+# [1] http://gvs.gs.washington.edu/SeattleSeqAnnotation131/
+# [2] http://atlee.ca/software/poster/
 #
 # 2011-02-09, Martijn Vermaat <m.vermaat.hg@lumc.nl>
 
@@ -258,12 +261,14 @@ if __name__ == '__main__':
         print """Annotate variants using SeattleSeq Annotation.
 
 Given a VCF file with variants, submit the file to the SeattleSeq Annotation
-web interface. The annotation result is retrieved as gzipped tab-separated
+web interface [1]. The annotation result is retrieved as gzipped tab-separated
 file.
 
 Usage:
   ./seattle_seq_annotation.py <input.vcf>
 
-The result is written to disk as <input.vcf.annotation.gz>."""
+The result is written to disk as <input.vcf.annotation.gz>.
+
+[1] http://gvs.gs.washington.edu/SeattleSeqAnnotation131/"""
         sys.exit(1)
     seattle_seq_annotation(sys.argv[1])
