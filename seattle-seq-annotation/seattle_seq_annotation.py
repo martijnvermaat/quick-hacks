@@ -160,6 +160,13 @@ def wait_for_result(job_id, submitted_file):
             debug('Waiting: 0%')
             continue
 
+        # Todo: If we submit a file with 0 variants, the monitor page keeps
+        # saying '0 variations in your file have been processed', even after
+        # the job has finished (and an email has been sent).
+        # So from the monitor we cannot detect completion in this case. The
+        # only solution I can think of is checking the input file for this
+        # special case.
+
         processed, total = progress.group(1), progress.group(2)
 
         debug('Waiting: %s / %s' % (processed, total))
