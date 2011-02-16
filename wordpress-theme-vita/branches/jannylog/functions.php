@@ -18,11 +18,12 @@ Ik ben Janny en ik schrijf op dit weblog over mijn hobby's. Naast
 patchwork en quilten zijn dit koken en de laatste jaren ook wandelen.
 Verder schrijf ik af en toe een berichtje over onze tuin. Reacties zijn
 altijd welkom.</p>
-  <p class="stats">Ik heb: <span class="catr"><a title="<?php global $numcmnts;echo $numcmnts;?> berichten">
+<p>Mail: <a href="mailto:janny@vermaat.name">janny@vermaat.name</a></p>
+  <p class="stats">Ik heb:
     <?php global $numposts;echo $numposts; ?>
-    </a> berichten</span>, <span class="comr"><a title="<?php global $numcmnts;echo $numcmnts;?> reacties">
+    berichten,
     <?php global $numcmnts;echo $numcmnts;?>
-    </a></span> reacties</p>
+    reacties</p>
 </li>
 <li class="quiltingbloggers boxr">
 <p>

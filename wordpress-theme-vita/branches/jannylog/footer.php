@@ -12,7 +12,7 @@
       </strong> op <a href="http://wordpress.org/">WordPress</a>
       <?php bloginfo('version'); ?>
       met thema <a href="http://wpgpl.com/themes/vita/" title="WordPress Theme: Vita">Vita</a> 1.6 door <a href="http://wpgpl.com/">WP GPL</a></p>
-    <p>&copy; 2009 Janny Vermaat</p>
+    <p>&copy; 2009-2011 Janny Vermaat</p>
     <br class="clear" />
   </div>
 </div>
