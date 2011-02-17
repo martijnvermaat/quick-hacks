@@ -14,7 +14,7 @@
 #
 # Requires the poster Python library [2].
 #
-# [1] http://gvs.gs.washington.edu/SeattleSeqAnnotation131/
+# [1] http://snp.gs.washington.edu/SeattleSeqAnnotation131/
 # [2] http://atlee.ca/software/poster/
 #
 # 2011-02-10, Martijn Vermaat <m.vermaat.hg@lumc.nl>
@@ -52,7 +52,7 @@ COLUMNS = ['sampleAlleles',
            'clinicalAssociation']
 
 # SeattleSeq Annotation location
-BASE_URL = 'http://gvs.gs.washington.edu/SeattleSeqAnnotation131/'
+BASE_URL = 'http://snp.gs.washington.edu/SeattleSeqAnnotation131/'
 POST_URL = BASE_URL + 'BatchQueryServlet'
 
 
