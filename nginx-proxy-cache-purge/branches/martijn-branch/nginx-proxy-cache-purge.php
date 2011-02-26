@@ -52,7 +52,8 @@ foreach ($urls_unique as $uri) {
 };
 }
 
-add_action('edit_post', 'wpselect_cache');
+// http://wordpress.org/support/topic/plugin-nginx-proxy-cache-purge-not-working-on-wp-292
+add_action('publish_post', 'wpselect_cache');
 
 function wpselect_footer() {
 	$content = '<!-- Page created in ';
