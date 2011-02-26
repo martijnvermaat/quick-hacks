@@ -8,26 +8,33 @@ Author: John Levandowski
 Author URI: http://johnlevandowski.com/
 */
 
+function make_purge_path($path) {
+    if ($path) {
+        $parts = explode('/', $path);
+        if (count($parts) > 2) {
+            return '/log/purge/'.implode('/', array_slice($parts, 2));
+        }
+    }
+    return '/log/purge/';
+}
+
 function wpselect_cache($post_id) {
 #post/page purge url
 $link = get_permalink($post_id);
 $parse = parse_url($link);
-$post_url = $parse[scheme].'://'.$parse[host].'/purge'.$parse[path];
+$post_url = $parse[scheme].'://'.$parse[host].make_purge_path($parse[path]);
 
 #home page purge url
 $home_page = home_url();
 $parse_home = parse_url($home_page);
-$home_page_url = $parse[scheme].'://'.$parse[host].'/purge';
-if ($parse_home[path] != '') { 
-	$home_page_url = $home_page_url.$parse_home[path].'/';
-} else $home_page_url = $home_page_url.'/';
+$home_page_url = $parse[scheme].'://'.$parse[host].make_purge_path('');
 
 #posts page purge url
 if ( get_option('show_on_front') == 'page' ) {
 $posts_page = get_option('page_for_posts');
 $posts_page_link = get_permalink($posts_page);
 $parse_posts = parse_url($posts_page_link);
-$posts_url = $parse_posts[scheme].'://'.$parse_posts[host].'/purge'.$parse_posts[path];
+$posts_url = $parse_posts[scheme].'://'.$parse_posts[host].make_purge_path($parse_posts[path]);
 } ;
 
 #feed purge url
