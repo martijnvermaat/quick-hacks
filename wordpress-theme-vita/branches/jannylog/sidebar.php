@@ -18,13 +18,6 @@
         <?php wp_tag_cloud('smallest=10&largest=18'); ?>
       </ul>
     </li>
-<!--    <li class="boxr caty clearfix">
-      <h3>Categories</h3>
-      <ul>
-        <?php wp_list_categories('show_count=0&title_li='); ?>
-      </ul>
-    </li>
-!-->
     <?php endif; // End of Sidebar ?>
   </ul>
 </div>

@@ -19,9 +19,6 @@
         </div>
         <p class="postmetadata">
           <?php the_tags('Onderwerpen: ',', ','<br />');?>
-<!--          <span class="catr">Category
-          <?php the_category(', ') ?>
-          </span> -->
 			<?php if (('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 				// Both Comments and Pings are open ?>
 				<br />Trackback: <a href="<?php trackback_url(); ?>" rel="trackback">trackback</a> vanaf je eigen site.

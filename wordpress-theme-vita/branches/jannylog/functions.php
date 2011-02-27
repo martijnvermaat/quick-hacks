@@ -39,7 +39,6 @@ altijd welkom.</p>
     <?php $my_query = new WP_Query('showposts=10');
   while ($my_query->have_posts()) : $my_query->the_post();
   $do_not_duplicate = $post->ID; ?>
-    <!-- Do stuff... -->
     <li><span>
       <?php the_time('d - m') ?>
       </span>

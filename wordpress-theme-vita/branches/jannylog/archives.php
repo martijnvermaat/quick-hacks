@@ -15,12 +15,6 @@ Template Name: Archives
           <?php wp_get_archives('type=monthly&show_post_count=1') ?>
         </ul>
       </div>
-<!--      <div class="arlist clearfix">
-        <h3>Per categorie:</h3>
-        <ul>
-          <?php wp_list_categories('title_li=&hierarchical=0&show_count=1') ?>
-        </ul>
-      </div> -->
       <?php if (function_exists('wp_tag_cloud')) { ?>
       <div id="archivebox">
         <h3>Per onderwerp:</h3>

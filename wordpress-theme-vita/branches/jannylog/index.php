@@ -22,9 +22,6 @@
         </div>
         <p class="postmetadata">
           <?php the_tags('Onderwerpen: ',', ','<br />');?>
-<!--          <span class="catr">Category
-          <?php the_category(', ') ?>
-          </span> -->
         </p>
       </div>
       <?php endwhile; ?>

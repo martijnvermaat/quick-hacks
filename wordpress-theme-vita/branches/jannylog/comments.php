@@ -8,8 +8,6 @@
 		return;
 }
 ?>
-<!-- You can start editing here. -->
-
 <?php if ( have_comments() ) : ?>
 <?php if ( ! empty($comments_by_type['pings']) ) : ?>
 <h3 id="pings"><?php echo fb_comment_type_count('pings'); ?>  <?php _e('Trackbacks/Pingbacks' );?> <?php if ('open' == $post->ping_status) {
