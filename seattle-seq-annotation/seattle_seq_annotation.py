@@ -7,7 +7,7 @@
 # tab-separated file.
 #
 # Usage:
-#   ./seattle_seq_annotation.py <input.vcf>
+#   ./seattle_seq_annotation.py snp|indel <input.vcf> <mail@domain.com>
 #
 # The result is written to disk as <input.vcf.annotation>. Temporary data is
 # written to <input.vcf.annotation.tmp> and removed afterwards.
@@ -20,14 +20,11 @@
 # 2011-02-10, Martijn Vermaat <m.vermaat.hg@lumc.nl>
 
 
-# E-mail address to use in submit (job errors will be mailed here)
-EMAIL = 'm.vermaat.hg@lumc.nl'
-
 # Seconds to wait between polling for job result
-WAIT_STEP = 5
+WAIT_STEP = 120
 
 # Maximum seconds to wait for job result
-WAIT_MAX = 180
+WAIT_MAX = 43200
 
 # Print debugging information
 DEBUG = True
@@ -65,24 +62,26 @@ import urllib
 import urllib2
 
 
-def seattle_seq_annotation(vcf_file):
+def seattle_seq_annotation(mode, vcf_file, address):
     """
     Submit a VCF file to the SeattleSeq Annotation web interface. The
     annotation result is retrieved as plain-text tab-separated and written
     to disk.
-
-    @todo: VCF file must contain '# autoFile testAuto.txt' as first line.
     """
-    monitor_url, result_url = submit_vcf_file(vcf_file)
+    monitor_url, result_url = submit_vcf_file(mode, vcf_file, address)
     wait_for_result(monitor_url)
     write_result_file(result_url, vcf_file + '.annotation')
 
 
-def submit_vcf_file(vcf_file):
+def submit_vcf_file(mode, vcf_file, address):
     """
     Submit a VCF file to the SeattleSeq Annotation server and return as a
     tuple the url to monitor the job and the url to get the result.
+
+    The {mode} argument can be 'snp' (default) or 'indel'.
     """
+    format = 'VCFIndel' if mode == 'indel' else 'VCF'
+
     auto_file = vcf_file + '.annotation.tmp'
     create_auto_file(vcf_file, auto_file)
 
@@ -92,15 +91,17 @@ def submit_vcf_file(vcf_file):
         fatal_error(message)
 
     parameters = [('genotypeSource',   'FileInput'),
-                  ('EMail',            EMAIL),
+                  ('EMail',            address),
                   ('GenotypeFile',     auto),
-                  ('fileFormat',       'VCF'),
+                  ('fileFormat',       format),
                   ('outputFileFormat', 'original'),
                   ('geneData',         'NCBI'),
                   ('HapMapFreqType',   'HapMapFreqMinor'),
                   ('gFetch',           'Display Genotypes')]
     for column in COLUMNS:
         parameters.append( ('columns', column) )
+
+    debug('Submitting for %s annotation: %s' % (mode, vcf_file))
 
     # Response contains result url and monitor url separated by a comma
     response = post_multipart(POST_URL, parameters)
@@ -249,18 +250,18 @@ def fatal_error(message):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 4 or not sys.argv[1] in ['snp', 'indel']:
         print """Annotate variants using SeattleSeq Annotation.
 
 Given a VCF file with variants, submit the file to the SeattleSeq Annotation
 web interface [1]. The annotation result is retrieved as tab-separated file.
 
 Usage:
-  {command} <input.vcf>
+  {command} snp|indel <input.vcf> <mail@domain.com>
 
 The result is written to disk as <input.vcf.annotation>. Temporary data is
 written to <input.vcf.annotation.tmp> and removed afterwards.
 
 [1] {url}""".format(command=sys.argv[0], url=BASE_URL)
         sys.exit(1)
-    seattle_seq_annotation(sys.argv[1])
+    seattle_seq_annotation(sys.argv[1], sys.argv[2], sys.argv[3])
