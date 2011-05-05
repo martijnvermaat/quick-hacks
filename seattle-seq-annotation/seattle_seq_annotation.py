@@ -146,8 +146,9 @@ def create_auto_file(vcf_file, auto_file):
     # Header line for automated processing
     auto.write('# autoFile testAuto.txt\n')
 
-    # Buffered read/write
     line_count = 0
+
+    # Buffered read/write
     while True:
         line = vcf.readline()
         if not line:
@@ -157,6 +158,11 @@ def create_auto_file(vcf_file, auto_file):
         if line_count > MAX_VARIANTS:
             fatal_error('VCF file contains more variants than accepted by '
                         'SeattleSeq (%d).' % MAX_VARIANTS)
+
+    # Todo: Ignore header lines (but this will be fixed when we implement
+    # splitting of large files anyway).
+    if line_count == 0:
+        fatal_error('VCF file contains no variants.')
 
     debug('Copied VCF file to temporary file.')
 
