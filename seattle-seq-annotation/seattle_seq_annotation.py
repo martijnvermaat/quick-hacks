@@ -14,6 +14,9 @@
 #
 # Requires the poster Python library [2].
 #
+# Todo: Split VCF file if it contains more than the maximum number of variants
+# accepted by SeattleSeq and submit the parts separately.
+#
 # [1] http://snp.gs.washington.edu/SeattleSeqAnnotation131/
 # [2] http://atlee.ca/software/poster/
 #
@@ -47,6 +50,9 @@ COLUMNS = ['sampleAlleles',
 #           'distanceToSplice',
 #           'microRNAs',
            'clinicalAssociation']
+
+# Maximum number of variants SeattleSeq accepts
+MAX_VARIANTS = 2000000
 
 # SeattleSeq Annotation location
 BASE_URL = 'http://snp.gs.washington.edu/SeattleSeqAnnotation131/'
@@ -141,11 +147,16 @@ def create_auto_file(vcf_file, auto_file):
     auto.write('# autoFile testAuto.txt\n')
 
     # Buffered read/write
+    line_count = 0
     while True:
         line = vcf.readline()
         if not line:
             break
         auto.write(line)
+        line_count += 1
+        if line_count > MAX_VARIANTS:
+            fatal_error('VCF file contains more variants than accepted by '
+                        'SeattleSeq (%d).' % MAX_VARIANTS)
 
     debug('Copied VCF file to temporary file.')
 
