@@ -40,15 +40,23 @@ $posts_url = $parse_posts[scheme].'://'.$parse_posts[host].make_purge_path($pars
 #feed purge url
 $feed_url = $home_page_url.'feed/';
 
+#atom feed purge url
+$atom_url = $home_page_url.'feed/atom/';
+
 #comments feed purge url
 $comments_feed_url = $home_page_url.'comments/feed/';
+
+#comments atom feed purge url
+$comments_atom_url = $home_page_url.'comments/feed/atom/';
 
 #array of purge urls
 $urls = array(
 	$post_url, 
 	$home_page_url,
 	$feed_url,
+	$atom_url,
 	$comments_feed_url,
+	$comments_atom_url,
 	$posts_url
 );
 
