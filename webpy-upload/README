@@ -1,0 +1,12 @@
+File upload example with web.py.
+
+Just run upload.py directly to use the built-in webserver, or add the
+following to your Apache configuration:
+
+    Alias /upload/static /var/www/webpy-upload/static
+    WSGIScriptAlias /upload /var/www/webpy-upload/upload.py
+    AddType text/html .py
+
+Then go to the /upload subpath, e.g. http://0.0.0.0:8080/upload
+
+2011-07-27, Martijn Vermaat <m.vermaat.hg@lumc.nl>

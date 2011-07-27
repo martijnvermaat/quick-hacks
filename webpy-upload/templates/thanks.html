@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Thanks for uploading your file</h2>
+<p>Your file was stored as {{ file|e }} from {{ name|e }}.</p>
+<p><a href="upload">Upload another file</a></p>
+{% endblock %}

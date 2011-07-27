@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Please upload a file below</h2>
+<form method="POST" enctype="multipart/form-data" action="upload">
+  <p>
+    <label for="name">Your name:</label>
+    <input id="name" name="name">
+  </p>
+  <p>
+    <label for="file">Your file:</label>
+    <input id="file" name="file" type="file">
+  </p>
+  <p>
+    <input type="submit" value="Upload file">
+  </p>
+</form>
+{% endblock %}
